@@ -416,7 +416,11 @@ void FadeMusic(u16 timer)
     if (timer != 0)
         ApplyMusicSoundFading(pTrack, timer);
     else
+#ifdef PLATFORM_PC
+        StopMusicOrSound(pTrack); // agbcc leaves pTrack in r0
+#else
         StopMusicOrSound();
+#endif
 }
 
 /**
@@ -725,7 +729,11 @@ void FadeMusic_2(u16 timer)
     if (timer != 0)
         ApplyMusicSoundFading(pTrack, timer);
     else
+#ifdef PLATFORM_PC
+        StopMusicOrSound(pTrack); // agbcc leaves pTrack in r0
+#else
         StopMusicOrSound();
+#endif
 }
 
 /**

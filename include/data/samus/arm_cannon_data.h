@@ -1,4 +1,5 @@
 #include "types.h"
+#include "structs/samus.h"
 
 extern const struct ArmCannonAnimData sArmCannonAnim_Running_None_Left[10];
 extern const struct ArmCannonAnimData sArmCannonAnim_Running_DiagonalUp_Left[10];

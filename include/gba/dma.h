@@ -34,6 +34,12 @@
 #define REG_DMA3_CNT_L (REG_DMA3 + 8)
 #define REG_DMA3_CNT_H (REG_DMA3 + 10)
 
+#ifdef PLATFORM_PC
+#define DMA_SET(channel, src, dst, cnt)                                        \
+    {                                                                          \
+        Port_DmaSet(channel, (const void *)(src), (void *)(dst), (u32)(cnt)); \
+    }
+#else
 #define DMA_SET(channel, src, dst, cnt)                                        \
     {                                                                          \
         vu32 *dma_ = (vu32 *)REG_DMA##channel;                                 \
@@ -42,6 +48,7 @@
         dma_[2]    = (vu32)cnt;                                                \
         dma_[2];                                                               \
     }
+#endif
 
 #define DMA3_COPY_16(src, dst, count)                                          \
     DMA_SET(3, src, dst, C_32_2_16(DMA_ENABLE, count))

@@ -257,10 +257,18 @@ struct MusicTrack {
 typedef void (*MusicFunc_T)(struct TrackVariables*);
 
 // Linker variables
+#ifdef PLATFORM_PC
+// Absolute values set in linker.ld; the code only uses their "address".
+#define gNumMusicPlayers ((char*)8)
+#define gUnk_Audio0x64 ((char*)0x64)
+#define gUnk_Audio0x193F600 ((char*)0x193F600)
+#define gUnk_Audio0x50 ((char*)0x50)
+#else
 extern char gNumMusicPlayers[];
 extern char gUnk_Audio0x64[];
 extern char gUnk_Audio0x193F600[];
 extern char gUnk_Audio0x50[];
+#endif
 
 extern struct MusicInfo gMusicInfo;
 

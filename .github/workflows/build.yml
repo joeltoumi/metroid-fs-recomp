@@ -1,0 +1,65 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux:
+    name: Linux (headless smoke test, ${{ matrix.region }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        region: [us, eu, jp]
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install tools
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
+      - name: Configure
+        # clang, like the Android NDK: it rejects implicit declarations, GCC does not.
+        run: cmake -B build -G Ninja -DMZM_HOST=headless -DMZM_REGION=${{ matrix.region }} -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER=clang
+      - name: Build
+        run: cmake --build build
+      - name: Smoke test (no game data)
+        # Boots the engine on a zero-filled image for 3000 frames and presses a
+        # few buttons. Catches crashes in the port layer; it can't check visuals.
+        run: |
+          head -c 8388608 /dev/zero > zero.gba
+          MZM_DEV_SKIP_ROM_CHECK=1 ./build/mzm_headless --rom zero.gba --frames 3000 --dump-every 0 \
+            --press 400:S:5 --press 700:A:5 --press 900:A:5
+
+  android:
+    name: Android APK
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: gradle/actions/setup-gradle@v5
+      - name: Build APK
+        working-directory: android
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon assembleRelease 2>&1 | tee gradle.log
+      - name: Report build errors
+        if: failure()
+        working-directory: android
+        # Surface the end of the log as an annotation (readable from the API).
+        run: |
+          {
+            grep -nE "error|Error|FAILED|What went wrong" gradle.log | tail -40
+            echo "----- tail -----"
+            tail -60 gradle.log
+          } > summary.txt || true
+          msg=$(sed -e 's/%/%25/g' summary.txt | awk '{printf "%s%%0A", $0}')
+          echo "::error title=Android build log::${msg}"
+      - uses: actions/upload-artifact@v5
+        with:
+          name: mzm-android-apk
+          path: android/app/build/outputs/apk/*/release/*.apk
+          if-no-files-found: error

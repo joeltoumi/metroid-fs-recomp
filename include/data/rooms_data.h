@@ -3,6 +3,7 @@
 
 #include "types.h"
 #include "structs/room.h"
+#include "structs/connection.h"
 #include "structs/sprite.h"
 
 extern const u16 sDestroyedDockingBayAnimatedPal[6 * 16];

@@ -1,4 +1,5 @@
 #include "types.h"
+#include "oam.h"
 
 extern const u8 sArmCannonGfx_Elevator_Top[6 * 32];
 extern const u8 sArmCannonGfx_Elevator_Bottom[6 * 32];

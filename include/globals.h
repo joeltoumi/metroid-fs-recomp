@@ -161,14 +161,7 @@ extern struct BackgroundPositions gBackgroundPositions;
 
 extern u16 gBackdropColor;
 
-struct InGameTime {
-    u8 hours;
-    u8 minutes;
-    u8 seconds;
-    u8 frames;
-};
-
-extern struct InGameTime gInGameTimer;
+#include "structs/in_game_timer.h"
 extern u8 gMaxInGameTimeFlag;
 
 enum Cutscene {

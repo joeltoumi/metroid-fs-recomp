@@ -30,4 +30,10 @@
  */
 // #define USE_EWRAM_SYMBOLS
 
+#ifdef PLATFORM_PC
+// mf-android: the native build compiles the C versions of functions that are
+// still matched with inline assembly for agbcc.
+#define NON_MATCHING
+#endif
+
 #endif /* CONFIG_H*/

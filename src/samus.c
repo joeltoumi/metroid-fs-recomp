@@ -27,7 +27,9 @@
 #define SET_SAMUS_PAL_ROW_2(pPal) SamusSetPalette(pPal, OBJ_PAL_ROW_SAMUS_2 * PAL_ROW, 1 * PAL_ROW, FALSE)
 #define SET_SAMUS_PAL_ROWS_1_2(pPal) SamusSetPalette(pPal, OBJ_PAL_ROW_SAMUS_1 * PAL_ROW, 2 * PAL_ROW, FALSE)
 
+#ifndef PLATFORM_PC
 void BlockApplySpeedBoosterScrewAttackDamage(u16, u16, u16);
+#endif
 
 /**
  * @brief 4D60 | 68 | Copies Samus data to the Samus data copy and resets Samus data

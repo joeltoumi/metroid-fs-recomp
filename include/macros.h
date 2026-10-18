@@ -226,6 +226,7 @@
 #define INCTEXT(x)  {0}
 #define SHIFT_JIS(x) {0}
 
+#ifndef PLATFORM_PC // Native build: tools/port/gen_assets.py replaces them
 #define INCBIN(...) {0}
 #define INCBIN_U8   INCBIN
 #define INCBIN_U16  INCBIN
@@ -239,6 +240,7 @@
 #define _INCBIN_S8  INCBIN
 #define _INCBIN_S16 INCBIN
 #define _INCBIN_S32 INCBIN
+#endif // !PLATFORM_PC
 
 #define FORCE_RODATA __attribute__((section(".rodata")))
 #define NAKED_FUNCTION __attribute__((naked))

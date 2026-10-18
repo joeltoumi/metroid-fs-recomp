@@ -220,7 +220,11 @@ void SoundStop(u16 sound)
     pTrack = sMusicTrackDataRom[sSoundDataEntries[sound].trackGroupNumber].pTrack;
 
     if (pTrack->flags & 2 && sSoundDataEntries[sound].pHeader == pTrack->pHeader)
+#ifdef PLATFORM_PC
+        StopMusicOrSound(pTrack);
+#else
         StopMusicOrSound(pTrack, sSoundDataEntries[sound].pHeader);
+#endif
 }
 
 /**

@@ -3,7 +3,7 @@
 #include "macros.h"
 
 const u32 sLavaPlumeGfx[1 * 512] = INCBIN_U32("data/sprites/lava_plume.gfx");
-static const u16 sLavaPlumePal[1 * 16] = INCBIN_U16("data/sprites/lava_plume.pal");
+const u16 sLavaPlumePal[1 * 16] = INCBIN_U16("data/sprites/lava_plume.pal");
 
 static const u16 sLavaPlumeWarningOam_Idle_Frame0[OAM_DATA_SIZE(2)] = {
     2,

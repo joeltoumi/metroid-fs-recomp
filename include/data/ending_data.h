@@ -2,6 +2,7 @@
 #define ENDING_DATA_H
 
 #include "macros.h"
+#include "structs/ending.h"
 
 #include "gba/memory.h"
 

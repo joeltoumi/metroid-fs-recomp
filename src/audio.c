@@ -888,7 +888,11 @@ void UpdateTrack(struct TrackData* pTrack)
     else if (pTrack->queueFlags & 0x2)
     {
         if (tmp & 0x80)
+#ifdef PLATFORM_PC
+            unk_39cc();
+#else
             unk_39cc(tmp & 0x80);
+#endif
 
         pTrack->queueFlags = 0;
     }

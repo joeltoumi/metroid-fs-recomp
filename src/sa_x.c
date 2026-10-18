@@ -1042,7 +1042,11 @@ u8 SaXElevatorBeforeShootingDoor(void)
     s32 ended;
     s32 i;
     // FIXME: Fake match
+#ifdef PLATFORM_PC
+    s32 tmp;
+#else
     register s32 tmp asm("r8");
+#endif
 
     ended = FALSE;
 

@@ -1,0 +1,98 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'dev.mzm.android'
+    compileSdk 35
+    ndkVersion '27.2.12479018'
+
+    defaultConfig {
+        applicationId 'dev.mzm.android'
+        minSdk 24
+        targetSdk 35
+        versionCode 1
+        versionName '0.1.0'
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DMZM_HOST=sdl",
+                          "-DANDROID_STL=c++_static", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+            }
+        }
+        ndk {
+            // The AYN Thor and every current phone are 64-bit ARM; x86_64 is
+            // for the emulator.
+            abiFilters 'arm64-v8a', 'x86_64'
+        }
+    }
+
+    // One APK per ROM region: the game code differs between versions
+    // (#ifdef REGION_*), so each build only accepts its own dump. The
+    // application ids differ, so all of them can be installed side by side.
+    flavorDimensions 'region'
+    productFlavors {
+        eu {
+            dimension 'region'
+            applicationIdSuffix '.eu'
+            resValue 'string', 'app_name', 'Zero Mission (EU)'
+            externalNativeBuild {
+                cmake {
+                    arguments '-DMZM_REGION=eu'
+                }
+            }
+        }
+        jp {
+            dimension 'region'
+            applicationIdSuffix '.jp'
+            resValue 'string', 'app_name', 'Zero Mission (JP)'
+            externalNativeBuild {
+                cmake {
+                    arguments '-DMZM_REGION=jp'
+                }
+            }
+        }
+        us {
+            dimension 'region'
+            resValue 'string', 'app_name', 'Zero Mission (US)'
+            externalNativeBuild {
+                cmake {
+                    arguments '-DMZM_REGION=us'
+                }
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path '../../CMakeLists.txt'
+            version '3.22.1+'
+        }
+    }
+
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            minifyEnabled false
+            // Signed with the debug key unless CI provides a keystore.
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging false
+        }
+    }
+
+    lint {
+        abortOnError false
+    }
+}
