@@ -1,0 +1,61 @@
+#ifndef KIHUNTER_AI_H
+#define KIHUNTER_AI_H
+
+#include "types.h"
+
+u8 KihunterGroundCheckInSpittingRange(void);
+u8 KihunterGroundDetectSamus(void);
+void KihunterTurningIntoX(void);
+void KihunterGroundInit(void);
+void KihunterGroundJumpWarningInit(void);
+void KihunterGroundJumpInit(void);
+void KihunterGroundLandingInit(void);
+void KihunterIdleInit(void);
+void KihunterFallingInit(void);
+void KihunterGroundTurningAroundInit(void);
+void KihunterGroundSpittingInit(void);
+void KihunterGroundJumpWarning(void);
+void KihunterGroundJumping(void);
+void KihunterGroundLanding(void);
+void KihunterGroundFalling(void);
+void KihunterGroundIdle(void);
+void KihunterGroundTurningAround(void);
+void KihunterGroundTurningAroundSecondPart(void);
+void KihunterGroundSpitting(void);
+u8 KihunterFlyingXMovement(u16 movement);
+void KihunterFlyingInit(void);
+void KihunterFlyingIdleInit(void);
+void KihunterFlyingTurningAroundInit(void);
+void KihunterFlyingIdle(void);
+void KihunterTurningAround(void);
+void KihunterFlyingTurningAroundSecondPart(void);
+void KihunterFlyingUpdateSwipeAnimation(void);
+void KihunterFlyingSwoopingDownInit(void);
+void KihunterFlyingSwoopingDown(void);
+void KihunterFlyingSwoopingAcrossInit(void);
+void KihunterFlyingSwoopingAcross(void);
+void KihunterFlyingAfterSwoopingInit(void);
+void KihunterFlyingAfterSwooping(void);
+void KihunterWingsInit(void);
+void KihunterWingsIdle(void);
+void KihunterWingsFalling(void);
+void KihunterWingsDisappearing(void);
+void KihunterSpitInit(void);
+void KihunterSpitMoving(void);
+void KihunterSpitExplodingInit(void);
+void KihunterSpitExploding(void);
+void KihunterHiveInit(void);
+void KihunterHiveSpawnKihunter(void);
+void KihunterHiveSpawnCooldown(void);
+void KihunterBugInit(void);
+void KihunterBugIdle(void);
+void KihunterBugChasingSamusInit(void);
+void KihunterBugChasingSamus(void);
+void KihunterGround(void);
+void KihunterFlying(void);
+void KihunterWings(void);
+void KihunterSpit(void);
+void KihunterHive(void);
+void KihunterBug(void);
+
+#endif /* KIHUNTER_AI_H */

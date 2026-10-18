@@ -1,0 +1,8388 @@
+#include "globals.h"
+#include "new_file_intro.h"
+
+#include "constants/game_state.h"
+#include "constants/audio.h"
+#include "constants/text.h"
+#include "constants/new_file_intro.h"
+
+#include "structs/cutscene.h"
+
+#include "data/new_file_intro_data.h"
+#include "data/generic_data.h"
+#include "data/menus/title_screen.h"
+#include "data/sprite_data.h"
+#include "data/sprites/hornoad.h"
+#include "data/sprites/x_parasite.h"
+#include "data/projectile_data.h"
+#include "data/audio.h"
+
+void unk_99940(void); // For V-blank callback
+
+u8 SpecialCutsceneGetRandomNumber(void);
+u8 NewFileIntroSetupOam(u8 type, s16 xPosition, s16 yPosition, boolu8 descendingSearchOrder);
+boolu32 NewFileIntroSamusDrifting(void);
+static void NewFileIntroSamusShipFlyingInit(void);
+static boolu32 NewFileIntroSamusShipFlyingProcess(void);
+static boolu32 NewFileIntroSamusShipFlying(void);
+static void NewFileIntroSamusFaintingInit(void);
+static boolu32 NewFileIntroSamusFaintingProcess(void);
+static boolu32 NewFileIntroSamusFainting(void);
+void NewFileIntroProcessOam_Empty(void);
+void NewFileIntroProcessTextCursor(struct SpecialCutsceneOam* pOam);
+void NewFileIntroSr388PreviewVblank(void);
+u8 NewFileIntroSr388SetupOam(u8 type, s16 xPosition, s16 yPosition);
+boolu32 NewFileIntroSr388Preview(void);
+void NewFileIntroSetupSr388PreviewAsteroid(u8 type, s16 xPosition, s16 yPosition, s16 arg3);
+void NewFileIntroInSr388Vblank(void);
+u8 NewFileIntroInSr388SetupOam(IntroInSr388OamType type, s16 xPosition, s16 yPosition);
+boolu32 NewFileIntroInSr388(void);
+void NewFileIntroGetPositionOfOamByType(IntroInSr388OamType type, s16* pXPosition, s16* pYPosition);
+void NewFileIntroSamusGettingCuredVblank(void);
+u8 NewFileIntroSamusGettingCuredSetupOam(IntroSamusGettingCuredOamType type, s16 xPosition, s16 yPosition);
+void NewFileIntroSamusGettingCuredNervousSystemVblank(void);
+boolu32 NewFileIntroSamusGettingCured(void);
+void NewFileIntroSamusGettingCuredProcessOam_Empty(struct SpecialCutsceneOam* pOam);
+u8 NewFileIntroFindOamByType(IntroSamusGettingCuredOamType type);
+u8 NewFileIntroSamusFoundSetupOam(IntroSamusFoundOamType type, s16 xPosition, s16 yPosition);
+void NewFileIntroSamusFoundVblank(void);
+boolu32 NewFileIntroSamusFound(void);
+u8 NewFileIntroSamusCuredSetupOam(IntroSamusCuredOamType type, s16 xPosition, s16 yPosition);
+void NewFileIntroSamusCuredVblank(void);
+boolu32 NewFileIntroSamusCured(void);
+void NewFileIntroSamusCuredProcessOam_Empty(struct SpecialCutsceneOam* pOam);
+void NewFileIntroArrivingAtBslVblank(void);
+boolu32 NewFileIntroArrivingAtBsl(void);
+u8 NewFileIntroArrivingAtBslSetupOam(IntroArrivingAtBslOamType type, s16 xPosition, s16 yPosition);
+u8 NewFileIntroGetPositionAndSlotOfOamByType(IntroArrivingAtBslOamType type, s16* pXPosition, s16* pYPosition);
+void NewFileIntroArrivingAtBslProcessOam_Empty(struct SpecialCutsceneOam* pOam);
+
+static u16* sMonologueTextPointersJapanese[19];
+static u16* sMonologueTextPointersEnglish[19];
+static u16* sMonologueTextPointersGerman[19];
+static u16* sMonologueTextPointersFrench[19];
+static u16* sMonologueTextPointersItalian[19];
+static u16* sMonologueTextPointersSpanish[19];
+
+const u8* sTitleScreenDebugTextPointer = {
+    sTitleScreenDebugText,
+};
+
+const struct FrameData* sData_79C2CC[6] = {
+    sOam_597ec0,
+    sOam_597ed0,
+    sOam_597ee0,
+    sOam_597ef0,
+    sOam_597ee0,
+    sOam_597ed0
+};
+
+static const u16* sArray_79c2e4[12] = {
+	sPal_5bf838,
+	sPal_5bf8b8,
+	sPal_5bf938,
+	sPal_5bf9b8,
+	sPal_5bfa38,
+	sPal_5bfab8,
+	sPal_5bfb38,
+	sPal_5bfbb8,
+	sPal_5bfc38,
+	sPal_5bfcb8,
+	sPal_5bfd38,
+	sPal_5bfdb8
+};
+
+static const u16* sPalPointers_79c314[16] = {
+	(const u16*)0x85dfd6c,
+	(const u16*)0x85dfeac,
+	(const u16*)0x85e102c,
+	(const u16*)0x85dffec,
+	(const u16*)0x85e012c,
+	(const u16*)0x85e026c,
+	(const u16*)0x85e03ac,
+	(const u16*)0x85e04ec,
+	(const u16*)0x85e062c,
+	(const u16*)0x85e076c,
+	(const u16*)0x85e08ac,
+	(const u16*)0x85e09ec,
+	(const u16*)0x85e0b2c,
+	(const u16*)0x85e0c6c,
+	(const u16*)0x85e0dac,
+	(const u16*)0x85e0eec
+};
+
+static const u16* sPalPointers_79c354[16] = {
+	(const u16*)0x85f6990,
+	(const u16*)0x85f6a10,
+	(const u16*)0x85f6a90,
+	(const u16*)0x85f6b10,
+	(const u16*)0x85f6b90,
+	(const u16*)0x85f6c10,
+	(const u16*)0x85f6c90,
+	(const u16*)0x85f6d10,
+	(const u16*)0x85f6d90,
+	(const u16*)0x85f6e10,
+	(const u16*)0x85f6e90,
+	(const u16*)0x85f6f10,
+	(const u16*)0x85f6f90,
+	(const u16*)0x85f7010,
+	(const u16*)0x85f7090,
+	(const u16*)0x85f7110
+};
+
+static u8 sBlob_79c394_79c3c8[] = INCBIN_U8("data/Blob_79c394_79c3c8.bin");
+
+static const u32* sIntroSr388SurfaceBgGfxPointers[8] = {
+    sIntroSr388SurfaceBgGfx0,
+    sIntroSr388SurfaceBgGfx1,
+    sIntroSr388SurfaceBgGfx2,
+    sIntroSr388SurfaceBgGfx3,
+    sIntroSr388SurfaceBgGfx4,
+    sIntroSr388SurfaceBgGfx5,
+    sIntroSr388SurfaceBgGfx6,
+    sIntroSr388SurfaceBgGfx7
+};
+
+static const u32* sIntroSr388PlanetBgGfxPointers[5] = {
+    sIntroSr388PlanetBgGfx0,
+    sIntroSr388PlanetBgGfx1,
+    sIntroSr388PlanetBgGfx2,
+    sIntroSr388PlanetBgGfx3,
+    sIntroSr388PlanetBgGfx4
+};
+
+static const u32* sIntroBslObjectGfxPointers[8] = {
+    sIntroBslObjectGfx0,
+    sIntroBslObjectGfx1,
+    sIntroBslObjectGfx2,
+    sIntroBslObjectGfx3,
+    sIntroBslObjectGfx4,
+    sIntroBslObjectGfx5,
+    sIntroBslObjectGfx6,
+    sIntroBslObjectGfx7
+};
+
+static const u32* sIntroSamusSittingBgGfxPointers[5] = {
+    sIntroSamusSittingBgGfx0,
+    sIntroSamusSittingBgGfx1,
+    sIntroSamusSittingBgGfx2,
+    sIntroSamusSittingBgGfx3,
+    sIntroSamusSittingBgGfx4
+};
+
+static const u32* sIntroSamusHelmetCloseupBgGfxPointers[6] = {
+    sIntroSamusHelmetCloseupBgGfx0,
+    sIntroSamusHelmetCloseupBgGfx1,
+    sIntroSamusHelmetCloseupBgGfx2,
+    sIntroSamusHelmetCloseupBgGfx3,
+    sIntroSamusHelmetCloseupBgGfx4,
+    sIntroSamusHelmetCloseupBgGfx5
+};
+
+static u8 sBlob_79c448_79c5a4[] = INCBIN_U8("data/Blob_79c448_79c5a4.bin");
+
+static u16** sMonologueTextPointers[LANGUAGE_COUNT] = {
+    sMonologueTextPointersJapanese,
+    sMonologueTextPointersJapanese,
+    sMonologueTextPointersEnglish,
+    sMonologueTextPointersGerman,
+    sMonologueTextPointersFrench,
+    sMonologueTextPointersItalian,
+    sMonologueTextPointersSpanish
+};
+
+static u8 sBlob_79c5c0_79cdd8[] = INCBIN_U8("data/Blob_79c5c0_79cdd8.bin");
+
+const u16** sLocationTextPointers[LANGUAGE_COUNT] = {
+    (const u16**)0x879c680,
+    (const u16**)0x879c7a8,
+    (const u16**)0x879c8d0,
+    (const u16**)0x879c9f8,
+    (const u16**)0x879cb20,
+    (const u16**)0x879cc48,
+    (const u16**)0x879cd70
+};
+
+u16** sMessageTextPointers[LANGUAGE_COUNT] = {
+    (u16**)0x879c5c0,
+    (u16**)0x879c6e8,
+    (u16**)0x879c810,
+    (u16**)0x879c938,
+    (u16**)0x879ca60,
+    (u16**)0x879cb88,
+    (u16**)0x879ccb0
+};
+
+static u8 sBlob_79ce10_79e6a0[] = INCBIN_U8("data/Blob_79ce10_79e6a0.bin");
+
+static u16* sMonologueTextPointersJapanese[19] = {
+	(u16*)0x871e20c,
+	(u16*)0x871e4e4,
+	(u16*)0x871e67e,
+	(u16*)0x871e814,
+	(u16*)0x871e9b6,
+	(u16*)0x871eb34,
+	(u16*)0x871ecac,
+	(u16*)0x871efc2,
+	(u16*)0x871f498,
+	(u16*)0x871f52c,
+	(u16*)0x871f56c,
+	(u16*)0x871f5fc,
+	(u16*)0x871f656,
+	(u16*)0x871f71a,
+	(u16*)0x871f7cc,
+	(u16*)0x871f896,
+	(u16*)0x871f98a,
+	(u16*)0x871fa32,
+	(u16*)0x871fa92
+};
+
+static u16* sMonologueTextPointersEnglish[19] = {
+	(u16*)0x871fad4,
+	(u16*)0x87200ee,
+	(u16*)0x8720310,
+	(u16*)0x8720528,
+	(u16*)0x8720748,
+	(u16*)0x872094a,
+	(u16*)0x8720b4a,
+	(u16*)0x8721116,
+	(u16*)0x872192e,
+	(u16*)0x8721a12,
+	(u16*)0x8721ab6,
+	(u16*)0x8721c28,
+	(u16*)0x8721d12,
+	(u16*)0x8721f20,
+	(u16*)0x8722068,
+	(u16*)0x8722238,
+	(u16*)0x8722438,
+	(u16*)0x8722550,
+	(u16*)0x87225f8
+};
+
+static u16* sMonologueTextPointersGerman[19] = {
+	(u16*)0x87226a0,
+	(u16*)0x8723016,
+	(u16*)0x8723324,
+	(u16*)0x8723624,
+	(u16*)0x8723958,
+	(u16*)0x8723be2,
+	(u16*)0x8723e44,
+	(u16*)0x872475e,
+	(u16*)0x87252c6,
+	(u16*)0x8725412,
+	(u16*)0x87254ea,
+	(u16*)0x87256d8,
+	(u16*)0x872581e,
+	(u16*)0x8725a60,
+	(u16*)0x8725b94,
+	(u16*)0x8725dac,
+	(u16*)0x872603c,
+	(u16*)0x87261c6,
+	(u16*)0x87262aa
+};
+
+static u16* sMonologueTextPointersFrench[19] = {
+	(u16*)0x872638c,
+	(u16*)0x8726aa6,
+	(u16*)0x8726cfe,
+	(u16*)0x8726f04,
+	(u16*)0x8727106,
+	(u16*)0x8727314,
+	(u16*)0x8727522,
+	(u16*)0x8727b08,
+	(u16*)0x87282bc,
+	(u16*)0x87283a6,
+	(u16*)0x8728466,
+	(u16*)0x8728608,
+	(u16*)0x87286e8,
+	(u16*)0x87288ba,
+	(u16*)0x8728a12,
+	(u16*)0x8728bfc,
+	(u16*)0x8728e4a,
+	(u16*)0x8728f96,
+	(u16*)0x872904e
+};
+
+static u16* sMonologueTextPointersItalian[19] = {
+	(u16*)0x87290fc,
+	(u16*)0x8729792,
+	(u16*)0x8729a6e,
+	(u16*)0x8729c84,
+	(u16*)0x8729f24,
+	(u16*)0x872a124,
+	(u16*)0x872a330,
+	(u16*)0x872a8f6,
+	(u16*)0x872b142,
+	(u16*)0x872b254,
+	(u16*)0x872b2c8,
+	(u16*)0x872b446,
+	(u16*)0x872b56e,
+	(u16*)0x872b7a6,
+	(u16*)0x872b8e6,
+	(u16*)0x872bab4,
+	(u16*)0x872bcc2,
+	(u16*)0x872bdb8,
+	(u16*)0x872be4a
+};
+
+static u16* sMonologueTextPointersSpanish[19] = {
+	(u16*)0x872bef8,
+	(u16*)0x872c69c,
+	(u16*)0x872c8f2,
+	(u16*)0x872cb02,
+	(u16*)0x872cd92,
+	(u16*)0x872d002,
+	(u16*)0x872d212,
+	(u16*)0x872d81e,
+	(u16*)0x872e0b8,
+	(u16*)0x872e1b6,
+	(u16*)0x872e220,
+	(u16*)0x872e3d2,
+	(u16*)0x872e4ea,
+	(u16*)0x872e70a,
+	(u16*)0x872e848,
+	(u16*)0x872ea20,
+	(u16*)0x872ebf6,
+	(u16*)0x872ed50,
+	(u16*)0x872ee1c
+};
+
+static u8 sBlob_79e868_79eca0[] = INCBIN_U8("data/Blob_79e868_79eca0.bin");
+
+/**
+ * @brief 87610 | f8 | Handler for intro
+ * 
+ */
+boolu32 IntroHandler(void) 
+{
+    boolu32 result;
+
+    result = FALSE;
+    
+    if (gChangedInput & (KEY_START | KEY_A))
+    {
+        if (gSubGameMode1 == 3)
+        {
+            if (INTRO_DATA.unk_20E != 0)
+                INTRO_DATA.unk_20E = 0;
+        }
+        else if (gSubGameMode1 != 0 && gSubGameMode1 != 3)
+        {
+            if (READ_16(REG_BLDCNT) & BLDCNT_ALPHA_BLENDING_EFFECT)
+                WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+            
+            INTRO_DATA.unk_20E = 0;
+            gSubGameMode1 = 3;
+            FadeAllSounds(20);
+            FadeMusic(20);
+        }
+    }
+
+    switch (gSubGameMode1)
+    {
+        case 0:
+            NewFileIntroInit();
+            gSubGameMode1 = 1;
+            break;
+        
+        case 1:
+            if (IntroSpaceView())
+                gSubGameMode1 = 2;
+            break;
+        
+        case 2:
+            if (IntroSamusShipCrashing())
+                gSubGameMode1 = 3;
+            break;
+        
+        case 3:
+            if (INTRO_DATA.unk_20E == 0)
+            {
+                if (gWrittenToBldy < BLDY_MAX_VALUE)
+                    gWrittenToBldy++;
+                else
+                    result = TRUE;
+            }
+            else
+                INTRO_DATA.unk_20E--;
+            
+            SpecialCutsceneDrawAllOam(); 
+    }
+
+    return result;
+}
+
+ /**
+ * @brief 87708 | 218 | Handler for new file intro
+ * 
+ */
+boolu32 NewFileIntroHandler(void) 
+{
+    boolu32 result;
+
+    result = FALSE;
+
+    switch (gSubGameMode1)
+    {
+        case 0:
+            StopAllMusicAndSounds();
+            NewFileIntroInit();
+
+            if (gGameCompletion.introPlayed == TRUE)
+                return TRUE;
+            else 
+                gSubGameMode1 = 1;
+            break;
+
+        case 1:
+            INTRO_DATA.timer++;
+            if (INTRO_DATA.timer >= 100)
+            {
+                INTRO_DATA.timer = 0;
+                gSubGameMode1 = 2;
+            }
+            break;
+
+        case 2:
+            if (NewFileIntroSr388Preview())
+                gSubGameMode1 = 3;
+            break;
+
+        case 3:
+            if (NewFileIntroInSr388())
+                gSubGameMode1 = 4;
+            break;
+
+        case 4:
+            if (NewFileIntroSamusShipFlying())
+                gSubGameMode1 = 5;
+            break;
+
+        case 5:
+            if (NewFileIntroSamusFainting())
+                gSubGameMode1 = 6;
+            break;
+
+        case 6:
+            if (NewFileIntroSamusDrifting())
+                gSubGameMode1 = 7;
+            break;
+
+        case 7:
+            if (NewFileIntroSamusFound())
+                gSubGameMode1 = 8;
+            break;
+
+        case 8:
+            if (NewFileIntroSamusGettingCured())
+                gSubGameMode1 = 9;
+            break;
+
+        case 9:
+            if (NewFileIntroSamusCured())
+                gSubGameMode1 = 10;
+            break;
+
+        case 10:
+            if (NewFileIntroArrivingAtBsl())
+                gSubGameMode1 = 11;
+            break;
+
+        case 11:
+            if (NewFileIntroLandingOnBsl())
+            {
+                INTRO_DATA.unk_20E = 0;
+                gSubGameMode1 = 12;
+            }
+            break;
+        
+        case 12:
+            INTRO_DATA.unk_20E++;
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                if (INTRO_DATA.unk_20E == 1)
+                {
+                    INTRO_DATA.unk_20E = 0;
+                    gWrittenToBldy++;
+                }
+            }
+            else
+            {
+                if (INTRO_DATA.unk_20E == 1)
+                {
+                    Sram_ProcessIntroSave(0);
+                }
+                else if (INTRO_DATA.unk_20E == 2)
+                {
+                    Sram_ProcessIntroSave(1);
+                } 
+                else if (INTRO_DATA.unk_20E == 3)
+                {
+                    Sram_ProcessIntroSave(2);
+                }
+                else if (INTRO_DATA.unk_20E == 4)
+                {
+                    Sram_ProcessIntroSave(3);
+                    INTRO_DATA.timer = 0;
+                    INTRO_DATA.unk_20E = 0;
+                    result = TRUE;
+                }
+            }
+
+            SpecialCutsceneDrawAllOam();
+    }
+
+    return result;
+}
+
+ /**
+ * @brief 87920 | 50 | To document
+ * 
+ */
+boolu32 unk_87920(void) 
+{
+    boolu32 result;
+    boolu32 done;
+    
+    result = FALSE;
+
+    switch (gCurrentCutscene)
+    {
+        default:
+            result = TRUE;
+            done = FALSE;
+            break;
+
+        case 1:
+            done = IntroHandler();
+            break;
+
+        case 2:
+            done = NewFileIntroHandler();
+            break;
+
+        case 3:
+            done = EndingHandler();
+            break;
+
+        case 4:
+            done = DiedFromSr388CollisionHandler();
+    }
+
+    if (done)
+    {
+        StopAllMusicAndSounds();
+        result = TRUE;
+    }
+    
+    return result;
+}
+
+ /**
+ * @brief 87970 | 94 | V-blank for the new file intro Samus ship flying cutscene
+ * 
+ */
+static void NewFileIntroSamusShipFlyingVblank(void) 
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, 256);
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+
+    WRITE_16(REG_BG1HOFS, gBg1XPosition);
+    WRITE_16(REG_BG1VOFS, gBg1YPosition);
+    WRITE_16(REG_BG2HOFS, gBg2XPosition);
+    WRITE_16(REG_BG2VOFS, gBg2YPosition);
+    WRITE_16(REG_BG3HOFS, gBg3XPosition);
+    WRITE_16(REG_BG3VOFS, gBg3YPosition);
+}
+
+ /**
+ * @brief 87a04 | 264 | Setup for the new file intro Samus ship flying cutscene
+ * 
+ */
+static void NewFileIntroSamusShipFlyingInit(void) 
+{
+    u16 i;
+    
+    CallbackSetVBlank(unk_99940);
+    
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+
+    for (i = 0; i < 8; i++)
+        LZ77UncompVram(sIntroBslObjectGfxPointers[i], VRAM_OBJ + i * 0x1000);
+    
+    DMA3_COPY_32(sIntroSamusShipPal, PALRAM_OBJ, 5 * PAL_ROW_SIZE / 4);
+    DMA3_COPY_32(sPal_598150, PALRAM_OBJ + 0x100, 2 * PAL_ROW_SIZE / 4);
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / 4);
+
+    LZ77UncompWram(sIntroBslSpaceBgGfx, EWRAM_BASE + 0x10000);
+
+    DMA3_COPY_32(EWRAM_BASE + 0x10000, VRAM_BASE, (VRAM_SIZE / 3) / 4);
+
+    LZ77UncompVram(sIntroBslTilemap, VRAM_BASE + 0xE800);
+    LZ77UncompVram(sIntroSpaceTilemap, VRAM_BASE + 0xF800);
+
+    DMA3_COPY_32(sIntroBslSpaceBgPal, PALRAM_BASE + 0x100, 8 * PAL_ROW_SIZE / 4);
+
+    WRITE_16(PALRAM_BASE, 0);
+
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    gBg1XPosition = 0;
+    gBg1YPosition = 0;
+    gBg2XPosition = 48;
+    gBg2YPosition = -8;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+
+    WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+    WRITE_16(REG_BG0CNT, 28 << BGCNT_SCREEN_BASE_BLOCK_SHIFT | 2 << BGCNT_CHAR_BASE_BLOCK_SHIFT);
+    WRITE_16(REG_BG2CNT, BGCNT_SIZE_512x256 << BGCNT_SCREEN_SIZE_SHIFT | 29 << BGCNT_SCREEN_BASE_BLOCK_SHIFT | BGCNT_LOW_MID_PRIORITY);
+    WRITE_16(REG_BG3CNT, 31 << BGCNT_SCREEN_BASE_BLOCK_SHIFT | BGCNT_LOW_PRIORITY);
+
+    NewFileIntroSetupOam(200, 250, 0, 0);
+    NewFileIntroSetupOam(1, (s16)gBg2XPosition, (s16)gBg2YPosition, 0);
+    NewFileIntroSetupOam(2, 160, 90, 0);
+    NewFileIntroSetupOam(4, 0, 0, 1);
+
+    for (i = 0; i < 10; i++)
+        NewFileIntroSetupOam(3, SpecialCutsceneGetRandomNumber(), SpecialCutsceneGetRandomNumber(), 1);
+
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / 4 );
+
+    INTRO_DATA.pText = sCutsceneTextNone;
+    WRITE_16(REG_DISPCNT, DCNT_OBJ | DCNT_BG3 | DCNT_BG2);
+
+    CallbackSetVBlank(NewFileIntroSamusShipFlyingVblank);
+}
+
+ /**
+ * @brief 87C68 | 188 | Processes the new file intro Samus ship flying cutscene
+ * 
+ */
+static boolu32 NewFileIntroSamusShipFlyingProcess(void) 
+{
+    boolu32 result;
+
+    result = FALSE;
+
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && INTRO_DATA.unk_218 == 0)
+        INTRO_DATA.unk_218 = 1;
+    
+    INTRO_DATA.timer++;
+
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            if (SpecialCutsceneGetRandomNumber() < 128 && INTRO_DATA.unk_215 < 12)
+                NewFileIntroSetupOam(3, 0, SpecialCutsceneGetRandomNumber(), 1);
+
+            if (INTRO_DATA.timer == 99)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG0);
+            }
+            else if (INTRO_DATA.timer == 100)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][10];
+                INTRO_DATA.subStage = 1;
+            }
+            break;
+        
+        case 1:
+            if (SpecialCutsceneGetRandomNumber() < 128 && INTRO_DATA.unk_215 < 12)
+                NewFileIntroSetupOam(3, 0, SpecialCutsceneGetRandomNumber(), 1);
+
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 2;
+            }
+            break;
+
+        case 2:
+            if (INTRO_DATA.timer == 30)
+            {
+                INTRO_DATA.timer = 0;
+                gWrittenToBldy = BLDY_MAX_VALUE;
+                result = TRUE;
+            }
+    }
+    
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+    IntroProcessText();
+
+    return result;
+}
+
+ /**
+ * @brief 87df0 | a0 | Main handler for new file intro Samus ship flying cutscene
+ * 
+ */
+static boolu32 NewFileIntroSamusShipFlying(void)
+{
+    boolu32 result;
+
+    result = FALSE;
+
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroSamusShipFlyingInit();
+            INTRO_DATA.stage = 1;
+            break;
+
+        case 1:
+            SpecialCutsceneFadeIn();
+            if (!gWrittenToBldy)
+                INTRO_DATA.stage = 2;
+            break;
+
+        case 2:
+            if (NewFileIntroSamusShipFlyingProcess())
+            {
+                INTRO_DATA.stage = 3;
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 0;   
+            }
+            break;
+
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+                gWrittenToBldy++;
+            else 
+            {
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.stage = 0;
+                result = TRUE;
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+    }
+
+    return result;
+}
+
+ /**
+ * @brief 87e90 | 1d8 | Setup for the new file intro Samus fainting cutscene
+ * 
+ */
+static void NewFileIntroSamusFaintingInit(void)
+{
+    CallbackSetVBlank(unk_99940);
+
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / 4);
+
+    LZ77UncompVram(sIntroSamusSittingTilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroSamusSittingTilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusSittingGfx, VRAM_BASE);
+
+    DMA3_COPY_32(sIntroSamusSittingPal, PALRAM_BASE, 128);
+
+    WRITE_16(PALRAM_BASE, 0);
+
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+
+    DMA3_COPY_32(sIntroBslSpaceBgPal, PALRAM_BASE + 0x100, 64);
+    
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    gBg1XPosition = 0;
+    gBg1YPosition = 0;
+    gBg2XPosition = 10;
+    gBg2YPosition = 2;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+
+    WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+    WRITE_16(REG_BG0CNT, 28 << BGCNT_SCREEN_BASE_BLOCK_SHIFT | 2 << BGCNT_CHAR_BASE_BLOCK_SHIFT);
+    WRITE_16(REG_BG2CNT, 30 << BGCNT_SCREEN_BASE_BLOCK_SHIFT | BGCNT_LOW_MID_PRIORITY);
+    WRITE_16(REG_BG3CNT, 31 << BGCNT_SCREEN_BASE_BLOCK_SHIFT | BGCNT_LOW_PRIORITY);
+
+    NewFileIntroSetupOam(200, 250, 0, 0);
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, VRAM_SIZE / 24 );
+
+    INTRO_DATA.pText = sCutsceneTextNone;
+    
+    WRITE_16(REG_DISPCNT, DCNT_OBJ | DCNT_BG3 | DCNT_BG2);
+
+    CallbackSetVBlank(NewFileIntroSamusShipFlyingVblank);
+    
+    gWrittenToBldy = 0;
+    gWrittenToBldalpha_Eva = 12;
+    gWrittenToBldalpha_Evb = 8;
+}
+
+ /**
+ * @brief 88068 | 13c | Processes the new file intro Samus fainting cutscene
+ * 
+ */
+static boolu32 NewFileIntroSamusFaintingProcess(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && INTRO_DATA.unk_218 == 0)
+        INTRO_DATA.unk_218 = 1;
+    
+    INTRO_DATA.timer += 1;
+    
+    switch (INTRO_DATA.subStage) 
+    {
+        case 0:
+            if (INTRO_DATA.timer == 1)
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_OBJ_SECOND_TARGET_PIXEL | BLDCNT_BG3_SECOND_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG2_FIRST_TARGET_PIXEL);
+                NewFileIntroSetupOam(10, gBg2XPosition, gBg2YPosition, 1);
+            }
+            else if (INTRO_DATA.timer == 59)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG0);
+            }
+            else if (INTRO_DATA.timer == 60)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][11];
+                INTRO_DATA.subStage = 1;
+            }
+            break;
+        
+        case 1:
+            INTRO_DATA.timer = 0;
+
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 2;
+                gWrittenToBldy = 16;
+            }
+            break;
+        
+        case 2:
+            if (INTRO_DATA.timer == 30) 
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+                INTRO_DATA.timer = 0;
+                finished = TRUE;
+            }
+            break;
+    }
+    
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+    IntroProcessText();
+    
+    return finished;
+}
+
+ /**
+ * @brief 881a4 | 9c | Main handler for the new file intro Samus fainting cutscene
+ * 
+ */
+static boolu32 NewFileIntroSamusFainting(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroSamusFaintingInit();
+            INTRO_DATA.stage = 2;
+            break;
+
+        case 1:
+            SpecialCutsceneFadeIn();
+            if (!gWrittenToBldy)
+                INTRO_DATA.stage = 2;
+            break;
+
+        case 2:
+            if (NewFileIntroSamusFaintingProcess())
+            {
+                INTRO_DATA.stage = 3;
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 0;
+            }
+            break;
+
+        case 3:
+            if (gWrittenToBldy < 16)
+            {
+                gWrittenToBldy++;
+            }
+            else 
+            {
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.stage = 0;
+                finished = TRUE;
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+
+    return finished;
+}
+
+ /**
+ * @brief 88240 | 26c | Setup for the 'gunship drifting away from BSL ship' cutscene
+ * 
+ */
+void NewFileIntroSamusDriftingInit(void)
+{
+    u16 i;
+
+    CallbackSetVBlank(unk_99940);
+    
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+    
+    for (i = 0; i < 8; i++)
+        LZ77UncompVram(sIntroBslObjectGfxPointers[i], VRAM_OBJ + i * 0x1000);
+    
+    DMA3_COPY_32(sIntroSamusShipPal, PALRAM_OBJ, 5 * PAL_ROW_SIZE / 4);
+    DMA3_COPY_32(sPal_598150, PALRAM_OBJ + 0x100, 2 * PAL_ROW_SIZE / 4);
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / 4);
+    
+    LZ77UncompWram(sIntroBslSpaceBgGfx, EWRAM_BASE + 0x10000);
+    
+    DMA3_COPY_32(EWRAM_BASE + 0x10000, VRAM_BASE, (VRAM_SIZE / 3) / 4);
+    
+    LZ77UncompVram(sIntroBslTilemap, VRAM_BASE + 0xE800);
+    LZ77UncompVram(sIntroSpaceTilemap, VRAM_BASE + 0xF800);
+    
+    DMA3_COPY_32(sIntroBslSpaceBgPal, PALRAM_BASE + 0x100, 8 * PAL_ROW_SIZE / 4);
+    
+    SET_BACKDROP_COLOR(COLOR_BLACK);
+
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+    
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+    
+    gBg1XPosition = 0;
+    gBg1YPosition = 0;
+    gBg2XPosition = 48;
+    gBg2YPosition = -8;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+    
+    WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 29, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_512x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    
+    NewFileIntroSetupOam(200, 250, 0, 0);
+    NewFileIntroSetupOam(1, gBg2XPosition, gBg2YPosition, 0);
+    NewFileIntroSetupOam(20, 160, 90, 0);
+    NewFileIntroSetupOam(4, 0, 0, 1);
+    
+    for (i = 0; i < 10; i++)
+        NewFileIntroSetupOam(3, SpecialCutsceneGetRandomNumber(), SpecialCutsceneGetRandomNumber(), 1);
+    
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+    
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / 4);
+    
+    INTRO_DATA.pText = sCutsceneTextNone;
+    
+    WRITE_16(REG_DISPCNT, DCNT_BG2 | DCNT_BG3 | DCNT_OBJ);
+    
+    CallbackSetVBlank(NewFileIntroSamusShipFlyingVblank);
+    
+    gWrittenToBldy = 0;
+}
+
+ /**
+ * @brief 884ac | c8 | V-blank for the 'Samus losing conciousness' cutscene
+ * 
+ */
+static void NewFileIntroSamusLosingConsciousnessVblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / 4);
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+
+    WRITE_16(REG_BG1HOFS, gBg1XPosition);
+    WRITE_16(REG_BG1VOFS, gBg1YPosition);
+    WRITE_16(REG_BG2HOFS, gBg2XPosition);
+    WRITE_16(REG_BG2VOFS, gBg2YPosition);
+    WRITE_16(REG_BG3HOFS, gBg3XPosition);
+    WRITE_16(REG_BG3VOFS, gBg3YPosition);
+    
+    if (INTRO_DATA.unk_110 == 1)
+    {
+        INTRO_DATA.unk_110 = 0;
+        DMA3_COPY_32(sIntroSamusCloseupGrayscalePal, PALRAM_BASE, 4 * PAL_ROW_SIZE / 4);
+    }
+}
+
+ /**
+ * @brief 88574 | 1e0 | Setup for the 'Samus losing conciousness' cutscene
+ * 
+ */
+void NewFileIntroSamusLosingConsciousnessInit(void) 
+{
+    u16 i;
+
+    CallbackSetVBlank(unk_99940);
+    
+    DMA3_FILL_32(0, 0x030016a0, 720); // TODO: Find out what 16a0 is
+    
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / 4);
+
+    for (i = 0; i < 6; i++)
+        LZ77UncompVram(sIntroSamusHelmetCloseupBgGfxPointers[i], VRAM_BASE + i * 0x1000);
+    
+    LZ77UncompVram(sIntroSamusHelmetCloseupTilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroSamusHelmetCloseupTilemap, VRAM_BASE + 0xF800);
+
+    DMA3_COPY_32(sIntroSamusHelmetCloseupPal, PALRAM_BASE, 4 * PAL_ROW_SIZE / 4);
+    
+    SET_BACKDROP_COLOR(COLOR_BLACK);
+
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+    
+    DMA3_COPY_32(sIntroBslSpaceBgPal, PALRAM_BASE + 0x100, 8 * PAL_ROW_SIZE / 4);
+    
+    WRITE_16(REG_BG0HOFS, 0);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+    
+    gBg1XPosition = 0;
+    gBg1YPosition = 0;
+    gBg2XPosition = 10;
+    gBg2YPosition = 0;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+    
+    WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 30, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    
+    NewFileIntroSetupOam(200, 250, 0, 0);
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+    
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / 4);
+    
+    INTRO_DATA.pText = sCutsceneTextNone;
+    
+    WRITE_16(REG_DISPCNT, DCNT_BG2 | DCNT_BG3 | DCNT_OBJ);
+    
+    CallbackSetVBlank(NewFileIntroSamusLosingConsciousnessVblank);
+    
+    gWrittenToBldy = 0;
+    gWrittenToBldalpha_Eva = 12;
+    gWrittenToBldalpha_Evb = 8;
+}
+
+ /**
+ * @brief 88754 | 25c | Setup for the 'gunship drifting into asteroids' cutscene
+ * 
+ */
+void NewFileIntroSamusDriftingIntoAsteroidsInit(void) 
+{
+    u16 i;
+    void* temp1;
+    u32 temp2;
+    
+    WRITE_16(REG_IME, FALSE);
+    WRITE_16(REG_DISPSTAT, READ_16(REG_DISPSTAT) & ~DSTAT_IF_HBLANK);
+    WRITE_16(REG_IE, READ_16(REG_IE) & ~IF_HBLANK);
+    WRITE_16(REG_IME, TRUE);
+    
+    CallbackSetVBlank(unk_99940);
+    
+    DMA3_FILL_32(0, &INTRO_DATA.oam, sizeof(INTRO_DATA.oam));
+    
+    for (i = 0; i < 8; i++)
+        LZ77UncompVram(sIntroBslObjectGfxPointers[i], VRAM_OBJ + i * 0x1000);
+    
+    DMA3_COPY_32(sPal_612f48, PALRAM_OBJ, 16 * PAL_ROW_SIZE / 4);
+    DMA3_COPY_32(sPal_598150, PALRAM_OBJ + 0x100, 2 * PAL_ROW_SIZE / 4);
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / 4);
+
+    LZ77UncompVram(sTitleScreenSpaceBackgroundGfx, VRAM_BASE);
+    LZ77UncompVram(sTitleScreenSpaceBackgroundTilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+    
+    DMA3_COPY_32(sPal_609020, PALRAM_BASE, 16 * PAL_ROW_SIZE / 4);
+    DMA3_COPY_32(sPal_598a8c, PALRAM_BASE + 0x1E0, PAL_ROW_SIZE / 4);
+    
+    SET_BACKDROP_COLOR(COLOR_BLACK);
+    
+    WRITE_16(REG_BG0HOFS, 0);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+    
+    gBg2XPosition = 0;
+    gBg2YPosition = 0;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+    
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+
+    gWrittenToBldalpha_Eva = gWrittenToBldalpha_Evb = 0;
+
+    //WRITE_16(REG_BLDALPHA, 0); // Doesn't match
+    temp1 = REG_BLDALPHA;
+    temp2 = 0;
+    WRITE_16(temp1, temp2);
+    
+    NewFileIntroSetupOam(30, 140, 140, 0);
+    NewFileIntroSetupOam(31, 140, 80, 0);
+    
+    for (i = 0; i < 4; i++)
+        NewFileIntroSetupOam(36, SpecialCutsceneGetRandomNumber(), SpecialCutsceneGetRandomNumber(), 1);
+    
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+    
+    INTRO_DATA.pText = sCutsceneTextNone;
+    
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / 4);
+    
+    WRITE_16(REG_DISPCNT, DCNT_BG0 | DCNT_BG3 | DCNT_OBJ);
+    
+    CallbackSetVBlank(NewFileIntroSamusShipFlyingVblank);
+    
+    gWrittenToBldy = 0;
+}
+
+ /**
+ * @brief 889b0 | 318 | To document
+ * 
+ */
+boolu32 NewFileIntroSamusDriftingProcess(void)
+{
+    boolu32 finished;
+    s16 x;
+    s16 y;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && !INTRO_DATA.unk_218)
+        INTRO_DATA.unk_218 = 1;
+    
+    INTRO_DATA.timer++;
+    
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            if (SpecialCutsceneGetRandomNumber() < 128 && INTRO_DATA.unk_215 < 12)
+                NewFileIntroSetupOam(3, 0, SpecialCutsceneGetRandomNumber(), TRUE);
+            
+            if (INTRO_DATA.timer != 149) // Why?
+            {
+                if (INTRO_DATA.timer == 150)
+                {
+                    INTRO_DATA.timer = 0;
+                    INTRO_DATA.subStage = 1;
+                    gWrittenToBldy = BLDY_MAX_VALUE;
+                }
+            }
+            break;
+        
+        case 1:
+            NewFileIntroSamusLosingConsciousnessInit();
+            INTRO_DATA.timer = 0;
+            INTRO_DATA.subStage = 2;
+            break;
+        
+        case 2:
+            if (INTRO_DATA.timer == 1)
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_BG2_FIRST_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG3_SECOND_TARGET_PIXEL | BLDCNT_OBJ_SECOND_TARGET_PIXEL);
+                NewFileIntroSetupOam(10, gBg2XPosition, gBg2YPosition, TRUE);
+                gWrittenToBldy = 0;
+            }
+            else if (INTRO_DATA.timer == 118)
+            {
+                break;
+            }
+            else if (INTRO_DATA.timer == 120)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG2);
+                WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+                INTRO_DATA.unk_110 = 1;
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 3;
+            }
+            break;
+
+        case 3:
+            if (INTRO_DATA.timer == 60)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 4;
+                gWrittenToBldy = 16;
+            }
+            break;
+        
+        case 4:
+            NewFileIntroSamusDriftingIntoAsteroidsInit();
+            INTRO_DATA.timer = 0;
+            INTRO_DATA.subStage = 5;
+            break;
+        
+        case 5:
+            INTRO_DATA.timer = 0;
+            
+            if (SpecialCutsceneGetRandomNumber() < 128 && INTRO_DATA.unk_215 < 12)
+            {
+                x = SpecialCutsceneGetRandomNumber();
+                y = SpecialCutsceneGetRandomNumber();
+                NewFileIntroSetupOam(36, x, y, TRUE);
+            }
+            break;
+
+        case 6:
+            WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_INCREASE_EFFECT);
+            
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                if (INTRO_DATA.timer == 3)
+                {
+                    INTRO_DATA.timer = 0;
+                    gWrittenToBldy++;
+                }
+            } 
+            else if (INTRO_DATA.timer == 10)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 7;
+                finished = TRUE;
+            }
+            
+            if (SpecialCutsceneGetRandomNumber() < 128 && INTRO_DATA.unk_215 < 12)
+            {
+                x = SpecialCutsceneGetRandomNumber();
+                y = SpecialCutsceneGetRandomNumber();
+                NewFileIntroSetupOam(36, x, y, TRUE);
+            }
+            break;
+        
+        case 7:
+            if (gWrittenToBldy) 
+            {
+                if (INTRO_DATA.timer == 6) 
+                {
+                    INTRO_DATA.timer = 0;
+                    gWrittenToBldy--;
+                }
+            } 
+            else 
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 8;
+            }
+
+            if (SpecialCutsceneGetRandomNumber() < 128 && INTRO_DATA.unk_215 < 12)
+            {
+                x = SpecialCutsceneGetRandomNumber();
+                y = SpecialCutsceneGetRandomNumber();
+                NewFileIntroSetupOam(36, x, y, TRUE);
+            }
+            break;
+        
+        case 8:
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 1)
+            {
+                SpecialCutsceneDestroyOamOfType(201);
+                INTRO_DATA.subStage = 9;
+            }
+            
+            if (SpecialCutsceneGetRandomNumber() < 128 && INTRO_DATA.unk_215 < 12)
+            {
+                x = SpecialCutsceneGetRandomNumber();
+                y = SpecialCutsceneGetRandomNumber();
+                NewFileIntroSetupOam(36, x, y, TRUE);
+            }
+            break;
+        
+        case 9:
+            finished = TRUE;
+            break;
+    }
+    
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+    IntroProcessText();
+    
+    return finished;
+}
+
+ /**
+ * @brief 88cc8 | 9c | To document
+ * 
+ */
+boolu32 NewFileIntroSamusDrifting(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroSamusDriftingInit();
+            INTRO_DATA.stage = 2;
+            break;
+
+        case 1:
+            SpecialCutsceneFadeIn();
+            if (!gWrittenToBldy)
+                INTRO_DATA.stage = 2;
+            break;
+
+        case 2:
+            if (NewFileIntroSamusDriftingProcess())
+            {
+                INTRO_DATA.stage = 3;
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 0;
+            }
+            break;
+
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy++;
+            }
+            else 
+            {
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.stage = 0;
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+
+    return finished;
+}
+
+ /**
+ * @brief 88d64 | 150 | To document
+ * 
+ */
+void NewFileIntroProcessBslShip(struct SpecialCutsceneOam *pOam)
+{
+    s32 cos;
+    s32 sin;
+    
+    pOam->unk_4 = pOam->xPosition;
+    
+    if (pOam->stage == 0) 
+    {
+        pOam->stage = 2;
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->unk_A++;
+        pOam->xPosition = (((60 - pOam->spawnX) * pOam->unk_A) >> 10) + pOam->spawnX;
+        pOam->yPosition = (((10 - pOam->spawnY) * pOam->unk_A) >> 10) + pOam->spawnY;
+        
+        if (pOam->xPosition > 39) 
+        {
+            pOam->unk_A = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A == 1) 
+        {
+            pOam->unk_A = 0;
+            pOam->spawnX = 0;
+            pOam->spawnY = 4;
+            pOam->unk_8 = pOam->yPosition;
+            pOam->timer = 128;
+            pOam->stage = 3;
+        }
+    }
+    else if (pOam->stage == 3)
+    {
+        cos = pOam->spawnX * COS(pOam->timer);
+        sin = pOam->spawnY * SIN(pOam->timer);
+        pOam->yPosition = ((SIN(0) * cos + COS(0) * sin) >> 16) + pOam->unk_8;
+        pOam->timer++;
+        
+        if (pOam->unk_A != 60) // Why?
+        {
+            if (pOam->unk_A == 200)
+            {
+                pOam->unk_A = 0;
+                pOam->stage = 4;
+            } 
+        }
+    }
+    else if (pOam->stage == 4)
+    {
+        pOam->stage = 5;
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+    } 
+    else if (pOam->stage == 5)
+    {    
+        pOam->unk_A++;
+        pOam->xPosition = (((520 - pOam->spawnX) * pOam->unk_A) >> 10) + pOam->spawnX;
+        pOam->yPosition = (((100 - pOam->spawnY) * pOam->unk_A) >> 10) + pOam->spawnY;
+
+        if (pOam->xPosition >= 520)
+        {
+            pOam->unk_A = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 6;
+        }
+    }
+    
+    gBg2XPosition = pOam->xPosition;
+    gBg2YPosition = pOam->yPosition;
+}
+
+ /**
+ * @brief 88eb4 | 128 | To document
+ * 
+ */
+void NewFileIntroProcessFlyingSamusShip(struct SpecialCutsceneOam *pOam)
+{
+    s32 rotation;
+    s32 cos;
+    s32 sin;
+    s32 x;
+    s32 y;
+
+    rotation = 0;
+    
+    if (pOam->stage == 0)
+    {
+        pOam->unk_4 = pOam->xPosition;
+        pOam->unk_8 = pOam->yPosition;
+        pOam->timer = 64;
+        pOam->stage = 2;
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->timer++;
+        pOam->scaling -= 2;
+
+        if (pOam->timer == 128)
+        {
+            pOam->stage = 2;
+            pOam->scaling = Q_8_8(1);
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        pOam->spawnX = 0;
+        pOam->spawnY = 8;
+        pOam->unk_4 = pOam->xPosition;
+        pOam->unk_8 = pOam->yPosition;
+        pOam->stage = 3;
+    }
+    else if (pOam->stage == 3)
+    {
+        pOam->timer += 2;
+    }
+    else if (pOam->stage == 4)
+    {
+        pOam->timer++;
+        pOam->unk_A++;
+        if (pOam->unk_A == 180)
+        {
+            pOam->unk_A = 0;
+            pOam->stage = 5;
+        }
+    }
+    else if (pOam->stage == 5)
+    {
+        pOam->spawnX = 280 - pOam->xPosition;
+        pOam->spawnY = 60;
+        pOam->unk_4 = pOam->xPosition + pOam->spawnX;
+        pOam->unk_8 = pOam->yPosition;
+        pOam->timer = 128;
+        pOam->stage = 6;
+    }
+    else if (pOam->stage == 6)
+    {
+        pOam->timer++;
+        if (pOam->timer == 0)
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+    
+    cos = pOam->spawnX * COS(pOam->timer);
+    sin = pOam->spawnY * SIN(pOam->timer);
+    
+    x = cos * COS(rotation) - sin * SIN(0);
+    y = cos * SIN(0) + sin * COS(rotation);
+    
+    pOam->xPosition = (x >> 16) + pOam->unk_4;
+    pOam->yPosition = (y >> 16) + pOam->unk_8;
+}
+
+ /**
+ * @brief 88fdc | b4 | To document
+ * 
+ */
+void NewFileIntroProcessHorizontalParticle(struct SpecialCutsceneOam *pOam)
+{
+    s32 rng;
+    
+    if (pOam->stage == 0)
+    {
+        rng = SpecialCutsceneGetRandomNumber() & 7;
+        pOam->unk_8 = rng + 1;
+        rng = SpecialCutsceneGetRandomNumber() & 3;
+        pOam->unk_4 = rng;
+        pOam->pOam = sData_79C2CC[pOam->unk_4];
+        pOam->spawnX = pOam->xPosition;
+        pOam->stage = 1;
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->unk_A++;
+        pOam->xPosition = ((pOam->unk_8 * pOam->unk_A) >> 4) + pOam->spawnX;
+        
+        pOam->timer++;
+        if (pOam->timer == 8)
+        {
+            pOam->timer = 0;
+            
+            if (pOam->unk_4 < 5)
+                pOam->unk_4++;
+            else
+                pOam->unk_4 = 0;
+            
+            pOam->pOam = sData_79C2CC[pOam->unk_4];
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+        }
+    }
+    
+    if (pOam->xPosition >= SCREEN_SIZE_X || pOam->yPosition >= SCREEN_SIZE_Y)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 89090 | 28 | To document
+ * 
+ */
+void unk_89090(struct SpecialCutsceneOam *pOam) 
+{
+    pOam->animationDurationCounter++;
+    if (pOam->animationDurationCounter == 25)
+    {
+        pOam->animationDurationCounter = 0;
+        gBg3XPosition--;
+    }
+}
+
+ /**
+ * @brief 890b8 | 104 | To document
+ * 
+ */
+void NewFileIntroProcessSamusFainting(struct SpecialCutsceneOam* pOam)
+{
+    u8 rng1;
+    u8 rng2;
+
+    rng1 = sRandomNumberTable[MOD_AND(gFrameCounter16Bit, 32)] / 2;
+    rng2 = sRandomNumberTable[MOD_AND(gFrameCounter16Bit + 7, 32)] / 2;
+
+    if (!pOam->unk_8)
+    {
+        pOam->timer++;
+        if (pOam->timer)
+        {
+            pOam->timer = 0;
+            if (pOam->yPosition < 16)
+            {
+                pOam->yPosition += rng2;
+                if (pOam->yPosition > 15)
+                {
+                    pOam->yPosition = 16;
+                    pOam->unk_8 = 1;
+                }
+            }
+        }
+    }
+    else
+    {
+        pOam->timer++;
+        if (pOam->timer)
+        {
+            pOam->timer = 0;
+            if (pOam->yPosition > 0)
+            {
+                pOam->yPosition -= rng2;
+                if (pOam->yPosition <= 0)
+                {
+                    pOam->yPosition = 0;
+                    pOam->unk_8 = 0;
+                }
+            }
+        }
+    }
+
+    if (!pOam->unk_4)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A)
+        {
+            pOam->unk_A = 0;
+            if (pOam->xPosition < 16)
+            {
+                pOam->xPosition += rng1;
+                if (pOam->xPosition > 15)
+                {
+                    pOam->xPosition = 16;
+                    pOam->unk_4 = 1;
+                }
+            }
+        }
+    }
+    else
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A)
+        {
+            pOam->unk_A = 0;
+            if (pOam->xPosition > 0)
+            {
+                pOam->xPosition -= rng1;
+                if (pOam->xPosition <= 0)
+                {
+                    pOam->xPosition = 0;
+                    pOam->unk_4 = 0;
+                }
+            }
+        }
+    }
+
+    gBg2XPosition = pOam->xPosition;
+    gBg2YPosition = pOam->yPosition;
+}
+
+ /**
+ * @brief 891bc | 74 | To document
+ * 
+ */
+void NewFileIntroProcessSamusDrifting(struct SpecialCutsceneOam* pOam)
+{
+    pOam->unk_A++;
+    
+    if (pOam->stage == 0)
+    {
+        pOam->unk_A = 0;
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->xPosition = pOam->spawnX + (pOam->unk_A >> 1);
+        pOam->yPosition = pOam->spawnY + (pOam->unk_A >> 2);
+
+        pOam->timer++;
+        if (pOam->timer == 2)
+        {
+            pOam->timer = 0;
+            pOam->scaling++;
+        }
+    }
+
+    if (pOam->xPosition > (SCREEN_SIZE_X + 40) || pOam->yPosition > (SCREEN_SIZE_Y + 20))
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 89230 | 258 | To document
+ * 
+ */
+void NewFileIntroProcessSamusDriftingIntoAsteroids(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+
+    pOam->unk_A++;
+    
+    if (pOam->stage == 0)
+    {
+        pOam->unk_A = 0;
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->rotation -= 4;
+        pOam->scaling -= 8;
+        pOam->stage = 2;
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->timer++;
+        pOam->yPosition = (SIN(pOam->timer) >> 7) + pOam->spawnY;
+        
+        if (pOam->timer > 52)
+        {
+            pOam->unk_4++;
+            if (pOam->unk_4 == 12)
+            {
+                pOam->rotation--;
+                pOam->xPosition--;
+                pOam->unk_4 = 0;
+            }
+            
+            pOam->unk_8++;
+            if (pOam->unk_8 == 10)
+            {
+                pOam->unk_8 = 0;
+                pOam->scaling--;
+            }
+        }
+
+        if (pOam->timer > 127)
+        {
+            pOam->unk_8 = 0;
+            pOam->unk_A = 0;
+            pOam->unk_4 = 0;
+            pOam->timer = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        pOam->timer++;
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A >> 2);
+        pOam->yPosition = pOam->spawnY - (pOam->unk_A >> 3) + (SIN(pOam->timer) >> 7);
+        pOam->unk_4++;
+        
+        if (pOam->unk_4 == 12)
+        {
+            pOam->rotation--;
+            pOam->unk_4 = 0;
+        }
+        
+        pOam->unk_8++;
+        if (pOam->unk_8 == 2)
+        {
+            pOam->unk_8 = 0;
+            pOam->scaling--;
+        }
+        
+        if (pOam->timer == 0)
+        {
+            pOam->unk_8 = 0;
+            pOam->unk_A = 0;
+            pOam->unk_4 = 0;
+            pOam->timer = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 3;
+        }
+    }
+    else if (pOam->stage == 3)
+    {
+        pOam->timer++;
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A >> 2);
+        pOam->yPosition = pOam->spawnY - (pOam->unk_A >> 3);
+        pOam->unk_4++;
+        
+        if (pOam->unk_4 == 12)
+        {
+            pOam->rotation--;
+            pOam->unk_4 = 0;
+        }
+        
+        pOam->unk_8++;
+        if (pOam->unk_8 == 1)
+        {
+            pOam->unk_8 = 0;
+            pOam->scaling--;
+        }
+        
+        if (pOam->timer == 0)
+        {
+            pOam->unk_8 = 0;
+            pOam->unk_A = 0;
+            pOam->unk_4 = 0;
+            pOam->timer = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 4;
+        }
+        
+        if (pOam->scaling < 3)
+        {
+            pOam->unk_8 = 0;
+            pOam->unk_A = 0;
+            pOam->unk_4 = 0;
+            pOam->timer = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 5;
+        }
+    }
+    else if (pOam->stage == 4)
+    {
+        pOam->timer++;
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A >> 1);
+        pOam->yPosition = pOam->spawnY - (pOam->unk_A >> 2);
+        pOam->unk_4++;
+        
+        if (pOam->unk_4 == 12)
+        {
+            pOam->rotation--;
+            pOam->unk_4 = 0;
+        }
+        
+        pOam->unk_8++;
+        if (pOam->unk_8 == 1)
+        {
+            pOam->unk_8 = 0;
+            pOam->scaling--;
+        }
+
+        if (pOam->scaling < 3)
+        {
+            pOam->unk_8 = 0;
+            pOam->unk_A = 0;
+            pOam->unk_4 = 0;
+            pOam->timer = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 5;
+        }
+    }
+    else if (pOam->stage == 5)
+    {
+        pOam->unk_A = 0;
+        pOam->scaling = Q_8_8(1);
+        pOam->animationDurationCounter = 0;
+        pOam->currentAnimationFrame = 0;
+        pOam->affineMode = OAM_AFFINE_MODE_NORMAL;
+        pOam->pOam = sOam_598000;
+        pOam->stage = 6;
+        INTRO_DATA.subStage = 6;
+    }
+    else if (pOam->stage == 6)
+    {
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+}
+
+ /**
+ * @brief 89488 | 64 | To document
+ * 
+ */
+void unk_89488(struct SpecialCutsceneOam *pOam) 
+{
+    if (pOam->stage == 0)
+    {
+        NewFileIntroSetupOam(32, pOam->xPosition + 122, pOam->yPosition, FALSE);
+        NewFileIntroSetupOam(33, pOam->xPosition + 50, pOam->yPosition + 1, FALSE);
+        NewFileIntroSetupOam(34, pOam->xPosition + 36, pOam->yPosition, FALSE);
+        NewFileIntroSetupOam(35, pOam->xPosition, pOam->yPosition, FALSE);
+        pOam->type = 0;
+    }
+}
+
+ /**
+ * @brief 894ec | c4 | To document
+ * 
+ */
+void NewFileIntroProcessSidewaysBslShip(struct SpecialCutsceneOam* pOam)
+{
+    if (pOam->stage == 0)
+    {
+        pOam->timer++;
+        if (pOam->timer == 20)
+        {
+            pOam->spawnX++;
+            pOam->timer = 0;
+
+            if (pOam->unk_A == 4)
+                pOam->unk_A = 0;
+
+            if (pOam->unk_A < 2)
+                pOam->yPosition++;
+            else if (pOam->unk_A < 4)
+                pOam->yPosition--;
+                
+            pOam->unk_A++;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->unk_A = 0;
+        pOam->stage = 2;
+    }
+    else if (pOam->stage == 2)
+    {
+        pOam->timer++;
+        if (pOam->timer == 2)
+        {
+            pOam->unk_A++;
+            pOam->timer = 0;
+        }
+
+        pOam->xPosition = (((900 - pOam->spawnX) * pOam->unk_A) >> 12) + pOam->spawnX;
+        pOam->yPosition = (((pOam->unk_4 - pOam->spawnY) * pOam->unk_A) >> 11) + pOam->spawnY;
+
+        if (pOam->xPosition > 320)
+        {
+            pOam->unk_A = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 3;
+        }
+    }
+}
+
+ /**
+ * @brief 895b0 | c4 | To document
+ * 
+ */
+void NewFileIntroProcessDepthParticle(struct SpecialCutsceneOam* pOam)
+{
+    s32 x;
+    s32 y;
+    s32 divisor;
+    
+    pOam->unk_4 = pOam->unk_A;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = (pOam->xPosition - SCREEN_X_MIDDLE) * 100;
+        pOam->spawnY = (pOam->yPosition - SCREEN_Y_MIDDLE) * 100;
+        pOam->stage = 1;
+    }
+    else
+    {
+        if ((s16)pOam->unk_A < 100)
+        {
+            if ((s16)pOam->unk_A == 25)
+                pOam->pOam = sOam_597ed0;
+            else if ((s16)pOam->unk_A == 50)
+                pOam->pOam = sOam_597ee0;
+            else if ((s16)pOam->unk_A == 70)
+                pOam->pOam = sOam_597ef0;
+
+            divisor = -pOam->unk_4 + 100;
+            x = pOam->spawnX / divisor;
+            pOam->xPosition = x + SCREEN_X_MIDDLE;
+            y = pOam->spawnY / divisor + SCREEN_Y_MIDDLE;
+            pOam->yPosition = y;
+
+            if ((u16)(x + 128) > 256 || (s16)y > 168 || (s16)y < -8)
+            {
+                pOam->type = 0;
+                pOam->unk_18_0 = 0;
+            }
+        }
+        else
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+    
+    pOam->unk_A++;
+}
+
+ /**
+ * @brief 89674 | 400 | To document
+ * 
+ */
+u8 NewFileIntroSetupOam(u8 type, s16 xPosition, s16 yPosition, boolu8 descendingSearchOrder)
+{
+    s8 slot;
+
+    if (!descendingSearchOrder)
+    {
+        for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+        {
+            if (INTRO_DATA.oam[slot].type == 0)
+                break;
+        }
+        
+        if (slot > 19)
+            return 20;
+    }
+    else
+    {
+        for (slot = ARRAY_SIZE(INTRO_DATA.oam) - 1; slot >= 0; slot--)
+        {
+            if (INTRO_DATA.oam[slot].type == 0)
+                break;
+        }
+        
+        if (slot < 0)
+            return 20;
+    }
+    
+    DMA3_FILL_32(0, &INTRO_DATA.oam[slot], 36);
+
+    INTRO_DATA.oam[slot].xPosition = xPosition;
+    INTRO_DATA.oam[slot].yPosition = yPosition;
+    INTRO_DATA.oam[slot].type = type;
+    INTRO_DATA.oam[slot].unk_18_0 = 1;
+
+    if (type == 1)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessBslShip;
+    }
+    else if (type == 2)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1);
+        INTRO_DATA.oam[slot].pOam = sOam_597f50;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessFlyingSamusShip;
+    }
+    else if (type == 3)
+    {
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sOam_597ec0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessHorizontalParticle;
+    }
+    else if (type == 4)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_89090;
+    }
+    else if (type == 10)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusFainting;
+    }
+    else if (type == 20)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1);
+        INTRO_DATA.oam[slot].affineMode = OAM_AFFINE_MODE_DOUBLE_SIZED;
+        INTRO_DATA.oam[slot].pOam = sOam_597f50;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusDrifting;
+    }
+    else if (type == 30)
+    {
+        INTRO_DATA.oam[slot].spawnX = xPosition;
+        INTRO_DATA.oam[slot].spawnY = yPosition;
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1);
+        INTRO_DATA.oam[slot].affineMode = OAM_AFFINE_MODE_AFFINE;
+        INTRO_DATA.oam[slot].pOam = sOam_597f88;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusDriftingIntoAsteroids;
+    }
+    else if (type == 31)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pOam = sOam_597f88;
+        INTRO_DATA.oam[slot].pFunction = unk_89488;
+    }
+    else if (type == 32)
+    {
+        INTRO_DATA.oam[slot].unk_4 = -40;
+        INTRO_DATA.oam[slot].pOam = sOam_597fe0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSidewaysBslShip;
+    }
+    else if (type == 33)
+    {
+        INTRO_DATA.oam[slot].unk_4 = -30;
+        INTRO_DATA.oam[slot].pOam = sOam_597fd0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSidewaysBslShip;
+    }
+    else if (type == 34)
+    {
+        INTRO_DATA.oam[slot].unk_4 = -20;
+        INTRO_DATA.oam[slot].pOam = sOam_597fc0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSidewaysBslShip;
+    }
+    else if (type == 35)
+    {
+        INTRO_DATA.oam[slot].unk_4 = -10;
+        INTRO_DATA.oam[slot].pOam = sOam_597fb0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSidewaysBslShip;
+    }
+    else if (type == 36)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sOam_597ec0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessDepthParticle;
+    }
+    else if (type == 200)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroNextPageArrowOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessTextCursor;
+    }
+    else if (type == 201)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroNextPageArrowOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessOam_Empty;
+    }
+    
+    return slot;
+}
+
+ /**
+ * @brief 89a74 | 3c | To document
+ * 
+ */
+void unk_89a74(u8 type, s16 xPos, s16 yPos, s16 arg3) 
+{
+    u8 slot;
+    
+    slot = NewFileIntroSetupOam(type, xPos, yPos, TRUE);
+    INTRO_DATA.oam[slot].unk_8 = arg3;
+}
+
+ /**
+ * @brief 89ab0 | 4 | To document
+ * 
+ */
+void NewFileIntroProcessOam_Empty(void) 
+{
+    return;
+}
+
+ /**
+ * @brief 89ab4 | 248 | To document
+ * 
+ */
+void NewFileIntroSr388PreviewInit(void)
+{
+    u16 i;
+    
+    CallbackSetVBlank(unk_99940);
+    
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+    
+    LZ77UncompVram(sIntroSr388SpaceAndSurfaceObjGfx, VRAM_OBJ);
+    
+    DMA3_COPY_32(sIntroSr388SpaceAndSurfaceObjPal, PALRAM_OBJ, 16 * PAL_ROW_SIZE / sizeof(u32));
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / sizeof(u32));
+    
+    CallbackSetVBlank(unk_99940);
+
+    for (i = 0; i < ARRAY_SIZE(sIntroSr388SurfaceBgGfxPointers); i++)
+        LZ77UncompVram(sIntroSr388SurfaceBgGfxPointers[i], VRAM_BASE + i * 0x1000);
+
+    LZ77UncompVram(sIntroSr388SurfaceTilemap, VRAM_BASE + 0xE800);
+
+    for (i = 0; i < ARRAY_SIZE(sIntroSr388PlanetBgGfxPointers); i++)
+        LZ77UncompVram(sIntroSr388PlanetBgGfxPointers[i], VRAM_BASE + 0x8000 + i * 0x1000);
+    
+    LZ77UncompVram(sIntroSr388SpaceBgTilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSr388PlanetTilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+    
+    DMA3_COPY_32(sSr388SpaceAndSurfacePal, PALRAM_BASE, 16 * PAL_ROW_SIZE / sizeof(u32));
+    
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG1CNT, CREATE_BGCNT(0, 29, BGCNT_HIGH_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(2, 30, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(2, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    
+    gBg1XPosition = 0;
+    gBg1YPosition = 0;
+    gBg2XPosition = 16;
+    gBg2YPosition = 0;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+    
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    
+    NewFileIntroSr388SetupOam(50, 250, 200);
+    NewFileIntroSr388SetupOam(1, 0, 0);
+    NewFileIntroSr388SetupOam(2, gBg2XPosition, 0);
+    
+    NewFileIntroSetupSr388PreviewAsteroid(3, 250, 100, -12);
+    NewFileIntroSetupSr388PreviewAsteroid(4, 150, 10, -8);
+    NewFileIntroSetupSr388PreviewAsteroid(5, 50, 60, -6);
+    NewFileIntroSetupSr388PreviewAsteroid(6, 190, 130, -20);
+    NewFileIntroSetupSr388PreviewAsteroid(5, 280, 30, -10);
+    
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+    
+    INTRO_DATA.pText = sCutsceneTextNone;
+    
+    PlayMusic(MUSIC_SECTOR_1, 13);
+    
+    WRITE_16(REG_DISPCNT, DCNT_BG2 | DCNT_BG3 | DCNT_OBJ);
+    
+    CallbackSetVBlank(NewFileIntroSr388PreviewVblank);
+}
+
+ /**
+ * @brief 89cfc | 348 | To document
+ * 
+ */
+boolu32 NewFileIntroSr388PreviewProcess(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    INTRO_DATA.timer++;
+    
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            if (INTRO_DATA.timer == 1)
+            {
+                DMA3_FILL_32(0, VRAM_BASE + 0xD000, 0x1000);
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG0);
+            }
+            else if (INTRO_DATA.timer == 50)
+            {
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][8];
+            }
+            else if (INTRO_DATA.timer == 58)
+            {
+                gWrittenToBldalpha_Eva = 0;
+                gWrittenToBldalpha_Evb = BLDALPHA_MAX_VALUE;
+            }
+            else if (INTRO_DATA.timer == 59)
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG2_SECOND_TARGET_PIXEL | BLDCNT_BG3_SECOND_TARGET_PIXEL);
+            }
+            else if (INTRO_DATA.timer == 60)
+            {
+                INTRO_DATA.timer = 0;
+                NewFileIntroSr388SetupOam(9, gBg2XPosition + 92, 64);
+                INTRO_DATA.subStage = 1;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 1:
+            if (INTRO_DATA.timer == 2)
+            {
+                INTRO_DATA.timer = 0;
+
+                if (gWrittenToBldalpha_Eva < BLDALPHA_MAX_VALUE)
+                    gWrittenToBldalpha_Eva++;
+            }
+
+            if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && INTRO_DATA.unk_218 == 0)
+                INTRO_DATA.unk_218 = 1;
+
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 2;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 2:
+            if (INTRO_DATA.timer == 2)
+            {
+                INTRO_DATA.timer = 0;
+
+                if (gWrittenToBldalpha_Eva == 0)
+                {
+                    SpecialCutsceneDestroyOamOfType(9);
+                    INTRO_DATA.subStage = 3;
+                }
+                else
+                {
+                    gWrittenToBldalpha_Eva--;
+                }
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 3:
+            if (INTRO_DATA.timer == 1)
+            {
+                gWrittenToBldalpha_Eva = 0;
+                gWrittenToBldalpha_Evb = BLDALPHA_MAX_VALUE;
+            }
+            else if (INTRO_DATA.timer == 2)
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_BG1_FIRST_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG2_SECOND_TARGET_PIXEL 
+                         | BLDCNT_BG3_SECOND_TARGET_PIXEL | BLDCNT_OBJ_SECOND_TARGET_PIXEL | BLDCNT_BACKDROP_SECOND_TARGET_PIXEL);
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG1);
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 4;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 4:
+            if (gWrittenToBldalpha_Eva == BLDALPHA_MAX_VALUE)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~(DCNT_BG2 | DCNT_BG3));
+                WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.subStage = 5;
+                NewFileIntroSr388SetupOam(10, 128, 210);
+            }
+            else if (gWrittenToBldalpha_Eva == 2)
+            {
+                NewFileIntroSr388SetupOam(7, 0, 0);
+            }
+
+            if (INTRO_DATA.timer == 7)
+            {
+                INTRO_DATA.timer = 0;
+
+                if (gWrittenToBldalpha_Eva < BLDALPHA_MAX_VALUE)
+                {
+                    gWrittenToBldalpha_Eva++;
+                    gWrittenToBldalpha_Evb--;
+                }
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 5:
+            if (INTRO_DATA.timer == 70)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 6;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 6:
+            INTRO_DATA.unk_213++;
+            if (INTRO_DATA.unk_213 == 4)
+            {
+                INTRO_DATA.unk_213 = 0;
+
+                if (gWrittenToBldy < BLDY_MAX_VALUE)
+                {
+                    gWrittenToBldy++;
+                }
+                else
+                {
+                    INTRO_DATA.timer = 0;
+                    INTRO_DATA.subStage = 0;
+                    finished = TRUE;
+                }
+            }
+
+            if (gWrittenToBldy >= BLDY_MAX_VALUE)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 0;
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+    
+    IntroProcessText();
+    
+    return finished;
+}
+
+ /**
+ * @brief 8A044 | ac | To document
+ * 
+ */
+boolu32 NewFileIntroSr388Preview(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroSr388PreviewInit();
+            INTRO_DATA.stage = 1;
+            break;
+
+        case 1:
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+
+            INTRO_DATA.timer++;
+
+            if (gWrittenToBldy)
+            {
+                if (INTRO_DATA.timer > 1)
+                {
+                    INTRO_DATA.timer = 0;
+                    gWrittenToBldy--;
+                }
+            }
+            else
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.stage = 2;
+            }
+            break;
+
+        case 2:
+            if (NewFileIntroSr388PreviewProcess())
+            {
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.stage = 3;
+            }
+            break;
+
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy++;
+            }
+            else
+            {
+                INTRO_DATA.stage = 0;
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+
+    return finished;
+}
+
+ /**
+ * @brief 8a0f0 | 40 | To document
+ * 
+ */
+void unk_8a0f0(struct SpecialCutsceneOam* pOam)
+{
+    pOam->animationDurationCounter++;
+    if (pOam->animationDurationCounter == 36)
+        pOam->animationDurationCounter = 0;
+
+    gBg3XPosition = pOam->xPosition;
+
+    if (INTRO_DATA.subStage == 5)
+    {
+        gBg3XPosition = 0;
+        pOam->type = 0;
+    }
+}
+
+ /**
+ * @brief 8a130 | 40 | To document
+ * 
+ */
+void unk_8a130(struct SpecialCutsceneOam* pOam)
+{
+    pOam->animationDurationCounter++;
+    if (pOam->animationDurationCounter == 29)
+        pOam->animationDurationCounter = 0;
+
+    gBg2XPosition = pOam->xPosition;
+
+    if (INTRO_DATA.subStage == 5)
+    {
+        gBg2XPosition = 0;
+        pOam->type = 0;
+    }
+}
+
+ /**
+ * @brief 8a170 | 6c | To document
+ * 
+ */
+void NewFileIntroProcessSr388PreviewAsteroid(struct SpecialCutsceneOam *pOam)
+{
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->unk_A++;
+        pOam->xPosition = ((pOam->unk_8 * pOam->unk_A) >> 6) + pOam->spawnX;
+        
+        if (pOam->xPosition < -40)
+        {
+            pOam->spawnX = 280;
+            pOam->unk_A = 0;
+        }
+    }
+    
+    if (INTRO_DATA.subStage == 5)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8a1dc | 28 | To document
+ * 
+ */
+void unk_8a1dc(struct SpecialCutsceneOam* pOam)
+{
+    pOam->animationDurationCounter++;
+    if (pOam->animationDurationCounter == 3)
+    {
+        pOam->animationDurationCounter = 0;
+        pOam->unk_4++;
+        gBg1YPosition = pOam->unk_4;
+    }
+}
+
+ /**
+ * @brief 8a204 | 64 | To document
+ * 
+ */
+void unk_8a204(struct SpecialCutsceneOam *pOam)
+{
+    pOam->unk_A++;
+    
+    pOam->timer++;
+    if (pOam->timer == 21)
+        pOam->timer = 0;
+    
+    if (pOam->unk_A == 110)
+        NewFileIntroSr388SetupOam(9, pOam->xPosition + 24, pOam->yPosition);
+    else if (pOam->unk_A > 1000)
+        pOam->unk_A = 1000;
+    
+    if (INTRO_DATA.subStage == 5)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8a268 | 38 | To document
+ * 
+ */
+void NewFileIntroProcessSunReflection(struct SpecialCutsceneOam* pOam)
+{
+    pOam->timer++;
+    if (pOam->timer == 29)
+        pOam->timer = 0;
+
+    if (INTRO_DATA.subStage == 5)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8a2a0 | 30 | To document
+ * 
+ */
+void NewFileIntroProcessSr388Rocks(struct SpecialCutsceneOam* pOam)
+{
+    pOam->timer++;
+    if (pOam->timer == 1)
+    {
+        pOam->timer = 0;
+        pOam->yPosition--;
+    }
+
+    if (pOam->yPosition <= 160)
+        pOam->pOam = sOam_59a0f0;
+}
+
+ /**
+ * @brief 8a2d0 | 29c | To document
+ * 
+ */
+u8 NewFileIntroSr388SetupOam(u8 type, s16 xPosition, s16 yPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == 0)
+            break;
+    }
+
+    if (slot > 19)
+        return 20;
+    
+    DMA3_FILL_32(0, &INTRO_DATA.oam[slot], sizeof(struct SpecialCutsceneOam));
+
+    INTRO_DATA.oam[slot].xPosition = xPosition;
+    INTRO_DATA.oam[slot].yPosition = yPosition;
+    INTRO_DATA.oam[slot].type = type;
+    INTRO_DATA.oam[slot].unk_18_0 = 1;
+    
+    if (type == 1)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_8a0f0;
+    }
+    else if (type == 2)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_8a130;
+    }
+    else if (type == 3)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sOam_59a0a0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSr388PreviewAsteroid;
+    }
+    else if (type == 4)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sOam_59a0b0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSr388PreviewAsteroid;
+    }
+    else if (type == 5)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sOam_59a0c0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSr388PreviewAsteroid;
+    }
+    else if (type == 6)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sOam_59a0d0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSr388PreviewAsteroid;
+    }
+    else if (type == 7)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_8a1dc;
+    }
+    else if (type == 8)
+    {
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sOam_59a100;
+        INTRO_DATA.oam[slot].pFunction = unk_8a204;
+    }
+    else if (type == 9)
+    {
+        INTRO_DATA.oam[slot].unk_18_3 = 1;
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sOam_59a0e0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSunReflection;
+    }
+    else if (type == 10)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sOam_59a168;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSr388Rocks;
+    }
+    else if (type == 50)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroNextPageArrowOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessTextCursor;
+    }
+    
+    return slot;
+}
+
+ /**
+ * @brief 8a56c | 38 | To document
+ * 
+ */
+void NewFileIntroSetupSr388PreviewAsteroid(u8 type, s16 xPosition, s16 yPosition, s16 arg3)
+{
+    u8 slot;
+    
+    slot = NewFileIntroSr388SetupOam(type, xPosition, yPosition);
+    INTRO_DATA.oam[slot].unk_8 = arg3;
+}
+
+ /**
+ * @brief 8a5a4 | 94 | V-blank for the SR388 preview cutscene
+ * 
+ */
+void NewFileIntroSr388PreviewVblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+
+    WRITE_16(REG_BG1HOFS, gBg1XPosition);
+    WRITE_16(REG_BG1VOFS, gBg1YPosition);
+    WRITE_16(REG_BG2HOFS, gBg2XPosition);
+    WRITE_16(REG_BG2VOFS, gBg2YPosition);
+    WRITE_16(REG_BG3HOFS, gBg3XPosition);
+    WRITE_16(REG_BG3VOFS, gBg3YPosition);
+}
+
+ /**
+ * @brief 8a638 | 254 | Setup for the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewFileIntroInSr388Init(void)
+{
+    CallbackSetVBlank(unk_99940);
+
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+
+    LZ77UncompVram(sIntroHornoadEncounterObjGfx, VRAM_OBJ);
+
+    DMA3_COPY_32(sIntroHornoadEncounterObjPal, PALRAM_OBJ, 16 * PAL_ROW_SIZE / sizeof(u32));
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompVram(sIntroHornoadEncounterBgGfx, VRAM_BASE);
+    LZ77UncompVram(sTilemap_5a86c8, VRAM_BASE + 0xE800);
+    LZ77UncompVram(sTilemap_5a83b8, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+    LZ77UncompVram(sTilemap_5a9044, VRAM_BASE + 0xC000);
+
+    DMA3_COPY_32(sPal_5a8e44, PALRAM_BASE, 16 * PAL_ROW_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BG0HOFS, 0);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG1CNT, CREATE_BGCNT(0, 24, BGCNT_HIGH_MID_PRIORITY, BGCNT_SIZE_512x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 29, BGCNT_HIGH_MID_PRIORITY, BGCNT_SIZE_512x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    
+    gBg2XPosition = 136;
+    gBg2YPosition = 0;
+    gBg3XPosition = 0;
+    gBg1XPosition = gBg3XPosition + 392;
+    gBg1YPosition = gBg2YPosition - 96;
+
+    gUnk_3001234 = 560;
+    gUnk_3001236 = -40;
+
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_NEXT_PAGE_ARROW, 250, 200);
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_UNK_255, 0, 0);
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_UNK_255, 0, 0);
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_SAMUS, 234, 200);
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_LEFT_RESEARCHER, 288, 200);
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_RIGHT_RESEARCHER, 312, 100);
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_UNK_11, 0, 0);
+    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_CAVE_ENTRANCE_BG, 304 - gBg2XPosition, 200);
+
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / sizeof(u32));
+    
+    INTRO_DATA.pText = sCutsceneTextNone;
+    
+    WRITE_16(REG_DISPCNT, DCNT_BG0 | DCNT_BG1 | DCNT_BG2 | DCNT_BG3 | DCNT_OBJ);
+
+    CallbackSetVBlank(NewFileIntroInSr388Vblank);
+}
+
+ /**
+ * @brief 8a88c | 344 | Processes the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+boolu32 NewFileIntroInSr388Process(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && INTRO_DATA.unk_218 == 0)
+        INTRO_DATA.unk_218 = 1;
+    
+    INTRO_DATA.timer++;
+    
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            INTRO_DATA.unk_213++;
+            if (INTRO_DATA.unk_213 == 4)
+            {
+                INTRO_DATA.unk_213 = 0;
+            
+                if (gWrittenToBldy)
+                    gWrittenToBldy--;
+            }
+        
+            if (INTRO_DATA.timer == 2)
+            {
+                INTRO_DATA.timer = 0;
+                
+                gBg2YPosition++;
+                if (gBg2YPosition == 96)
+                    INTRO_DATA.subStage = 2;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+        
+            gBg2XPosition += INTRO_DATA.unk_216;
+            break;
+        
+        case 1:
+        case 2:
+            INTRO_DATA.timer = 0;
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+        
+            gBg2XPosition += INTRO_DATA.unk_216;
+            break;
+        
+        case 3:
+            if (INTRO_DATA.timer == 1)
+                DMA3_FILL_32(0, VRAM_BASE + 0xD000, 0x1000);
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+        
+            gBg2XPosition += INTRO_DATA.unk_216;
+            break;
+        
+        case 4:
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            
+            gBg2XPosition += INTRO_DATA.unk_216;
+            INTRO_DATA.timer = 0;
+            break;
+        
+        case 5:
+            if (INTRO_DATA.timer == 1)
+            {
+                INTRO_DATA.unk_110 = 1;
+            }
+            else if (INTRO_DATA.timer == 30)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][9];
+                INTRO_DATA.subStage = 6;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 6:
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 9;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 7:
+            if (INTRO_DATA.timer == 10)
+            {
+                DMA3_FILL_32(0, VRAM_BASE + 0xD000, 0x1000);
+            }
+            else if (INTRO_DATA.timer == 11)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_20C = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][10];
+                INTRO_DATA.subStage = 8;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 8:
+            INTRO_DATA.timer = 0;
+        
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 9;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 9:
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+        
+            gBg2XPosition += INTRO_DATA.unk_216;
+        
+            if (INTRO_DATA.timer > 50)
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+                finished = TRUE;
+            }
+            break;
+    }
+    
+    IntroProcessText();
+    
+    return finished;
+}
+
+ /**
+ * @brief 8abd0 | 98 | Main handler for the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+boolu32 NewFileIntroInSr388(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroInSr388Init();
+            
+            INTRO_DATA.stage = 2;
+            break;
+        
+        case 1:
+            SpecialCutsceneFadeIn();
+
+            if (!gWrittenToBldy)
+                INTRO_DATA.stage = 2;
+            break;
+
+        case 2:
+            if (NewFileIntroInSr388Process())
+            {
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.stage = 3;
+                gWrittenToBldy = 0;
+            }
+            break;
+
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy++;
+            }
+            else
+            {
+                INTRO_DATA.stage = 0;
+                INTRO_DATA.subStage = 0;
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+
+    return finished;
+}
+
+ /**
+ * @brief 8ac68 | 5d8 | Processes Samus in the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewFileIntroProcessSamusInSr388(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+    s16 x;
+    s16 y;
+
+    pOam->timer++;
+    
+    if (INTRO_DATA.subStage == 0)
+    {
+        if (gBg2YPosition > 47)
+        {
+            pOam->yPosition = 240 - gBg2YPosition;
+            pOam->xPosition--;
+        }
+        
+        pOam->timer = 0;
+    }
+    else if (INTRO_DATA.subStage == 1)
+    {
+        pOam->yPosition = 240 - gBg2YPosition;
+        
+        if (pOam->stage == 0)
+        {
+            if (pOam->timer < 20)
+            {
+                pOam->xPosition--;
+            }
+            else if (pOam->timer < 70)
+            {
+                INTRO_DATA.unk_216 = -1;
+            }
+            else if (pOam->timer == 70)
+            {
+                INTRO_DATA.unk_216 = 0;
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_IdleLeft;
+                pOam->stage = 1;
+            }
+        }
+        else if (pOam->stage == 1)
+        {
+            if (pOam->timer == 30)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_TurningRight;
+                pOam->stage = 2;
+            }
+        }
+        else if (pOam->stage == 2)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_IdleRight;
+                pOam->stage = 3;
+                INTRO_DATA.unk_20C = 0;
+            }
+        }
+        else if (pOam->stage == 3)
+        {
+            if (pOam->timer == 30)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_TurningLeft;
+                pOam->stage = 4;
+            }
+        }
+        else if (pOam->stage == 4)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_IdleLeft;
+                pOam->stage = 5;
+            }
+        }
+        else if (pOam->stage == 5)
+        {
+            if (pOam->timer == 30)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->stage = 0;
+                INTRO_DATA.subStage = 2;
+            }
+        }
+    }
+    else if (INTRO_DATA.subStage == 2)
+    {
+        pOam->stage = 3;
+        INTRO_DATA.subStage = 3;
+    }
+    else if (INTRO_DATA.subStage == 3)
+    {
+        if (pOam->stage == 0)
+        {
+            if (pOam->timer == 30)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_WalkingRight;
+                pOam->stage = 1;
+                pOam->xPosition++;
+            }
+        }
+        else if (pOam->stage == 1)
+        {
+            if (pOam->xPosition < 260)
+            {
+                pOam->xPosition++;
+            }
+            else
+            {
+                pOam->xPosition = 260;
+                pOam->timer = 0;
+                pOam->stage = 2;
+            }
+        }
+        else if (pOam->stage == 2)
+        {
+            if (pOam->timer == 1)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_WalkingLeft;
+                pOam->stage = 3;
+            }
+        }
+        else if (pOam->stage == 3)
+        {
+            if (pOam->xPosition > 140)
+            {
+                pOam->xPosition--;
+            }
+            else if (gBg2XPosition > 108)
+            {
+                INTRO_DATA.unk_216 = -1;
+            }
+            else
+            {
+                INTRO_DATA.unk_216 = 0;
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_IdleLeft;
+                pOam->stage = 4;
+            }
+        }
+        else if (pOam->stage == 4)
+        {
+            if (pOam->timer == 60)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->stage = 5;
+            }
+        }
+        else if (pOam->stage == 5)
+        {
+            pOam->pOam = sIntroInSr388SamusOam_WalkingLeft;
+            
+            if (gBg2XPosition > 40)
+            {
+                INTRO_DATA.unk_216 = -1;
+                
+                if (gBg2XPosition == 56)
+                    NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_HORNOAD, 0, 128);
+            }
+            else
+            {
+                INTRO_DATA.unk_216 = 0;
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_IdleLeft;
+                pOam->stage = 6;
+            }
+        }
+        else if (pOam->stage == 6)
+        {
+            if (pOam->timer == 30)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_TurningRight;
+                pOam->stage = 7;
+            }
+        }
+        else if (pOam->stage == 7)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_IdleRight;
+                pOam->stage = 8;
+            }
+        }
+        else if (pOam->stage == 8)
+        {
+            if (pOam->timer == 30)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_TurningLeft;
+                pOam->stage = 9;
+            }
+        }
+        else if (pOam->stage == 9)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_IdleLeft;
+                pOam->stage = 10;
+            }
+        }
+        else if (pOam->stage == 10)
+        {
+            if (pOam->timer == 30)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_WalkingLeft;
+                pOam->stage = 11;
+            }
+        }
+        else if (pOam->stage == 11)
+        {
+            pOam->pOam = sIntroInSr388SamusOam_WalkingLeft;
+            
+            if (pOam->timer == 1)
+            {
+                if (gBg2XPosition != 0)
+                {
+                    INTRO_DATA.unk_216 = -1;
+                }
+                else
+                {
+                    INTRO_DATA.unk_216 = 0;
+                    pOam->timer = 0;
+                    pOam->animationDurationCounter = 0;
+                    pOam->currentAnimationFrame = 0;
+                    pOam->pOam = sIntroInSr388SamusOam_IdleLeft;
+                    INTRO_DATA.subStage = 4;
+                    pOam->stage = 0;
+                }
+            }
+            else
+            {
+                pOam->timer = 0;
+                INTRO_DATA.unk_216 = 0;
+            }
+        }
+    }
+    else if (INTRO_DATA.subStage == 4)
+    {
+        if (pOam->stage == 0)
+        {
+            if (pOam->timer == 60)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_MissileArmedLeft;
+                pOam->stage = 1;
+            }
+        }
+        else if (pOam->stage == 1)
+        {
+            if (pOam->timer == 60)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_FiringMissileLeft;
+                
+                NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_HORIZONTAL_MISSILE, pOam->xPosition - 20, pOam->yPosition - 22);
+                
+                pOam->stage = 2;
+            }
+        }
+        else if (pOam->stage == 2)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_MissileArmedLeft;
+                pOam->stage = 3;
+            }
+        }
+        else if (pOam->stage == 3)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_HORIZONTAL_MISSILE, &x, &y);
+            
+            if (x == 300)
+            {
+                pOam->timer = 0;
+                pOam->stage = 4;
+            }
+        }
+        else if (pOam->stage == 4)
+        {
+            if (pOam->timer == 8)
+            {
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_MissileArmedUpLeft;
+                return;
+            }
+            else if (pOam->timer == 10)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_FiringMissileUpLeft;
+                
+                NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_FIRST_DIAGONAL_MISSILE, pOam->xPosition - 20, pOam->yPosition - 40);
+                
+                pOam->stage = 5;
+            }
+        }
+        else if (pOam->stage == 5)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_MissileArmedUpLeft;
+                pOam->stage = 6;
+            }
+        }
+        else if (pOam->stage == 6)
+        {
+            if (pOam->timer == 130)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_FiringMissileUpLeft;
+                
+                NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_SECOND_DIAGONAL_MISSILE, pOam->xPosition - 20, pOam->yPosition - 40);
+                
+                pOam->stage = 7;
+            }
+        }
+        else if (pOam->stage == 7)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_MissileArmedUpLeft;
+                pOam->stage = 8;
+            }   
+        }
+        else if (pOam->stage == 8)
+        {
+            if (pOam->timer == 78)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_FiringMissileUpLeft;
+                
+                NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_SECOND_DIAGONAL_MISSILE, pOam->xPosition - 20, pOam->yPosition - 40);
+                
+                pOam->stage = 9;
+            }
+        }
+        else if (pOam->stage == 9)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388SamusOam_MissileArmedUpLeft;
+                pOam->stage = 10;
+            }
+        }
+    }
+    else if (INTRO_DATA.subStage > 4)
+    {
+        pOam->animationDurationCounter = 0;
+    }
+}
+
+ /**
+ * @brief 8b240 | 20c | Processes the left BSL guy in the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewfileIntroProcessLeftBiologicalResearcher(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+    s16 x;
+    s16 y;
+
+    pOam->timer++;
+    
+    if (INTRO_DATA.subStage == 0)
+    {
+        if (gBg2YPosition > 47)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            pOam->xPosition = x + pOam->unk_8;
+            pOam->yPosition = y;
+        }
+        
+        pOam->timer = 0;
+        pOam->stage = 20;
+    }
+    else if (INTRO_DATA.subStage == 1 || INTRO_DATA.subStage == 2)
+    {
+        NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+        
+        pOam->xPosition = x + pOam->unk_8;
+        pOam->yPosition = y;
+        pOam->stage = 20;
+    }
+    else if (INTRO_DATA.subStage == 3)
+    {
+        if (pOam->stage == 16)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition < x)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->stage = 17;
+            }
+        }
+        else if (pOam->stage == 17)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition > x + 10)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Turning;
+                pOam->stage = 18;
+            }
+        }
+        else if (pOam->stage == 18)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Idle;
+                pOam->stage = 19;
+            }
+        }
+        else if (pOam->stage == 19)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition > x + pOam->unk_8)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Walking;
+                pOam->stage = 20;
+            }
+        }
+        else if (pOam->stage == 20)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition <= x + pOam->unk_8 - 7)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Idle;
+                pOam->stage = 21;
+            }
+            else
+            {
+                pOam->xPosition--;
+            }
+        }
+        else if (pOam->stage == 21)
+        {
+            if (gBg2XPosition < 98)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Walking;
+                pOam->stage = 22;
+            }
+        }
+        else if (pOam->stage == 22)
+        {
+            if (gBg2XPosition > 45)
+            {
+                pOam->xPosition--;
+            }
+            else
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Idle;
+                pOam->stage = 23;
+            }
+        }
+    }
+    else if (INTRO_DATA.subStage == 4)
+    {
+        pOam->timer = 0;
+    }
+    else if (INTRO_DATA.subStage > 4)
+    {
+        pOam->animationDurationCounter = 0;
+    }
+    
+    pOam->xPosition -= INTRO_DATA.unk_216;
+}
+
+ /**
+ * @brief 8b44c | 214 | Processes the right BSL guy in the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewfileIntroProcessRightBiologicalResearcher(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+    s16 x;
+    s16 y;
+
+    pOam->timer++;
+    
+    if (INTRO_DATA.subStage == 0)
+    {
+        if (gBg2YPosition > 47)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            pOam->xPosition = x + pOam->unk_8;
+            pOam->yPosition = y;
+        }
+        
+        pOam->timer = 0;
+        pOam->stage = 20;
+    }
+    else if (INTRO_DATA.subStage == 1 || INTRO_DATA.subStage == 2)
+    {
+        NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+        
+        pOam->xPosition = x + pOam->unk_8;
+        pOam->yPosition = y;
+        pOam->stage = 20;
+    }
+    else if (INTRO_DATA.subStage == 3)
+    {
+        if (pOam->stage == 16)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition < x)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->stage = 17;
+            }
+        }
+        else if (pOam->stage == 17)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition > x + 10)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Turning;
+                pOam->stage = 18;
+            }
+        }
+        else if (pOam->stage == 18)
+        {
+            frame = &pOam->pOam[pOam->currentAnimationFrame];
+            if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Idle;
+                pOam->stage = 19;
+            }
+        }
+        else if (pOam->stage == 19)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition > x + pOam->unk_8 + 10)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Walking;
+                pOam->stage = 20;
+            }
+        }
+        else if (pOam->stage == 20)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+            
+            if (pOam->xPosition <= x + pOam->unk_8 - 10)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Idle;
+                pOam->stage = 21;
+            }
+            else
+            {
+                pOam->xPosition--;
+            }
+        }
+        else if (pOam->stage == 21)
+        {
+            if (gBg2XPosition < 103)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Walking;
+                pOam->stage = 22;
+            }
+        }
+        else if (pOam->stage == 22)
+        {
+            if (gBg2XPosition > 52)
+            {
+                pOam->xPosition--;
+            }
+            else
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388BslResearcherOam_Idle;
+                pOam->stage = 23;
+            }
+        }
+    }
+    else if (INTRO_DATA.subStage == 4)
+    {
+        pOam->timer = 0;
+    }
+    else if (INTRO_DATA.subStage > 4)
+    {
+        pOam->animationDurationCounter = 0;
+    }
+    
+    pOam->xPosition -= INTRO_DATA.unk_216;
+}
+
+ /**
+ * @brief 8b660 | 174 | Processes the hornoad in the SR388 cutscene (unused?)
+ * 
+ */
+void unk_8b660(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+    u32 timer;
+    u8 tmp;
+    s16 y;
+    
+    pOam->timer++;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnY = pOam-> yPosition;
+        pOam->unk_4 = 0;
+        pOam->pOam = sIntroInSr388HornoadOam_IdleUnused;
+
+        if (pOam->timer == 4)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->stage = 1;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->pOam = sIntroInSr388HornoadOam_JumpingUnused;
+
+        if (pOam->unk_8 == 0)
+        {
+            timer = pOam->timer;
+            y = sHornoadJumpVelocityHigh[pOam->unk_4] * timer >> 2;
+        }
+        else
+        {
+            timer = pOam->timer;
+            tmp = timer; // From permuter
+            y = sHornoadJumpVelocityLow[pOam->unk_4] * tmp >> 2;
+        }
+        
+        pOam->yPosition = pOam->spawnY + y;
+        if (pOam->yPosition > 144)
+        {
+            pOam->yPosition = 144;
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388HornoadOam_BouncingUnused;
+            pOam->stage = 2;
+        }
+
+        if (y < 0)
+            pOam->xPosition += 2;
+        else
+            pOam->xPosition += 1;
+
+        if (pOam->animationDurationCounter == 4 && pOam->currentAnimationFrame == 2)
+            pOam->xPosition += 8;
+
+        if (pOam->timer == 4)
+        {
+            pOam->timer = 0;
+            pOam->spawnY = pOam->yPosition;
+            pOam->unk_4++;
+
+            if (pOam->unk_4 == 10)
+                pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            pOam->animationDurationCounter = 0;
+
+        if (pOam->timer == sArray_59db00[pOam->unk_A])
+        {
+            pOam->unk_A++;
+            if (pOam->unk_A == 6)
+                pOam->unk_A = 0;
+
+            if (!pOam->unk_8)
+                pOam->unk_8 = 1;
+            else
+                pOam->unk_8 = 0;
+
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->stage = 0;
+        }
+    }
+
+    pOam->xPosition -= INTRO_DATA.unk_216;
+    if (pOam->xPosition > 260)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8b7d4 | 4c8 | Processes the hornoad in the SR388 cutscene
+ * 
+ */
+void NewFileIntroProcessHornoad(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+    s16 var0;
+    s16 var1;
+    s32 var2;
+    s32 spawnY;
+    s32 xPos;
+    s16 x;
+    s16 y;
+
+    pOam->timer++;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnY = pOam->yPosition;
+
+        if (pOam->timer == 150)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388HornoadOam_Chomping;
+            pOam->stage = 1;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->spawnY = pOam->yPosition;
+
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388HornoadOam_Chomping;
+            pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_HORIZONTAL_MISSILE, &x, &y);
+
+        pOam->spawnY = pOam->yPosition;
+
+        if (x - pOam->xPosition < 25)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388HornoadOam_Biting;
+            pOam->stage = 3;
+        }
+    }
+    else if (pOam->stage == 3)
+    {
+        pOam->pOam = sIntroInSr388HornoadOam_Jumping;
+
+        var0 = pOam->timer * sHornoadJumpVelocityHigh[pOam->unk_4] >> 2;
+        var2 = var0 + (u16)pOam->spawnY;
+        pOam->yPosition = var2;
+
+        if (pOam->timer == 4)
+        {
+            pOam->timer = 0;
+            pOam->spawnY = var2;
+
+            pOam->unk_4++;
+            if (pOam->unk_4 == 5)
+            {
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388HornoadOam_MidAir;
+            }
+            else if (pOam->unk_4 > 10)
+            {
+                pOam->unk_4 = 10;
+            }
+        }
+
+        if (pOam->yPosition > 128)
+        {
+            pOam->spawnY = 128;
+            pOam->yPosition = 128;
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388HornoadOam_Bouncing;
+            pOam->unk_4 = 0;
+            pOam->stage = 4;
+        }
+    }
+    else if (pOam->stage == 4)
+    {
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388HornoadOam_Panting;
+            pOam->stage = 5;
+        }
+    }
+    else if (pOam->stage == 5)
+    {
+        NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_HORIZONTAL_MISSILE, &x, &y);
+
+        if (x == 300)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388HornoadOam_Biting;
+            pOam->stage = 6;
+        }
+    }
+    else if (pOam->stage == 6)
+    {
+        pOam->pOam = sIntroInSr388HornoadOam_Jumping;
+
+        var0 = pOam->timer * sHornoadJumpVelocityHigh[pOam->unk_4] >> 1;
+        do { pOam->spawnY += 0; } while (0);
+        spawnY = (u16)pOam->spawnY;
+        var2 = var0;
+        pOam->yPosition = var2 + spawnY;
+        pOam->xPosition++;
+
+        if (pOam->currentAnimationFrame == 2 && pOam->animationDurationCounter == 4)
+        {
+            xPos = (u16)pOam->xPosition;
+            xPos += 8;
+            pOam->xPosition = xPos;
+        }
+        else
+        {
+            var0 += 0;
+        }
+
+        if (pOam->timer == 4)
+        {
+            pOam->timer = 0;
+            pOam->spawnY = pOam->yPosition;
+
+            pOam->unk_4++;
+            if (pOam->unk_4 == 5)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388HornoadOam_MidAir;
+            }
+            else if (pOam->unk_4 > 10)
+            {
+                pOam->unk_4 = 10;
+            }
+        }
+
+        if (pOam->unk_4 > 1)
+        {
+            NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_FIRST_DIAGONAL_MISSILE, &x, &y);
+
+            if (pOam->xPosition >= x && pOam->yPosition >= y)
+            {
+                NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_MISSILE_EXPLOSION_BIG, pOam->xPosition, pOam->yPosition);
+
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388HornoadOam_Shaking;
+                pOam->unk_4 = 1;
+                WRITE_16(REG_MOSAIC, sXParasiteMosaicValues[1] * 16);
+                pOam->unk_18_5 = 1;
+                pOam->stage = 7;
+            }
+        }
+    }
+    else if (pOam->stage == 7)
+    {
+        if (pOam->timer == 2)
+        {
+            pOam->timer = 0;
+            pOam->unk_4++;
+            WRITE_16(REG_MOSAIC, sXParasiteMosaicValues[pOam->unk_4] * 16);
+        }
+
+        if (pOam->unk_A == 1)
+        {
+            if (pOam->unk_4 == 15)
+            {
+                pOam->timer = 0;
+                pOam->animationDurationCounter = 0;
+                pOam->currentAnimationFrame = 0;
+                pOam->pOam = sIntroInSr388XParasiteOam_Floating;
+                pOam->xPosition -= 4;
+                pOam->yPosition -= 10;
+                pOam->unk_A = 0;
+                pOam->stage = 8;
+            }
+        }
+        else
+        {
+            if (pOam->unk_4 == 29)
+            {
+                pOam->unk_A++;
+                pOam->unk_4 = 1;
+            }
+        }
+    }
+    else if (pOam->stage == 8)
+    {
+        if (pOam->timer == 2)
+        {
+            pOam->timer = 0;
+            pOam->unk_4++;
+            WRITE_16(REG_MOSAIC, sXParasiteMosaicValues[pOam->unk_4] * 16);
+        }
+
+        if (pOam->unk_A == 1)
+        {
+            if (pOam->unk_4 == 29)
+            {
+                pOam->timer = 0;
+                pOam->unk_18_5 = 0;
+
+                NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_SAMUS, &x, &y);
+
+                pOam->spawnY = pOam->yPosition;
+                pOam->spawnX = x;
+                pOam->unk_4 = x - pOam->xPosition;
+                pOam->unk_A = 63;
+                pOam->stage = 9;
+            }
+        }
+        else
+        {
+            if (pOam->unk_4 == 29)
+            {
+                pOam->unk_A++;
+                pOam->unk_4 = 1;
+            }
+        }
+    }
+    else if (pOam->stage == 9)
+    {
+        if (pOam->timer != 10)
+        {
+            if (pOam->timer > 30)
+            {
+                pOam->timer = 0;
+                pOam->stage = 10;
+            }
+        }
+    }
+    else if (pOam->stage == 10)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A > 255)
+            pOam->unk_A -= 256;
+
+        var0 = pOam->unk_A;
+        var1 = pOam->unk_A * 2;
+        if (var1 > 255)
+            var1 -= 256;
+
+        pOam->xPosition = pOam->spawnX + ((pOam->unk_4 * COS(var1) * SIN(var0)) >> 16);
+        pOam->yPosition = pOam->spawnY + ((pOam->unk_4 * COS(var1) * COS(var0)) >> 16);
+
+        if (pOam->unk_A > 159)
+        {
+            pOam->unk_A = 0;
+            pOam->timer = 0;
+            pOam->unk_4 = 0;
+            pOam->spawnY = 0;
+            pOam->spawnX = 0;
+            pOam->stage = 11;
+        }
+        else if (pOam->unk_A > 155)
+        {
+            pOam->spawnX--;
+            pOam->spawnY++;
+        }
+        else if (pOam->unk_A > 119)
+        {
+            pOam->spawnY++;
+        }
+    }
+    else if (pOam->stage == 11)
+    {
+        pOam->affineMode = OAM_AFFINE_MODE_DOUBLE_SIZED;
+
+        pOam->scaling += Q_8_8(0.5f);
+        if (pOam->scaling >= Q_8_8(2))
+            pOam->stage = 12;
+    }
+    else if (pOam->stage == 12)
+    {
+        pOam->scaling -= Q_8_8(1.f / 16);
+        if (pOam->scaling <= Q_8_8(0.56f))
+        {
+            INTRO_DATA.subStage = 5;
+            pOam->stage = 13;
+        }
+    }
+    else if (pOam->stage == 13)
+    {
+        pOam->animationDurationCounter = 0;
+    }
+
+    pOam->xPosition -= INTRO_DATA.unk_216;
+}
+
+ /**
+ * @brief 8bc9c | b4 | Processes the horizontal missile in the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewFileIntroProcessHorizontalMissile(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+
+    pOam->timer++;
+    
+    if (pOam->stage == 0)
+    {
+        pOam->xPosition = pOam->spawnX - (pOam->timer * sNormalMissileVelocity[pOam->unk_4] >> 2);
+        
+        if (pOam->timer == 4)
+        {
+            pOam->timer = 0;
+            
+            if (pOam->unk_4 < 6)
+                pOam->unk_4++;
+            
+            pOam->spawnX = pOam->xPosition;
+        }
+        else if (pOam->timer == 1)
+        {
+            NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_MISSILE_TRAIL, pOam->xPosition + 12, pOam->yPosition + 2);
+        }
+        
+        if (pOam->xPosition < 32)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388MissileExplosionOam_Small;
+            pOam->stage = 1;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+}
+
+ /**
+ * @brief 8bd50 | c8 | Processes the first diagonal missile in the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewFileIntroProcessFirstDiagonalMissile(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+    s16 x;
+    s16 y;
+
+    pOam->timer++;
+    
+    if (pOam->stage == 0)
+    {
+        pOam->xPosition = pOam->spawnX - (pOam->timer * (sNormalMissileVelocity[pOam->unk_4] + 1) >> 2);
+        pOam->yPosition = pOam->spawnY - (pOam->timer * (sNormalMissileVelocity[pOam->unk_4] + 1) >> 2);
+        
+        if (pOam->timer == 4)
+        {
+            pOam->timer = 0;
+            
+            if (pOam->unk_4 < 6)
+                pOam->unk_4++;
+            
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+        }
+        else if (pOam->timer == 1)
+        {
+            NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_MISSILE_TRAIL, pOam->xPosition + 10, pOam->yPosition + 12);
+        }
+
+        NewFileIntroGetPositionOfOamByType(INTRO_IN_SR388_OAM_TYPE_HORNOAD, &x, &y);
+
+        if (pOam->xPosition <= x - 2 && pOam->yPosition <= y - 2)
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+}
+
+ /**
+ * @brief 8be18 | 2c | To document
+ * 
+ */
+void unk_8be18(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+    
+    frame = &pOam->pOam[pOam->currentAnimationFrame];
+    if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8be44 | d8 | To document
+ * 
+ */
+void unk_8be44(struct SpecialCutsceneOam *pOam)
+{
+    if (pOam->stage == 0)
+    {
+        pOam->yPosition = gBg2YPosition;
+        pOam->xPosition = gBg2XPosition;
+        pOam->stage = 1;
+    }
+    else if (pOam->stage == 1)
+    {
+        if (pOam->yPosition + 1 < gBg2YPosition)
+        {
+            pOam->yPosition = gBg2YPosition;
+            gBg3YPosition++;
+        }
+        
+        if (pOam->xPosition - 1 > gBg2XPosition)
+        {
+            pOam->xPosition = gBg2XPosition;
+            gBg3XPosition--;
+        }
+    }
+    
+    if (pOam->unk_4 == 0)
+    {
+        gBg1XPosition = gBg2XPosition + 256;
+        gBg1YPosition = gBg2YPosition - 96;
+        
+        if (gBg1XPosition < 120)
+        {
+            WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG1);
+            WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+            
+            gWrittenToBldalpha_Eva = gWrittenToBldalpha_Evb = 0;
+            pOam->unk_4 = 1;
+        }
+    }
+    
+    if (gBg2XPosition == 0)
+        pOam->type = 0;
+}
+
+ /**
+ * @brief 8bf1c | 4c | To document
+ * 
+ */
+void unk_8bf1c(struct SpecialCutsceneOam* pOam)
+{
+    if (gBg2YPosition > 23)
+        pOam->yPosition = 216 - gBg2YPosition;
+
+    pOam->xPosition -= INTRO_DATA.unk_216;
+    if (pOam->xPosition > 302)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8bf68 | 48 | To document
+ * 
+ */
+void unk_8bf68(struct SpecialCutsceneOam* pOam)
+{
+    if (gBg2YPosition > 23)
+        pOam->yPosition = 216 - gBg2YPosition;
+
+    pOam->xPosition -= INTRO_DATA.unk_216;
+    if (pOam->xPosition > 250)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8bfb0 | d4 | Processes the second and subsequent diagonal missiles in the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewFileIntroProcessSecondDiagonalMissile(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+
+    pOam->timer++;
+    
+    if (pOam->stage == 0)
+    {
+        pOam->xPosition = pOam->spawnX - (pOam->timer * (sNormalMissileVelocity[pOam->unk_4] + 1) >> 2);
+        pOam->yPosition = pOam->spawnY - (pOam->timer * (sNormalMissileVelocity[pOam->unk_4] + 1) >> 2);
+        
+        if (pOam->timer == 4)
+        {
+            pOam->timer = 0;
+            
+            if (pOam->unk_4 < 6)
+                pOam->unk_4++;
+            
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+        }
+        else if (pOam->timer == 1)
+        {
+            NewFileIntroInSr388SetupOam(INTRO_IN_SR388_OAM_TYPE_MISSILE_TRAIL, pOam->xPosition + 10, pOam->yPosition + 12);
+        }
+        
+        if (pOam->yPosition < 50)
+        {
+            pOam->timer = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroInSr388MissileExplosionOam_Small;
+            pOam->stage = 1;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+}
+
+ /**
+ * @brief 8c084 | 8 | To document
+ * 
+ */
+void unk_8c084(struct SpecialCutsceneOam* pOam)
+{
+    pOam->type = 0;
+}
+
+ /**
+ * @brief 8c08c | 478 | Spawns an object for the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+u8 NewFileIntroInSr388SetupOam(IntroInSr388OamType type, s16 xPosition, s16 yPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == 0)
+            break;
+    }
+
+    if (slot > 19)
+        return 20;
+    
+    DMA3_FILL_32(0, &INTRO_DATA.oam[slot], sizeof(struct SpecialCutsceneOam));
+
+    INTRO_DATA.oam[slot].xPosition = xPosition;
+    INTRO_DATA.oam[slot].yPosition = yPosition;
+    INTRO_DATA.oam[slot].type = type;
+    INTRO_DATA.oam[slot].unk_18_0 = 1;
+
+    if (type == INTRO_IN_SR388_OAM_TYPE_SAMUS)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388SamusOam_WalkingLeft;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusInSr388;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_LEFT_RESEARCHER)
+    {
+        INTRO_DATA.oam[slot].unk_8 = 38;
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388BslResearcherOam_Walking;
+        INTRO_DATA.oam[slot].pFunction = NewfileIntroProcessLeftBiologicalResearcher;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_RIGHT_RESEARCHER)
+    {
+        INTRO_DATA.oam[slot].unk_8 = 72;
+        INTRO_DATA.oam[slot].currentAnimationFrame = 1;
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388BslResearcherOam_Walking;
+        INTRO_DATA.oam[slot].pFunction = NewfileIntroProcessRightBiologicalResearcher;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_HORNOAD_UNUSED)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388HornoadOam_IdleUnused;
+        INTRO_DATA.oam[slot].pFunction = unk_8b660;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_HORNOAD_UNUSED_2)
+    {
+        INTRO_DATA.oam[slot].unk_8 = 1;
+        INTRO_DATA.oam[slot].unk_A = 2;
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388HornoadOam_IdleUnused;
+        INTRO_DATA.oam[slot].pFunction = unk_8b660;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_HORIZONTAL_MISSILE)
+    {
+        INTRO_DATA.oam[slot].spawnX = xPosition;
+        INTRO_DATA.oam[slot].spawnY = yPosition;
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388MissileOam_Horizontal;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessHorizontalMissile;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_FIRST_DIAGONAL_MISSILE)
+    {
+        INTRO_DATA.oam[slot].spawnX = xPosition;
+        INTRO_DATA.oam[slot].spawnY = yPosition;
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388MissileOam_Diagonal;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessFirstDiagonalMissile;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_MISSILE_TRAIL)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388MissileTrailOam;
+        INTRO_DATA.oam[slot].pFunction = unk_8be18;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_HORNOAD)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388HornoadOam_Panting;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessHornoad;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_MISSILE_EXPLOSION_BIG)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388MissileExplosionOam_Big;
+        INTRO_DATA.oam[slot].pFunction = unk_8be18;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_UNK_11)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_8be44;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_CAVE_ENTRANCE_BG)
+    {
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388CaveEntranceBgOam;
+        INTRO_DATA.oam[slot].pFunction = unk_8bf1c;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_BLACK_RECTANGLE)
+    {
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388BlackRectangeOam;
+        INTRO_DATA.oam[slot].pFunction = unk_8bf68;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_SECOND_DIAGONAL_MISSILE)
+    {
+        INTRO_DATA.oam[slot].spawnX = xPosition;
+        INTRO_DATA.oam[slot].spawnY = yPosition;
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroInSr388MissileOam_Diagonal;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSecondDiagonalMissile;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_NEXT_PAGE_ARROW)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroNextPageArrowOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessTextCursor;
+    }
+    else if (type == INTRO_IN_SR388_OAM_TYPE_UNK_255)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_8c084;
+    }
+
+    return slot;
+}
+
+ /**
+ * @brief 8c504 | 38 | To document
+ * 
+ */
+void unk_8c504(IntroInSr388OamType type, s16 xPosition, s16 yPosition, u16 arg3)
+{
+    u8 slot;
+    
+    slot = NewFileIntroInSr388SetupOam(type, xPosition, yPosition);
+    INTRO_DATA.oam[slot].unk_8 = arg3;
+}
+
+ /**
+ * @brief 8c53c | 4 | Empty function
+ * 
+ */
+void NewFileIntro_Empty(void)
+{
+    return;
+}
+
+ /**
+ * @brief 8c540 | 54 | Returns the X and Y position of a new file intro OAM
+ * 
+ */
+void NewFileIntroGetPositionOfOamByType(IntroInSr388OamType type, s16* pXPosition, s16* pYPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == type)
+        {
+            *pXPosition = INTRO_DATA.oam[slot].xPosition;
+            *pYPosition = INTRO_DATA.oam[slot].yPosition;
+            
+            return;
+        }
+    }
+
+    // Default values if not found
+    *pXPosition = 300;
+    *pYPosition = 200;
+}
+
+ /**
+ * @brief 8c594 | dc | V-blank for the 'hornoad encounter in SR388' cutscene
+ * 
+ */
+void NewFileIntroInSr388Vblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+
+    WRITE_16(REG_BG1HOFS, gBg1XPosition);
+    WRITE_16(REG_BG1VOFS, gBg1YPosition);
+    WRITE_16(REG_BG2HOFS, gBg2XPosition);
+    WRITE_16(REG_BG2VOFS, gBg2YPosition);
+    WRITE_16(REG_BG3HOFS, gBg3XPosition);
+    WRITE_16(REG_BG3VOFS, gBg3YPosition);
+
+    if (INTRO_DATA.unk_110 == 1)
+    {
+        INTRO_DATA.unk_110 = 0;
+
+        DMA3_COPY_32(sPal_5a9440, PALRAM_OBJ, 15 * PAL_ROW_SIZE / sizeof(u32));
+        DMA3_COPY_32(sPal_5a9260, PALRAM_BASE, 15 * PAL_ROW_SIZE / sizeof(u32));
+    }
+}
+
+ /**
+ * @brief 8c670 | 204 | Setup for the new file intro Metroid vaccine cutscene
+ * 
+ */
+void NewFileIntroSamusGettingCuredInit(void)
+{
+    const u16* pText2;
+
+    WRITE_16(REG_IME, FALSE);
+    WRITE_16(REG_DISPSTAT, READ_16(REG_DISPSTAT) & ~DSTAT_IF_HBLANK);
+    WRITE_16(REG_IE, READ_16(REG_IE) & ~IF_HBLANK);
+    WRITE_16(REG_IME, TRUE);
+
+    CallbackSetVBlank(unk_99940);
+
+    pText2 = INTRO_DATA.pText2; // Preserve second text pointer
+    
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+
+    INTRO_DATA.pText2 = pText2;
+
+    LZ77UncompVram(sIntroMetroidVaccineObjGfx, VRAM_OBJ);
+
+    DMA3_COPY_32(sIntroMetroidVaccineObjPal, PALRAM_OBJ, 16 * PAL_ROW_SIZE / sizeof(u32));
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompVram(sIntroMetroidVaccineBgGfx, VRAM_BASE);
+    LZ77UncompVram(sIntroMetroidVaccineBg1Tilemap, VRAM_BASE + 0xE800);
+    LZ77UncompVram(sIntroMetroidVaccineBg2Tilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroMetroidVaccineBg3Tilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+
+    DMA3_COPY_32(sIntroMetroidVaccineBgPal, PALRAM_BASE, 16 * PAL_ROW_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG1CNT, CREATE_BGCNT(0, 29, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 30, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+    
+    gWrittenToBldy = BLDY_MAX_VALUE;
+    WRITE_16(REG_BLDY, BLDY_MAX_VALUE);
+    
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_NEXT_PAGE_ARROW, 260, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_DOUBLE_HELIX, 192, 96);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_VACCINE_BG_TEXT, 0, 0);
+
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    INTRO_DATA.pText = sCutsceneTextNone;
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / sizeof(u32));
+
+    WRITE_16(REG_DISPCNT, DCNT_BG0 | DCNT_BG2 | DCNT_BG3 | DCNT_OBJ);
+
+    CallbackSetVBlank(NewFileIntroSamusGettingCuredVblank);
+}
+
+ /**
+ * @brief 8c874 | 158 | Processes the new file intro Metroid vaccine cutscene
+ * 
+ */
+boolu32 NewFileIntroSamusGettingCuredOperationProcess(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && INTRO_DATA.unk_218 == 0)
+        INTRO_DATA.unk_218 = 1;
+
+    INTRO_DATA.timer++;
+    
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1))
+            {
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = INTRO_DATA.pText2;
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(2 + 2.f / 3))
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG1);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(3))
+            {
+                NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_VACCINE_TEXTBOXES, 108, 64);
+                NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_ELECTROCARDIOGRAM, 128, 68);
+            }
+            else if (INTRO_DATA.timer > CONVERT_SECONDS(6 + 2.f / 3))
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 1;
+            }
+        
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+                INTRO_DATA.unk_218 = 0;
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 1:
+            INTRO_DATA.timer = 0;
+
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 2;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 2:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(.5f))
+            {
+                INTRO_DATA.timer = 0;
+                WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+                INTRO_DATA.subStage = 3;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy += 2;
+            }
+            else
+            {
+                gWrittenToBldy = BLDY_MAX_VALUE;
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 0;
+                finished = TRUE;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+    
+    IntroProcessText();
+    
+    return finished;
+}
+
+ /**
+ * @brief 8c9cc | 20 | H-blank code for the new file intro Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroSamusGettingCuredNervousSystemHblank(void)
+{
+    s16 val;
+
+    val = READ_16(REG_VCOUNT) * 2; // * 2, / 2 shenanigans are needed for match
+    WRITE_16(REG_WIN0H, ((u16*)(EWRAM_BASE + 0x2000))[val / 2]);
+}
+
+ /**
+ * @brief 8c9ec | 320 | Setup for the new file intro Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroSamusGettingCuredNervousSystemInit(void)
+{
+    CallbackSetVBlank(unk_99940);
+
+    DMA3_FILL_32(0, &INTRO_DATA.oam, sizeof(INTRO_DATA.oam));
+
+    INTRO_DATA.unk_218 = 0;
+
+    LZ77UncompVram(sIntroSamusNervousSystemObjGfx, VRAM_OBJ);
+
+    DMA3_COPY_32(sIntroSamusNervousSystemObjPal, PALRAM_OBJ, 16 * PAL_ROW_SIZE / sizeof(u32));
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompVram(sIntroSamusNervousSystemBgGfx, VRAM_BASE);
+    LZ77UncompVram(sIntroSamusNervousSystemBg1Tilemap, VRAM_BASE + 0xE800);
+    LZ77UncompVram(sIntroSamusNervousSystemBg2Tilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroSamusNervousSystemBg3Tilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+
+    DMA3_COPY_32(sIntroSamusNervousSystemBgPal, PALRAM_BASE, 16 * PAL_ROW_SIZE / sizeof(u32));
+
+    SET_BACKDROP_COLOR(COLOR_GREEN);
+
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG1CNT, CREATE_BGCNT(0, 29, BGCNT_HIGH_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 30, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+
+    gWrittenToBldy = BLDY_MAX_VALUE;
+    WRITE_16(REG_BLDY, BLDY_MAX_VALUE);
+    gWrittenToBldalpha_Evb = gWrittenToBldalpha_Eva = 0;
+
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_NEXT_PAGE_ARROW, 260, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10, 0, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10, 0, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10, 0, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10, 0, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10, 0, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10, 0, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10, 0, 0);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_CORNER_TEXT, 172, 158);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_NERVE_PARTS, 120, 80);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_1, 195, 97);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_2, 128, 128);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_3, 145, 28);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_4, 100, 72);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_5, 44, 30);
+    NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_6, 62, 121);
+
+    INTRO_DATA.unk_110 = 0;
+    INTRO_DATA.unk_111 = 0;
+
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    INTRO_DATA.pText = sCutsceneTextNone;
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / sizeof(u32));
+
+    WRITE_16(REG_WIN0V, C_16_2_8(0, SCREEN_SIZE_Y));
+
+    INTRO_DATA.unk_1F3 = 70;
+    INTRO_DATA.unk_1F4 = 120;
+    INTRO_DATA.unk_1F5 = 78;
+
+    NewFileIntroSamusGettingCuredSetupWindow();
+    NewFileIntroSamusGettingCuredSetupWindow();
+
+    DMA3_COPY_32(NewFileIntroSamusGettingCuredNervousSystemHblank, INTRO_DATA.hBlankCode, sizeof(INTRO_DATA.hBlankCode) / sizeof(u32));
+    INTRO_DATA.hBlankCodePointer = INTRO_DATA.hBlankCode + 1;
+    CallbackSetHBlank(INTRO_DATA.hBlankCodePointer);
+
+    WRITE_16(REG_IE, READ_16(REG_IE) | IF_HBLANK);
+    WRITE_16(REG_DISPSTAT, READ_16(REG_DISPSTAT) | DSTAT_IF_HBLANK);
+    WRITE_16(REG_WININ, WIN0_BG0 | WIN0_BG1 | WIN0_BG3 | WIN0_OBJ | WIN0_COLOR_EFFECT);
+    WRITE_16(REG_WINOUT, WIN0_ALL);
+    WRITE_16(REG_DISPCNT, DCNT_BG0 | DCNT_BG1 | DCNT_BG2 | DCNT_BG3 | DCNT_OBJ);
+    WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_WIN0);
+    
+    CallbackSetVBlank(NewFileIntroSamusGettingCuredNervousSystemVblank);
+}
+
+ /**
+ * @brief 8cd0c | 274 | Processes the new file intro Samus nervous system cutscene
+ * 
+ */
+boolu32 NewFileIntroSamusGettingCuredNervousSystemProcess(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && !INTRO_DATA.unk_218)
+        INTRO_DATA.unk_218 = 1;
+
+    APPLY_DELTA_TIME_INC(INTRO_DATA.timer);
+
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            NewFileIntroSamusGettingCuredNervousSystemInit();
+            INTRO_DATA.subStage = 1;
+            break;
+        
+        case 1:
+            if (gWrittenToBldy)
+            {
+                gWrittenToBldy -= 2;
+            }
+            else
+            {
+                gWrittenToBldy = 0;
+                INTRO_DATA.timer = 0;
+                WRITE_16(REG_BLDCNT, BLDCNT_BG2_FIRST_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG3_SECOND_TARGET_PIXEL 
+                         | BLDCNT_OBJ_SECOND_TARGET_PIXEL | BLDCNT_BACKDROP_SECOND_TARGET_PIXEL);
+                INTRO_DATA.subStage = 2;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 2:
+            if (gWrittenToBldalpha_Eva < 12)
+            {
+                gWrittenToBldalpha_Eva++;
+                gWrittenToBldalpha_Evb++;
+            }
+            else
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 3;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 3:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(.5f))
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][16];
+                INTRO_DATA.subStage = 4;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 4:
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 2)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.pText2 = INTRO_DATA.pText;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 5;
+            }
+            else if (INTRO_DATA.unk_218 == 4)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG0);
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 5;
+                INTRO_DATA.pText2 = INTRO_DATA.pText;
+                INTRO_DATA.pText = sCutsceneTextNone;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 5:
+            if (INTRO_DATA.timer == DELTA_TIME)
+            {
+                NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_28, 0, 0);
+            }
+            else if (INTRO_DATA.timer > CONVERT_SECONDS(7.5f))
+            {
+                INTRO_DATA.timer = 0;
+                gWrittenToBldy = 4;
+                INTRO_DATA.subStage = 7;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 6:
+            if (gWrittenToBldalpha_Eva)
+            {
+                gWrittenToBldalpha_Eva -= 2;
+                gWrittenToBldalpha_Evb -= 2;
+            }
+            else
+            {
+                INTRO_DATA.timer = 0;
+                WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+                INTRO_DATA.subStage = 7;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 7:
+            WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+            
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy += 2;
+            }
+            else
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 0;
+                finished = 1;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+    
+    IntroProcessText();
+    
+    return finished;
+}
+
+ /**
+ * @brief 8cf80 | dc | Main handler for the new file intro Samus getting cured cutscenes
+ * 
+ */
+boolu32 NewFileIntroSamusGettingCured(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroSamusGettingCuredInit();
+            INTRO_DATA.stage = 1;
+            break;
+
+        case 1:
+            SpecialCutsceneFadeIn();
+
+            if (!gWrittenToBldy)
+                INTRO_DATA.stage = 2;
+            break;
+
+        case 2:
+            if (NewFileIntroSamusGettingCuredOperationProcess())
+            {
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.stage = 3;
+            }
+            break;
+
+        case 3:
+            if (NewFileIntroSamusGettingCuredNervousSystemProcess())
+            {
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.stage = 4;
+            }
+            break;
+
+        case 4:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy++;
+            }
+            else
+            {
+                INTRO_DATA.stage = 0;
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+
+    return finished;
+}
+
+ /**
+ * @brief 8d05c | 10 | Processes the new file intro Metroid vaccine background text OAM
+ * 
+ */
+void NewFileIntroProcessVaccineBackgroundText(struct SpecialCutsceneOam* pOam)
+{
+    WRITE_16(REG_BG2VOFS, pOam->yPosition--);
+}
+
+ /**
+ * @brief 8d06c | 10 | To document
+ * 
+ */
+void unk_8d06c(struct SpecialCutsceneOam* pOam)
+{
+    pOam->type = 0;
+    pOam->unk_18_0 = 0;
+}
+
+ /**
+ * @brief 8d07c | e0 | Processes the first X parasite in the Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroProcessXInNervousSystem_1(struct SpecialCutsceneOam *pOam)
+{
+    u8 rng;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+
+    rng = SpecialCutsceneGetRandomNumber();
+    if (rng < 80)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->xPosition < pOam->spawnX)
+                pOam->xPosition++;
+        }
+        else if (pOam->xPosition > pOam->spawnX - 4)
+        {
+            pOam->xPosition--;
+        }
+    }
+    else if (rng < 160)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->yPosition < pOam->spawnY + 5)
+                pOam->yPosition++;
+        }
+        else if (pOam->yPosition > pOam->spawnY)
+        {
+            pOam->yPosition--;
+        }
+    }
+    
+    if (gNonGameplayRam.intro.subStage == 5)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A == 20)
+        {
+            NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_1, pOam->xPosition, pOam->yPosition);
+        }
+        else if (pOam->unk_A > 220)
+        {
+            pOam->scaling -= 2;
+            if (pOam->scaling < Q_8_8(1.f/ 8))
+            {
+                pOam->type = 0;
+                pOam->unk_18_0 = 0;
+            }
+        }
+    }
+}
+
+ /**
+ * @brief 8d15c | 6c | Processes the new file intro X lock-on OAM
+ * 
+ */
+void NewFileIntroProcessXLockOn(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+    
+    if (INTRO_DATA.oam[pOam->unk_8].type != 0)
+    {
+        pOam->xPosition = INTRO_DATA.oam[pOam->unk_8].xPosition;
+        pOam->yPosition = INTRO_DATA.oam[pOam->unk_8].yPosition;
+    }
+
+    frame = &pOam->pOam[pOam->currentAnimationFrame];
+    if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 8d1c8 | e4 | Processes the second X parasite in the Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroProcessXInNervousSystem_2(struct SpecialCutsceneOam *pOam)
+{
+    u8 rng;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+
+    rng = SpecialCutsceneGetRandomNumber();
+    if (rng < 80)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->xPosition < pOam->spawnX + 4)
+                pOam->xPosition++;
+        }
+        else if (pOam->xPosition > pOam->spawnX - 4)
+        {
+            pOam->xPosition--;
+        }
+    }
+    else if (rng < 160)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->yPosition < pOam->spawnY + 4)
+                pOam->yPosition++;
+        }
+        else if (pOam->yPosition > pOam->spawnY - 4)
+        {
+            pOam->yPosition--;
+        }
+    }
+    
+    if (gNonGameplayRam.intro.subStage == 5)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A == 20)
+        {
+            NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_2, pOam->xPosition, pOam->yPosition);
+        }
+        else if (pOam->unk_A > 220)
+        {
+            pOam->scaling -= 2;
+            if (pOam->scaling < Q_8_8(1.f/ 8))
+            {
+                pOam->type = 0;
+                pOam->unk_18_0 = 0;
+            }
+        }
+    }
+}
+
+ /**
+ * @brief 8d2ac | f0 | Processes the third X parasite in the Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroProcessXInNervousSystem_3(struct SpecialCutsceneOam *pOam)
+{
+    u8 rng;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+
+    rng = SpecialCutsceneGetRandomNumber();
+    if (rng < 80)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->xPosition < pOam->spawnX + 6)
+                pOam->xPosition++;
+        }
+        else if (pOam->xPosition > pOam->spawnX - 1)
+        {
+            pOam->xPosition--;
+        }
+    }
+    else if (rng < 160)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->yPosition < pOam->spawnY + 4)
+                pOam->yPosition++;
+        }
+        else if (pOam->yPosition > pOam->spawnY - 3)
+        {
+            pOam->yPosition--;
+        }
+    }
+    
+    if (gNonGameplayRam.intro.subStage == 5)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A == 40)
+        {
+            NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_3, pOam->xPosition, pOam->yPosition);
+        }
+        else if (pOam->unk_A > 240)
+        {
+            pOam->affineMode = OAM_AFFINE_MODE_AFFINE;
+            pOam->scaling -= 2;
+            if (pOam->scaling < Q_8_8(1.f/ 8))
+            {
+                pOam->type = 0;
+                pOam->unk_18_0 = 0;
+            }
+        }
+    }
+}
+
+ /**
+ * @brief 8d39c | e4 | Processes the fourth X parasite in the Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroProcessXInNervousSystem_4(struct SpecialCutsceneOam *pOam)
+{
+    u8 rng;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+
+    rng = SpecialCutsceneGetRandomNumber();
+    if (rng < 80)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->xPosition < pOam->spawnX + 5)
+                pOam->xPosition++;
+        }
+        else if (pOam->xPosition > pOam->spawnX - 5)
+        {
+            pOam->xPosition--;
+        }
+    }
+    else if (rng < 160)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->yPosition < pOam->spawnY + 5)
+                pOam->yPosition++;
+        }
+        else if (pOam->yPosition > pOam->spawnY - 5)
+        {
+            pOam->yPosition--;
+        }
+    }
+    
+    if (gNonGameplayRam.intro.subStage == 5)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A == 40)
+        {
+            NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_4, pOam->xPosition, pOam->yPosition);
+        }
+        else if (pOam->unk_A > 240)
+        {
+            pOam->scaling -= 2;
+            if (pOam->scaling < Q_8_8(1.f/ 8))
+            {
+                pOam->type = 0;
+                pOam->unk_18_0 = 0;
+            }
+        }
+    }
+}
+
+ /**
+ * @brief 8d480 | f0 | Processes the fifth X parasite in the Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroProcessXInNervousSystem_5(struct SpecialCutsceneOam *pOam)
+{
+    u8 rng;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+
+    rng = SpecialCutsceneGetRandomNumber();
+    if (rng < 80)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->xPosition < pOam->spawnX + 5)
+                pOam->xPosition++;
+        }
+        else if (pOam->xPosition > pOam->spawnX - 1)
+        {
+            pOam->xPosition--;
+        }
+    }
+    else if (rng < 160)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->yPosition < pOam->spawnY + 4)
+                pOam->yPosition++;
+        }
+        else if (pOam->yPosition > pOam->spawnY)
+        {
+            pOam->yPosition--;
+        }
+    }
+    
+    if (gNonGameplayRam.intro.subStage == 5)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A == 60)
+        {
+            NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_5, pOam->xPosition, pOam->yPosition);
+        }
+        else if (pOam->unk_A > 260)
+        {
+            pOam->affineMode = OAM_AFFINE_MODE_AFFINE;
+            pOam->scaling -= 2;
+            if (pOam->scaling < Q_8_8(1.f/ 8))
+            {
+                pOam->type = 0;
+                pOam->unk_18_0 = 0;
+            }
+        }
+    }
+}
+
+ /**
+ * @brief 8d570 | f0 | Processes the sixth X parasite in the Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroProcessXInNervousSystem_6(struct SpecialCutsceneOam *pOam)
+{
+    u8 rng;
+
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        pOam->stage = 1;
+    }
+
+    rng = SpecialCutsceneGetRandomNumber();
+    if (rng < 80)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->xPosition < pOam->spawnX + 5)
+                pOam->xPosition++;
+        }
+        else if (pOam->xPosition > pOam->spawnX)
+        {
+            pOam->xPosition--;
+        }
+    }
+    else if (rng < 160)
+    {
+        if (MOD_AND(rng, 2))
+        {
+            if (pOam->yPosition < pOam->spawnY + 3)
+                pOam->yPosition++;
+        }
+        else if (pOam->yPosition > pOam->spawnY - 3)
+        {
+            pOam->yPosition--;
+        }
+    }
+    
+    if (gNonGameplayRam.intro.subStage == 5)
+    {
+        pOam->unk_A++;
+        if (pOam->unk_A == 60)
+        {
+            NewFileIntroSamusGettingCuredSetupOam(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_6, pOam->xPosition, pOam->yPosition);
+        }
+        else if (pOam->unk_A > 260)
+        {
+            pOam->affineMode = OAM_AFFINE_MODE_AFFINE;
+            pOam->scaling -= 2;
+            if (pOam->scaling < Q_8_8(1.f/ 8))
+            {
+                pOam->type = 0;
+                pOam->unk_18_0 = 0;
+            }
+        }
+    }
+}
+
+ /**
+ * @brief 8d660 | 94 | To document
+ * 
+ */
+void unk_8d660(struct SpecialCutsceneOam *pOam)
+{
+    u8 value;
+    
+    pOam->unk_A++;
+
+    if (pOam->stage == 0)
+    {
+        if (pOam->unk_A > 20)
+        {
+            pOam->unk_A = 0;
+            INTRO_DATA.unk_110 = 1;
+            INTRO_DATA.unk_111 = 0;
+            pOam->stage = 1;
+        }
+    }
+    else if (pOam->stage == 1 && LOW_BYTE(sArray_5a9620[pOam->unk_8]) == pOam->unk_A)
+    {
+        pOam->unk_A = 0;
+
+        if (pOam->unk_8 < 29)
+            pOam->unk_8++;
+
+        value = HIGH_BYTE(sArray_5a9620[pOam->unk_8]);
+        INTRO_DATA.unk_111 = value;
+        INTRO_DATA.unk_110 = 1;
+    }
+}
+
+ /**
+ * @brief 8d6f4 | 6d0 | Spawns an OAM for a new file intro Samus getting cured cutscene
+ * 
+ */
+u8 NewFileIntroSamusGettingCuredSetupOam(IntroSamusGettingCuredOamType type, s16 xPosition, s16 yPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == 0)
+            break;
+    }
+
+    if (slot > 19)
+        return 20;
+    
+    DMA3_FILL_32(0, &INTRO_DATA.oam[slot], sizeof(struct SpecialCutsceneOam));
+    
+    INTRO_DATA.oam[slot].xPosition = xPosition;
+    INTRO_DATA.oam[slot].yPosition = yPosition;
+    INTRO_DATA.oam[slot].type = type;
+    INTRO_DATA.oam[slot].unk_18_0 = 1;
+
+    if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_DOUBLE_HELIX)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroMetroidVaccineDoubleHelixOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_VACCINE_TEXTBOXES)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroMetroidVaccineTextboxesOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_ELECTROCARDIOGRAM)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroMetroidVaccineElectrocardiogramOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_VACCINE_BG_TEXT)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessVaccineBackgroundText;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_10)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_8d06c;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_COUNTDOWN_FAST)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemCountdownOam_Fast;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_COUNTDOWN_SLOW)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemCountdownOam_Slow;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_NUMBER_281)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemNumber281Oam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_CORNER_TEXT)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemCornerTextOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_NERVE_PARTS)
+    {
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemNervePartsOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusGettingCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_1)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1.25f);
+        INTRO_DATA.oam[slot].affineMode = OAM_AFFINE_MODE_DOUBLE_SIZED;
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXParasiteOam_1;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXInNervousSystem_1;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_2)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1.5f);
+        INTRO_DATA.oam[slot].affineMode = OAM_AFFINE_MODE_DOUBLE_SIZED;
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXParasiteOam_2;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXInNervousSystem_2;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_3)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1);
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXParasiteOam_3;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXInNervousSystem_3;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_4)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1.25f);
+        INTRO_DATA.oam[slot].affineMode = OAM_AFFINE_MODE_DOUBLE_SIZED;
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXParasiteOam_4;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXInNervousSystem_4;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_5)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1);
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXParasiteOam_5;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXInNervousSystem_5;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_6)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1);
+        INTRO_DATA.oam[slot].priority = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXParasiteOam_6;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXInNervousSystem_6;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_1)
+    {
+        INTRO_DATA.oam[slot].unk_8 = NewFileIntroFindOamByType(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_1);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXLockOnOam_1;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXLockOn;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_2)
+    {
+        INTRO_DATA.oam[slot].unk_8 = NewFileIntroFindOamByType(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_2);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXLockOnOam_2;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXLockOn;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_3)
+    {
+        INTRO_DATA.oam[slot].unk_8 = NewFileIntroFindOamByType(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_3);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXLockOnOam_3;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXLockOn;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_4)
+    {
+        INTRO_DATA.oam[slot].unk_8 = NewFileIntroFindOamByType(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_4);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXLockOnOam_4;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXLockOn;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_5)
+    {
+        INTRO_DATA.oam[slot].unk_8 = NewFileIntroFindOamByType(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_5);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXLockOnOam_5;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXLockOn;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_LOCK_ON_6)
+    {
+        INTRO_DATA.oam[slot].unk_8 = NewFileIntroFindOamByType(INTRO_SAMUS_GETTING_CURED_OAM_TYPE_X_PARASITE_6);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusNervousSystemXLockOnOam_6;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessXLockOn;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_UNK_28)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_8d660;
+    }
+    else if (type == INTRO_SAMUS_GETTING_CURED_OAM_TYPE_NEXT_PAGE_ARROW)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroNextPageArrowOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessTextCursor;
+    }
+    
+    return slot;
+}
+
+ /**
+ * @brief 8ddc4 | 38 | Spawns an OAM for a new file intro Samus getting cured cutscene with an additional argument
+ * 
+ */
+void unk_8ddc4(IntroSamusGettingCuredOamType type, s16 xPosition, s16 yPosition, s16 arg3)
+{
+    u8 slot;
+
+    slot = NewFileIntroSamusGettingCuredSetupOam(type, xPosition, yPosition);
+    INTRO_DATA.oam[slot].unk_8 = arg3;
+}
+
+ /**
+ * @brief 8ddfc | 3c | Returns the OAM slot of the specified Samus getting cured cutscene OAM
+ * 
+ */
+u8 NewFileIntroFindOamByType(IntroSamusGettingCuredOamType type)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == type)
+            return slot;
+    }
+
+    // Default value if not found
+    return ARRAY_SIZE(INTRO_DATA.oam);
+}
+
+ /**
+ * @brief 8de38 | 4c | V-blank code for the new file intro Metroid vaccine cutscene
+ * 
+ */
+void NewFileIntroSamusGettingCuredVblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+}
+
+ /**
+ * @brief 8de84 | a8 | V-blank code for the new file intro Samus nervous system cutscene
+ * 
+ */
+void NewFileIntroSamusGettingCuredNervousSystemVblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+
+    if (INTRO_DATA.unk_110 == 1)
+    {
+        INTRO_DATA.unk_110 = 0;
+
+        DMA3_COPY_32(sArray_79c2e4[INTRO_DATA.unk_111], PALRAM_OBJ, 4 * PAL_ROW_SIZE / sizeof(u32));
+        DMA3_COPY_32(sArray_79c2e4[INTRO_DATA.unk_111], PALRAM_BASE, 4 * PAL_ROW_SIZE / sizeof(u32));
+    }
+}
+
+ /**
+ * @brief 8df2c | 4 | Empty OAM handler function for the 'Samus getting cured' cutscenes 
+ * 
+ */
+void NewFileIntroSamusGettingCuredProcessOam_Empty(struct SpecialCutsceneOam* pOam)
+{
+    return;
+}
+
+ /**
+ * @brief 8df30 | 210 | Setup for the intro Samus found cutscene
+ * 
+ */
+void NewFileIntroSamusFoundInit(void)
+{
+    WRITE_16(REG_IME, FALSE);
+    WRITE_16(REG_DISPSTAT, READ_16(REG_DISPSTAT) & ~DSTAT_IF_HBLANK);
+    WRITE_16(REG_IE, READ_16(REG_IE) & ~IF_HBLANK);
+    WRITE_16(REG_IME, TRUE);
+
+    CallbackSetVBlank(unk_99940);
+
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompVram(sIntroHazmatTeamGfx, VRAM_BASE);
+    LZ77UncompVram(sIntroVariaSuitCoveredInXParasitesGfx, VRAM_BASE + 0x8000);
+    LZ77UncompVram(sIntroHazmatTeamTilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroVariaSuitCoveredInXParasitesTilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+
+    DMA3_COPY_32(sIntroSamusFoundPal, PALRAM_BASE, 16 * PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompWram(sIntroSuitRemovalSurgeryGfx, EWRAM_BASE);
+    LZ77UncompWram(sIntroMetroidVaccineVialGfx, EWRAM_BASE + 0x8000);
+    LZ77UncompWram(sIntroSuitRemovalSurgeryTilemap, EWRAM_BASE + 0xD000);
+    LZ77UncompWram(sIntroMetroidVaccineVialTilemap, EWRAM_BASE + 0xD800);
+
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    gBg2XPosition = 0;
+    gBg2YPosition = 0;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 30, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(2, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_INCREASE_EFFECT);
+
+    gWrittenToBldy = BLDY_MAX_VALUE;
+    WRITE_16(REG_BLDY, BLDY_MAX_VALUE);
+
+    NewFileIntroSamusFoundSetupOam(INTRO_SAMUS_FOUND_OAM_TYPE_NEXT_PAGE_ARROW, 260, 0);
+    
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    INTRO_DATA.pText = sCutsceneTextNone;
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / sizeof(u32));
+
+    WRITE_16(REG_DISPCNT, DCNT_BG0 | DCNT_BG2 | DCNT_OBJ);
+
+    CallbackSetVBlank(NewFileIntroSamusFoundVblank);
+}
+
+ /**
+ * @brief 8e140 | 594 | Processes the intro Samus found cutscene
+ * 
+ */
+boolu32 NewFileIntroSamusFoundProcess(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && !INTRO_DATA.unk_218)
+        INTRO_DATA.unk_218 = 1;
+    
+    APPLY_DELTA_TIME_INC(INTRO_DATA.timer);
+    
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            if (INTRO_DATA.timer == TWO_THIRD_SECOND)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][12];
+                INTRO_DATA.subStage = 1;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 1:
+            INTRO_DATA.timer = 0;
+            gWrittenToBldalpha_Eva = BLDALPHA_MAX_VALUE;
+            gWrittenToBldalpha_Evb = 0;
+
+            if (INTRO_DATA.unk_218 == 2)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 2;
+            }
+            else if (INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 2;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 2:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(.5f) - DELTA_TIME)
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_BG2_FIRST_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG3_SECOND_TARGET_PIXEL | BLDCNT_OBJ_SECOND_TARGET_PIXEL);
+                NewFileIntroSamusFoundSetupOam(INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN, 16, 0);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(.5f))
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG3);
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 3;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 3:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.5f) - DELTA_TIME)
+            {
+                SpecialCutsceneDestroyOamOfType(INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN);
+                gWrittenToBldalpha_Eva = 0;
+                gWrittenToBldalpha_Evb = BLDALPHA_MAX_VALUE;
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG2);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(1.5f))
+            {
+                DMA3_COPY_32(EWRAM_BASE + 0xD000, VRAM_BASE + 0xF000, 0x200);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(1.5f) + DELTA_TIME)
+            {
+                NewFileIntroSamusFoundSetupOam(INTRO_SAMUS_FOUND_OAM_TYPE_LOAD_GFX, 0, 0);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(1 + 2.f / 3) - DELTA_TIME)
+            {
+                // Empty
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(1 + 2.f / 3))
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 4;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 4:
+            INTRO_DATA.timer = 0;
+            gWrittenToBldalpha_Eva = 0;
+            gWrittenToBldalpha_Evb = BLDALPHA_MAX_VALUE;
+
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                NewFileIntroSamusFoundSetupOam(INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN_LAYING, 0, 0);
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG2);
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 5;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 5:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.5f))
+            {
+                INTRO_DATA.timer = 0;
+                SpecialCutsceneDestroyOamOfType(INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN_LAYING);
+                gWrittenToBldalpha_Eva = BLDALPHA_MAX_VALUE;
+                gWrittenToBldalpha_Evb = 0;
+                INTRO_DATA.subStage = 6;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 6:
+            if (INTRO_DATA.timer == ONE_THIRD_SECOND)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][13];
+                INTRO_DATA.subStage = 7;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 7:
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 8;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 8:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 6))
+            {
+                INTRO_DATA.timer = 0;
+                DMA3_FILL_32(0, VRAM_BASE + 0xD000, 0x1000);
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][14];
+                INTRO_DATA.subStage = 9;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 9:
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                gWrittenToBldalpha_Eva = BLDALPHA_MAX_VALUE;
+                gWrittenToBldalpha_Evb = 0;
+                INTRO_DATA.subStage = 10;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 10:
+            if (INTRO_DATA.timer == DELTA_TIME)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG3);
+                DMA3_COPY_32(EWRAM_BASE + 0xD800, VRAM_BASE + 0xF800, 0x200);
+            }
+            else if (INTRO_DATA.timer == 2 * DELTA_TIME)
+            {
+                NewFileIntroSamusFoundSetupOam(INTRO_SAMUS_FOUND_OAM_TYPE_LOAD_GFX_2, 0, 0);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(.25f))
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG3);
+                INTRO_DATA.timer = 0;
+                NewFileIntroSamusFoundSetupOam(INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN_VACCINE, 0, 0);
+                NewFileIntroSamusFoundSetupOam(INTRO_SAMUS_FOUND_OAM_TYPE_SCREEN_SCROLLING, 0, gBg2YPosition);
+                INTRO_DATA.subStage = 11;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+	    case 11:
+	        if (INTRO_DATA.timer == CONVERT_SECONDS(1.5f))
+            {
+	            gWrittenToBldalpha_Eva = 0;
+	            gWrittenToBldalpha_Evb = BLDALPHA_MAX_VALUE;
+	            INTRO_DATA.timer = 0;
+	            SpecialCutsceneDestroyOamOfType(INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN_VACCINE);
+	            SpecialCutsceneDestroyOamOfType(INTRO_SAMUS_FOUND_OAM_TYPE_SCREEN_SCROLLING);
+	            INTRO_DATA.subStage = 12;
+	        }
+	
+	        SpecialCutsceneProcessOam();
+	        SpecialCutsceneDrawAllOam();
+	        break;
+        
+	    case 12:
+	        if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 6))
+            {
+	            INTRO_DATA.timer = 0;
+	            DMA3_FILL_32(0, VRAM_BASE + 0xD000, 0x1000);
+	            INTRO_DATA.unk_212 = 0;
+	            INTRO_DATA.unk_E = 0;
+	            INTRO_DATA.unk_C = 0;
+	            INTRO_DATA.pText = sMonologueTextPointers[gLanguage][15];
+	            INTRO_DATA.subStage = 13;
+	        }
+	
+	        SpecialCutsceneProcessOam();
+	        SpecialCutsceneDrawAllOam();
+	        break;
+	
+	    case 13:
+	        INTRO_DATA.timer = 0;
+            
+	        if (INTRO_DATA.unk_218 == 2)
+            {
+                INTRO_DATA.unk_218 = 0;
+	            INTRO_DATA.pText2 = INTRO_DATA.pText;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+	            INTRO_DATA.pText2 = INTRO_DATA.pText;
+	            INTRO_DATA.pText = sCutsceneTextNone;
+	            INTRO_DATA.subStage = 14;
+            }
+            else if (INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+	            INTRO_DATA.pText2 = INTRO_DATA.pText;
+	            INTRO_DATA.pText = sCutsceneTextNone;
+	            INTRO_DATA.subStage = 14;
+            }
+            
+	        SpecialCutsceneProcessOam();
+	        SpecialCutsceneDrawAllOam();
+	        break;
+	
+	    case 14:
+	        if (INTRO_DATA.timer == CONVERT_SECONDS(.5f))
+            {
+	            WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG2);
+	            WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+	            gWrittenToBldy = 0;
+	            INTRO_DATA.timer = 0;
+	            INTRO_DATA.subStage = 0;
+	            finished = TRUE;
+	        }
+	
+	        SpecialCutsceneProcessOam();
+	        SpecialCutsceneDrawAllOam();
+	        break;
+    }
+    
+    IntroProcessText();
+    
+    return finished;
+}
+
+ /**
+ * @brief 8e6d4 | a8 | Main handler of the intro Samus found cutscene
+ * 
+ */
+boolu32 NewFileIntroSamusFound(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroSamusFoundInit();
+            INTRO_DATA.stage = 1;
+            break;
+
+        case 1:
+            APPLY_DELTA_TIME_INC(INTRO_DATA.timer);
+            if (INTRO_DATA.timer == CONVERT_SECONDS(.1f))
+            {
+                INTRO_DATA.timer = 0;
+
+                if (gWrittenToBldy)
+                    gWrittenToBldy--;
+                else
+                    INTRO_DATA.stage = 2;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 2:
+            if (NewFileIntroSamusFoundProcess())
+            {
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.stage = 3;
+            }
+            break;
+
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy++;
+            }
+            else
+            {
+                INTRO_DATA.stage = 0;
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+
+    return finished;
+}
+
+ /**
+ * @brief 8e77c | 6c | Fades in the Varia suit covered in X parasites screen
+ * 
+ */
+void NewFileIntroProcessSamusFoundFadeIn(struct SpecialCutsceneOam* pOam)
+{
+    pOam->timer++;
+    if (pOam->timer == 4)
+    {
+        pOam->timer = 0;
+
+        if (pOam->xPosition > 0)
+            pOam->xPosition--;
+    }
+
+    gBg3XPosition = pOam->xPosition;
+    gBg3YPosition = 0;
+
+    pOam->unk_A++;
+    if (pOam->unk_A == 5)
+    {
+        pOam->unk_A = 0;
+
+        if (gWrittenToBldalpha_Eva)
+        {
+            gWrittenToBldalpha_Eva--;
+            gWrittenToBldalpha_Evb++;
+        }
+    }
+}
+
+ /**
+ * @brief 8e7e8 | 48 | Copies intro Samus found cutscene graphics from EWRAM into VRAM
+ * 
+ */
+void NewFileIntroProcessSamusLayingLoading(struct SpecialCutsceneOam* pOam)
+{
+    u32 offset;
+
+    offset = pOam->unk_A * 0x1000;
+    DMA3_COPY_32(EWRAM_BASE + offset, VRAM_BASE + offset, 0x1000 / sizeof(u32));
+
+    pOam->unk_A++;
+    if (pOam->unk_A == pOam->unk_8 + pOam->unk_4)
+        pOam->type = 0;
+}
+
+ /**
+ * @brief 8e830 | 6c | Fades in the intro Varia suit removal surgery screen
+ * 
+ */
+void NewFileIntroProcessSamusFoundFadeInSamusLaying(struct SpecialCutsceneOam* pOam)
+{
+    APPLY_DELTA_TIME_INC(pOam->timer);
+    if (pOam->timer == 3)
+    {
+        pOam->timer = 0;
+        
+        if (pOam->yPosition < 96)
+            pOam->yPosition++;
+    }
+
+    gBg2XPosition = 0;
+    gBg2YPosition = pOam->yPosition;
+
+    pOam->unk_A++;
+    if (pOam->unk_A == 4)
+    {
+        pOam->unk_A = 0;
+
+        if (gWrittenToBldalpha_Eva < BLDALPHA_MAX_VALUE)
+        {
+            gWrittenToBldalpha_Eva++;
+            gWrittenToBldalpha_Evb--;
+        }
+    }
+}
+
+ /**
+ * @brief 8e89c | 6c | Fades in the intro Metroid vaccine closeup screen
+ * 
+ */
+void NewFileIntroProcessSamusFoundFadeInVaccineCloseUp(struct SpecialCutsceneOam* pOam)
+{
+    APPLY_DELTA_TIME_INC(pOam->timer);
+    if (pOam->timer == 4)
+    {
+        pOam->timer = 0;
+        
+        if (pOam->xPosition < 16)
+            pOam->xPosition++;
+    }
+
+    gBg3XPosition = pOam->xPosition;
+    gBg3YPosition = 0;
+
+    pOam->unk_A++;
+    if (pOam->unk_A == 5)
+    {
+        pOam->unk_A = 0;
+
+        if (gWrittenToBldalpha_Eva)
+        {
+            gWrittenToBldalpha_Eva--;
+            gWrittenToBldalpha_Evb++;
+        }
+    }
+}
+
+ /**
+ * @brief 8e908 | 3c | Handles the downward scrolling of the intro Varia suit removal surgery screen
+ * 
+ */
+void NewFileIntroProcessSamusFoundScreenScrolling(struct SpecialCutsceneOam* pOam)
+{
+    APPLY_DELTA_TIME_INC(pOam->timer);
+    if (pOam->timer == 3)
+    {
+        pOam->timer = 0;
+        
+        if (pOam->yPosition < 96)
+            pOam->yPosition++;
+    }
+
+    gBg2XPosition = 0;
+    gBg2YPosition = pOam->yPosition;
+}
+
+ /**
+ * @brief 8e944 | 1bc | Spawns an OAM for a new file intro Samus found cutscene
+ * 
+ */
+u8 NewFileIntroSamusFoundSetupOam(IntroSamusFoundOamType type, s16 xPosition, s16 yPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == 0)
+            break;
+    }
+
+    if (slot >= ARRAY_SIZE(INTRO_DATA.oam))
+        return ARRAY_SIZE(INTRO_DATA.oam);
+
+    DMA3_FILL_32(0, &INTRO_DATA.oam[slot], sizeof(struct SpecialCutsceneOam));
+
+    INTRO_DATA.oam[slot].xPosition = xPosition;
+    INTRO_DATA.oam[slot].yPosition = yPosition;
+    INTRO_DATA.oam[slot].type = type;
+    INTRO_DATA.oam[slot].unk_18_0 = 1;
+
+    if (type == INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusFoundFadeIn;
+    }
+    else if (type == INTRO_SAMUS_FOUND_OAM_TYPE_LOAD_GFX)
+    {
+        INTRO_DATA.oam[slot].unk_A = 0;
+        INTRO_DATA.oam[slot].unk_8 = 0;
+        INTRO_DATA.oam[slot].unk_4 = 8;
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusLayingLoading;
+    }
+    else if (type == INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN_LAYING)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusFoundFadeInSamusLaying;
+    }
+    else if (type == INTRO_SAMUS_FOUND_OAM_TYPE_LOAD_GFX_2)
+    {
+        INTRO_DATA.oam[slot].unk_A = 8;
+        INTRO_DATA.oam[slot].unk_8 = 8;
+        INTRO_DATA.oam[slot].unk_4 = 5;
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusLayingLoading;
+    }
+    else if (type == INTRO_SAMUS_FOUND_OAM_TYPE_FADE_IN_VACCINE)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusFoundFadeInVaccineCloseUp;
+    }
+    else if (type == INTRO_SAMUS_FOUND_OAM_TYPE_SCREEN_SCROLLING)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusFoundScreenScrolling;
+    }
+    else if (type == INTRO_SAMUS_FOUND_OAM_TYPE_NEXT_PAGE_ARROW)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroNextPageArrowOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessTextCursor;
+    }
+
+    return slot;
+}
+
+ /**
+ * @brief 8eb00 | 7c | V-blank for the intro Samus found cutscene
+ * 
+ */
+void NewFileIntroSamusFoundVblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+    WRITE_16(REG_BG2HOFS, gBg2XPosition);
+    WRITE_16(REG_BG2VOFS, gBg2YPosition);
+    WRITE_16(REG_BG3HOFS, gBg3XPosition);
+    WRITE_16(REG_BG3VOFS, gBg3YPosition);
+}
+
+ /**
+ * @brief 8eb7c | 4 | Empty function
+ * 
+ */
+void NewFileIntroSamusFound_Empty(void)
+{
+    return;
+}
+
+ /**
+ * @brief 8eb80 | 250 | Setup for the intro Samus cured cutscene
+ * 
+ */
+void NewFileIntroSamusCuredInit(void)
+{
+    const u16* pText2;
+    
+    WRITE_16(REG_IME, FALSE);
+    WRITE_16(REG_DISPSTAT, READ_16(REG_DISPSTAT) & ~DSTAT_IF_HBLANK);
+    WRITE_16(REG_IE, READ_16(REG_IE) & ~IF_HBLANK);
+    WRITE_16(REG_IME, TRUE);
+
+    CallbackSetVBlank(unk_99940);
+
+    pText2 = INTRO_DATA.pText2;
+
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+
+    INTRO_DATA.pText2 = pText2;
+
+    LZ77UncompVram(sIntroApproachingBslObjGfx, VRAM_OBJ);
+
+    DMA3_COPY_32(sIntroApproachingBslObjPal, PALRAM_OBJ, 16 * PAL_ROW_SIZE / sizeof(u32));
+    DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
+    DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 15 * PAL_ROW_SIZE, PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompVram(sIntroSamusRebornBgTopGfx, VRAM_BASE);
+    LZ77UncompVram(sIntroSamusRebornBgBottomGfx, VRAM_BASE + 0x8000);
+    LZ77UncompVram(sIntroSamusRebornBgTopTilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusRebornBgBottomTilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+
+    DMA3_COPY_32(sIntroSamusRebornBgPal, PALRAM_BASE, 16 * PAL_ROW_SIZE / sizeof(u32));
+    DMA3_COPY_32(&sIntroSamusFoundPal[15 * PAL_ROW], PALRAM_BASE + 15 * PAL_ROW_SIZE, PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompWram(sIntroSamusMonologueBgTilemap, EWRAM_BASE);
+    LZ77UncompWram(sIntroSamusMonologueBgGfx, EWRAM_BASE + 0x1000);
+
+    WRITE_16(REG_BG0HOFS, -8);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(2, 30, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+
+    gWrittenToBldy = BLDY_MAX_VALUE;
+    WRITE_16(REG_BLDY, BLDY_MAX_VALUE);
+
+    gBg2XPosition = 0;
+    gBg2YPosition = 0;
+    gBg3XPosition = 0;
+    gBg3YPosition = 256;
+
+    NewFileIntroSamusCuredSetupOam(INTRO_SAMUS_CURED_OAM_TYPE_NEXT_PAGE_ARROW, 260, 0);
+    NewFileIntroSamusCuredSetupOam(INTRO_SAMUS_CURED_OAM_TYPE_SCREEN_SCROLLER, 0, 0);
+
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    INTRO_DATA.pText = sCutsceneTextNone;
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / sizeof(u32));
+
+    WRITE_16(REG_DISPCNT, DCNT_BG0 | DCNT_BG2 | DCNT_BG3 | DCNT_OBJ);
+
+    CallbackSetVBlank(NewFileIntroSamusCuredVblank);
+}
+
+ /**
+ * @brief 8edd0 | 428 | Processes the Samus cured cutscene
+ * 
+ */
+boolu32 NewFileIntroSamusCuredProcess(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && INTRO_DATA.unk_218 == 0)
+        INTRO_DATA.unk_218 = 1;
+    
+    APPLY_DELTA_TIME_INC(INTRO_DATA.timer);
+    
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            if (gWrittenToBldy)
+            {
+                gWrittenToBldy--;
+            }
+            else
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 1;
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 1:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(4 + 2.f / 3))
+            {
+                INTRO_DATA.timer = 0;
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG2);
+                INTRO_DATA.subStage = 2;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 2:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 6))
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = INTRO_DATA.pText2;
+                INTRO_DATA.subStage = 3;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+	    case 3:
+	        INTRO_DATA.timer = 0;
+	
+	        if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+	        {
+	            INTRO_DATA.unk_218 = 0;
+	        }
+	        else if (INTRO_DATA.unk_218 == 3)
+	        {
+	            INTRO_DATA.unk_218 = 0;
+	            INTRO_DATA.subStage = 4;
+	        }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 4:
+            if (INTRO_DATA.timer == ONE_THIRD_SECOND)
+            {
+                INTRO_DATA.timer = 0;
+                DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / sizeof(u32));
+                INTRO_DATA.subStage = 5;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+	    case 5:
+	        INTRO_DATA.unk_213++;
+	        if (INTRO_DATA.unk_213 < 6)
+	        {
+	            DMA3_COPY_32(EWRAM_BASE + INTRO_DATA.unk_213 * 0x1000, VRAM_BASE + 0x7000 + INTRO_DATA.unk_213 * 0x1000, 0x1000 / sizeof(u32));
+	        }
+	        else if (INTRO_DATA.unk_213 == 6)
+	        {
+	            DMA3_COPY_32(sPalPointers_79c354[0], PALRAM_BASE, 2 * PAL_ROW);
+	            DMA3_COPY_32(EWRAM_BASE, VRAM_BASE + 0xF000, 0x800 / sizeof(u32));
+	            gWrittenToBldalpha_Eva = 0;
+	            gWrittenToBldalpha_Evb = BLDALPHA_MAX_VALUE;
+	            gBg2YPosition = 0;
+	        }
+	        else
+	        {
+	            INTRO_DATA.unk_213 = 10;
+	        }
+	
+	        if (INTRO_DATA.timer == DELTA_TIME)
+	        {
+	            INTRO_DATA.timer = 0;
+	
+	            if (INTRO_DATA.unk_111 < 15)
+	            {
+	                INTRO_DATA.unk_111++;
+	                INTRO_DATA.unk_110 = 1;
+	            }
+	            else
+	            {
+	                WRITE_16(REG_BLDCNT, BLDCNT_BG2_FIRST_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT 
+	                         | BLDCNT_BG3_SECOND_TARGET_PIXEL | BLDCNT_OBJ_SECOND_TARGET_PIXEL);
+	                INTRO_DATA.unk_213 = 0;
+	                INTRO_DATA.subStage = 6;
+	            }
+	        }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+	    case 6:
+	        if (INTRO_DATA.timer == CONVERT_SECONDS(1 + 1.f / 6))
+            {
+	            WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG2);
+	            INTRO_DATA.timer = 0;
+	            INTRO_DATA.subStage = 7;
+	        }
+
+	        SpecialCutsceneProcessOam();
+	        SpecialCutsceneDrawAllOam();
+	        break;
+        
+	    case 7:
+	        INTRO_DATA.unk_213++;
+	        if (INTRO_DATA.unk_213 == 8)
+	        {
+	            INTRO_DATA.unk_213 = 0;
+	
+	            if (gWrittenToBldalpha_Eva < BLDALPHA_MAX_VALUE)
+	            {
+	                gWrittenToBldalpha_Eva++;
+	                gWrittenToBldalpha_Evb--;
+	            }
+	            else
+	            {
+	                INTRO_DATA.timer = 0;
+	                INTRO_DATA.subStage = 8;
+	            }
+	        }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 8:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(2.f / 15))
+            {
+                INTRO_DATA.timer = 0;
+                
+                if (INTRO_DATA.unk_12D < 15)
+                {
+                    INTRO_DATA.unk_12D++;
+                    INTRO_DATA.unk_12C = 1;
+                }
+                else
+                {
+                    gWrittenToBldy = 0;
+                    INTRO_DATA.subStage = 9;
+                }
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 9:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(.5f))
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_BRIGHTNESS_DECREASE_EFFECT | BLDCNT_SCREEN_FIRST_TARGET);
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][17];
+                INTRO_DATA.subStage = 10;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 10:
+            INTRO_DATA.timer = 0;
+
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+	        {
+	            INTRO_DATA.unk_218 = 0;
+	        }
+	        else if (INTRO_DATA.unk_218 == 3)
+	        {
+	            INTRO_DATA.unk_218 = 0;
+	            INTRO_DATA.subStage = 11;
+	        }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 11:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 6))
+            {
+                NewFileIntroSamusCuredSetupOam(INTRO_SAMUS_CURED_OAM_TYPE_SCREEN_GLARE, SCREEN_X_MIDDLE, 64);
+            }
+            else if (INTRO_DATA.timer == TWO_THIRD_SECOND)
+            {
+                INTRO_DATA.timer = 0;
+                gWrittenToBldy = BLDY_MAX_VALUE;
+                INTRO_DATA.subStage = 12;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+        
+        case 12:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+                gWrittenToBldy++;
+            else
+                finished = TRUE;
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+
+    IntroProcessText();
+
+    return finished;
+}
+
+ /**
+ * @brief 8f1f8 | 88 | Main handler for the intro Samus cured cutscene
+ * 
+ */
+boolu32 NewFileIntroSamusCured(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroSamusCuredInit();
+            INTRO_DATA.stage = 2;
+            break;
+
+        case 1:
+            SpecialCutsceneFadeIn();
+
+            if (!gWrittenToBldy)
+                INTRO_DATA.stage = 2;
+            break;
+
+        case 2:
+            if (NewFileIntroSamusCuredProcess())
+            {
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.stage = 3;
+            }
+            break;
+
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy++;
+            }
+            else
+            {
+                INTRO_DATA.stage = 0;
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+        
+    return finished;
+}
+
+ /**
+ * @brief 8f280 | 104 | Processes the screen scrolling in the Samus cured cutscene
+ * 
+ */
+void NewFileIntroSamusCuredProcessScrolling(struct SpecialCutsceneOam *pOam)
+{
+    APPLY_DELTA_TIME_INC(pOam->timer);
+
+    if (pOam->stage == 0)
+    {
+        pOam->xPosition = gBg2XPosition;
+        pOam->yPosition = gBg2YPosition;
+        pOam->spawnX = gBg3XPosition;
+        pOam->spawnY = gBg3YPosition;
+        pOam->unk_A = 0x5000;
+        pOam->timer = 0;
+        pOam->stage = 1;
+    }
+    else if (pOam->stage == 1)
+    {
+        if (pOam->timer == CONVERT_SECONDS(1.f / 6))
+        {
+            pOam->timer = 0;
+            pOam->stage = 2;
+        }
+    }
+    else if (INTRO_DATA.subStage == 1)
+    {
+        if (pOam->timer == DELTA_TIME)
+        {
+            pOam->timer = 0;
+            
+            if (pOam->yPosition > -SCREEN_SIZE_Y)
+            {
+                pOam->yPosition--;
+                pOam->unk_8++;
+            }
+            
+            if (pOam->spawnY > 0)
+                pOam->spawnY--;
+
+            gBg2YPosition = pOam->yPosition;
+            gBg3YPosition = pOam->spawnY;
+        }
+        
+        if (pOam->unk_8 == 9)
+        {
+            pOam->unk_8 = 0;
+            
+            if (pOam->unk_A)
+            {
+                pOam->unk_A -= 0x400;
+                DMA3_FILL_32(0, VRAM_BASE + 0x8000 + pOam->unk_A, 0x400);
+            }
+        }
+    }
+    else
+    {
+        pOam->timer = 0;
+    }
+}
+
+ /**
+ * @brief 8f384 | 140 | Spawns an OAM for the intro Samus cured cutscene
+ * 
+ */
+u8 NewFileIntroSamusCuredSetupOam(IntroSamusCuredOamType type, s16 xPosition, s16 yPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == 0)
+            break;
+    }
+
+    if (slot >= ARRAY_SIZE(INTRO_DATA.oam))
+        return ARRAY_SIZE(INTRO_DATA.oam);
+
+    DMA3_FILL_32(0, &INTRO_DATA.oam[slot], sizeof(struct SpecialCutsceneOam));
+
+    INTRO_DATA.oam[slot].xPosition = xPosition;
+    INTRO_DATA.oam[slot].yPosition = yPosition;
+    INTRO_DATA.oam[slot].type = type;
+    INTRO_DATA.oam[slot].unk_18_0 = 1;
+
+    if (type == INTRO_SAMUS_CURED_OAM_TYPE_SCREEN_SCROLLER)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusCuredProcessScrolling;
+    }
+    else if (type == INTRO_SAMUS_CURED_OAM_TYPE_SCREEN_GLARE)
+    {
+        SoundPlay(SOUND_12D);
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusCuredScreenGlareOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroSamusCuredProcessOam_Empty;
+    }
+    else if (type == INTRO_SAMUS_CURED_OAM_TYPE_NEXT_PAGE_ARROW)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroNextPageArrowOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessTextCursor;
+    }
+
+    return slot;
+}
+
+ /**
+ * @brief 8f4c4 | fc | V-blank for the Samus cured cutscene
+ * 
+ */
+void NewFileIntroSamusCuredVblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / sizeof(u32));
+
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+    WRITE_16(REG_BG2HOFS, gBg2XPosition);
+    WRITE_16(REG_BG2VOFS, gBg2YPosition);
+    WRITE_16(REG_BG3HOFS, gBg3XPosition);
+    WRITE_16(REG_BG3VOFS, gBg3YPosition);
+
+    if (INTRO_DATA.unk_110 == 1)
+    {
+        INTRO_DATA.unk_110 = 0;
+        DMA3_COPY_32(sPalPointers_79c314[INTRO_DATA.unk_111], PALRAM_BASE + 5 * PAL_ROW_SIZE, 10 * PAL_ROW_SIZE / sizeof(u32));
+    }
+
+    if (INTRO_DATA.unk_12C == 1)
+    {
+        INTRO_DATA.unk_12C = 0;
+        DMA3_COPY_32(sPalPointers_79c354[INTRO_DATA.unk_12D], PALRAM_BASE, 4 * PAL_ROW_SIZE / sizeof(u32));
+    }
+}
+
+ /**
+ * @brief 8f5c0 | 4 | Intro Samus cured OAM handler (empty)
+ * 
+ */
+void NewFileIntroSamusCuredProcessOam_Empty(struct SpecialCutsceneOam* pOam)
+{
+    return;
+}
+
+ /**
+ * @brief 8f5c4 | 230 | Setup for the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroArrivingAtBslInit(void)
+{
+    WRITE_16(REG_IME, FALSE);
+    WRITE_16(REG_DISPSTAT, READ_16(REG_DISPSTAT) & ~DSTAT_IF_HBLANK);
+    WRITE_16(REG_IE, READ_16(REG_IE) & ~IF_HBLANK);
+    WRITE_16(REG_IME, TRUE);
+
+    CallbackSetVBlank(unk_99940);
+
+    DMA3_FILL_32(0, &gNonGameplayRam, sizeof(gNonGameplayRam));
+
+    LZ77UncompVram(sIntroApproachingBslObjGfx, VRAM_OBJ);
+
+    DMA3_COPY_32(sIntroApproachingBslObjPal, PALRAM_OBJ, 16 * PAL_ROW_SIZE / sizeof(u32));
+
+    LZ77UncompVram(sIntroArrivingAtBslSpaceMapBgGfx, VRAM_BASE);
+    LZ77UncompVram(sIntroSamusMonologueBgGfx, VRAM_BASE + 0x8000);
+    LZ77UncompVram(sIntroArrivingAtBslSpaceMapTilemap, VRAM_BASE + 0xF000);
+    LZ77UncompVram(sIntroSamusMonologueBgTilemap, VRAM_BASE + 0xF800);
+    LZ77UncompVram(sIntroSamusShipFlyingTextTilemap, VRAM_BASE + 0xE000);
+
+    DMA3_COPY_32(sIntroArrivingAtBslSpaceMapPal, PALRAM_BASE, 16 * PAL_ROW_SIZE / sizeof(u32));
+
+    SET_BACKDROP_COLOR(COLOR_BLACK);
+
+    LZ77UncompWram(sIntroTilemap_662804, EWRAM_BASE);
+    LZ77UncompWram(sIntroFlyingToBslObjGfx, EWRAM_BASE + 0x1000);
+    LZ77UncompWram(sIntroFlyingToBslBgGfx, EWRAM_BASE + 0x9000);
+
+    WRITE_16(REG_BG0HOFS, 0);
+    WRITE_16(REG_BG0VOFS, 0);
+    WRITE_16(REG_BG1HOFS, 0);
+    WRITE_16(REG_BG1VOFS, 0);
+    WRITE_16(REG_BG2HOFS, 0);
+    WRITE_16(REG_BG2VOFS, 0);
+    WRITE_16(REG_BG3HOFS, 0);
+    WRITE_16(REG_BG3VOFS, 0);
+
+    gBg0XPosition = -8;
+    gBg0YPosition = 8;
+    gBg2XPosition = 0;
+    gBg2YPosition = 0;
+    gBg3XPosition = 0;
+    gBg3YPosition = 0;
+
+    WRITE_16(REG_BG0CNT, CREATE_BGCNT(2, 28, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 30, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BG3CNT, CREATE_BGCNT(2, 31, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+    WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+
+    gWrittenToBldy = BLDY_MAX_VALUE;
+    WRITE_16(REG_BLDY, BLDY_MAX_VALUE);
+    gWrittenToBldalpha_Eva = 0;
+    gWrittenToBldalpha_Evb = BLDALPHA_MAX_VALUE;
+
+    NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_TRAJECTORY, 112, 80);
+    NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_PLANETS_AND_SHIP, 112, 80);
+
+    SpecialCutsceneProcessOam();
+    SpecialCutsceneDrawAllOam();
+
+    INTRO_DATA.pText = sCutsceneTextNone;
+
+    DMA3_FILL_32(0, VRAM_BASE + 0xD000, (VRAM_SIZE / 6) / sizeof(u32));
+
+    WRITE_16(REG_DISPCNT, DCNT_BG0 | DCNT_BG2 | DCNT_OBJ);
+
+    CallbackSetVBlank(NewFileIntroArrivingAtBslVblank);
+}
+
+ /**
+ * @brief 8f7f4 | 750 | Processes the arriving at BSL cutscene
+ * 
+ */
+boolu32 NewFileIntroArrivingAtBslProcess(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW && gChangedInput & KEY_A && INTRO_DATA.unk_218 == 0)
+        INTRO_DATA.unk_218 = 1;
+
+    APPLY_DELTA_TIME_INC(INTRO_DATA.timer);
+
+    switch (INTRO_DATA.subStage)
+    {
+        case 0:
+            if (INTRO_DATA.timer == DELTA_TIME)
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.subStage = 2;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 1:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(.05f))
+            {
+                INTRO_DATA.timer = 0;
+                
+                if (gWrittenToBldalpha_Evb > 8)
+                    gWrittenToBldalpha_Evb--;
+                
+                if (gWrittenToBldalpha_Eva < BLDALPHA_MAX_VALUE)
+                    gWrittenToBldalpha_Eva += 2;
+                else
+                    INTRO_DATA.subStage = 2;
+                
+                if (gWrittenToBldalpha_Eva == 8)
+                {
+                    NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_TRAJECTORY, 112, 80);
+                    NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_PLANETS_AND_SHIP, 112, 80);
+                }
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 2:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 6))
+            {
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_BSL_POPUP, 198, 36);
+            }
+            else if (INTRO_DATA.timer == TWO_THIRD_SECOND)
+            {
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_UNK_255, 0, 0);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_TEXT_CURSOR, 20, 192);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_PANEL_FRAME, 128, 192);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_PANEL_BACKGROUND, 128, 192);
+                INTRO_DATA.subStage = 3;
+                INTRO_DATA.timer = 0;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            NewFileIntroProcessAdamText();
+            break;
+
+        case 3:
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+                SoundPlay(SOUND_203);
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~ DCNT_BG0);
+                INTRO_DATA.unk_218 = 0;
+                SoundPlay(SOUND_203);
+                INTRO_DATA.subStage = 4;
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            NewFileIntroProcessAdamText();
+            break;
+
+        case 4:
+            INTRO_DATA.timer = 0;
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 5:
+            if (INTRO_DATA.timer == DELTA_TIME)
+            {
+                ApplyMusicSoundFading(sMusicTrackDataRom[sSoundDataEntries[580].trackGroupNumber].pTrack, 0);
+            }
+            else if (INTRO_DATA.timer > CONVERT_SECONDS(.5f))
+            {
+                if (gWrittenToBldy < BLDY_MAX_VALUE)
+                {
+                    gWrittenToBldy++;
+                }
+                else
+                {
+                    WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG2);
+                    WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG3);
+                    DMA3_FILL_32(0, &INTRO_DATA.oam, sizeof(INTRO_DATA.oam));
+                    INTRO_DATA.timer = 0;
+                    INTRO_DATA.subStage = 6;
+                }
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 6:
+            INTRO_DATA.timer = 0;
+            
+            if (gWrittenToBldy)
+                gWrittenToBldy--;
+            else
+                INTRO_DATA.subStage = 7;
+            break;
+
+        case 7:
+            if (INTRO_DATA.timer == DELTA_TIME)
+            {
+                WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+                DMA3_FILL_32(0, VRAM_BASE, 0x4800);
+            }
+            else if (INTRO_DATA.timer == 2 * DELTA_TIME)
+            {
+                DMA3_COPY_32(EWRAM_BASE, VRAM_BASE + 0x4800, 0x800 / sizeof(u32));
+                DMA3_COPY_32(sIntroPal_663820, PALRAM_BASE + 12 * PAL_ROW_SIZE, 4 * PAL_ROW_SIZE / sizeof(u32));
+                gBg0XPosition = 0;
+                gBg0YPosition = 4;
+            }
+            else if (INTRO_DATA.timer == 3 * DELTA_TIME)
+            {
+                WRITE_16(REG_BG0CNT, CREATE_BGCNT(0, 9, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG0);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(1))
+            {
+                INTRO_DATA.timer = 0;
+                INTRO_DATA.unk_12 = 0;
+                INTRO_DATA.unk_10 = 0;
+                INTRO_DATA.unk_E = 0;
+                INTRO_DATA.unk_C = 0;
+                INTRO_DATA.unk_212 = 0;
+                INTRO_DATA.pText = sMonologueTextPointers[gLanguage][0];
+                INTRO_DATA.subStage = 8;
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_MONOLOGUE_CURSOR, 260, 0);
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 8:
+            INTRO_DATA.timer = 0;
+            
+            if (INTRO_DATA.unk_218 == 2 || INTRO_DATA.unk_218 == 4)
+            {
+                INTRO_DATA.unk_218 = 0;
+            }
+            else if (INTRO_DATA.unk_218 == 3)
+            {
+                INTRO_DATA.unk_218 = 0;
+                INTRO_DATA.subStage = 9;
+            }
+            
+            if (NewFileIntroCheckMonologueEnded())
+            {
+                INTRO_DATA.subStage = 9;
+                INTRO_DATA.unk_218 = 0;
+            }
+            
+            if (INTRO_DATA.unk_213 == 0)
+            {
+                INTRO_DATA.unk_213 = 100;
+            }
+            else if (INTRO_DATA.unk_213 == 1)
+            {
+                INTRO_DATA.unk_213 = 100;
+                SpecialCutsceneProcessMonologue();
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 9:
+            if (INTRO_DATA.timer == DELTA_TIME)
+            {
+                gWrittenToBldalpha_Evb = 0;
+                gWrittenToBldalpha_Eva = BLDALPHA_MAX_VALUE;
+                FadeMusic(256);
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 6))
+            {
+                INTRO_DATA.timer = 0;
+                WRITE_16(REG_BLDCNT, BLDCNT_BG0_FIRST_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG3_SECOND_TARGET_PIXEL);
+                INTRO_DATA.subStage = 10;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 10:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 15))
+            {
+                INTRO_DATA.timer = 0;
+                
+                if (gWrittenToBldalpha_Evb < BLDALPHA_MAX_VALUE)
+                    gWrittenToBldalpha_Evb++;
+                
+                if (gWrittenToBldalpha_Eva)
+                    gWrittenToBldalpha_Eva--;
+                
+                if (gWrittenToBldalpha_Evb == BLDALPHA_MAX_VALUE && !gWrittenToBldalpha_Eva)
+                {
+                    WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG0);
+                    INTRO_DATA.subStage = 11;
+                }
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 11:
+            if (INTRO_DATA.timer == DELTA_TIME)
+            {
+                DMA3_FILL_32(0, &INTRO_DATA.oam, sizeof(INTRO_DATA.oam));
+                gWrittenToBldalpha_Eva = BLDALPHA_MAX_VALUE;
+                gWrittenToBldalpha_Evb = 0;
+            }
+            else if (INTRO_DATA.timer < 6 * DELTA_TIME)
+            {
+                DMA3_COPY_32(EWRAM_BASE - 0x3000 + INTRO_DATA.timer * 0x2000, VRAM_BASE + 0xC000 + INTRO_DATA.timer * 0x2000, 0x2000 / sizeof(u32));
+            }
+            else if (INTRO_DATA.timer < 10 * DELTA_TIME)
+            {
+                DMA3_COPY_32(EWRAM_BASE - 0x3000 + INTRO_DATA.timer * 0x2000, VRAM_BASE - 0xC000 + INTRO_DATA.timer * 0x2000, 0x2000 / sizeof(u32));
+            }
+            else if (INTRO_DATA.timer == 10 * DELTA_TIME)
+            {
+                LZ77UncompVram(sIntroTilemap_5f65d8, VRAM_BASE + 0xE800);
+            }
+            else if (INTRO_DATA.timer == 11 * DELTA_TIME)
+            {
+                LZ77UncompVram(sIntroTilemap_5f5454, VRAM_BASE + 0xF000);
+                WRITE_16(REG_BG1CNT, CREATE_BGCNT(2, 31, BGCNT_HIGH_PRIORITY, BGCNT_SIZE_256x256));
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG1);
+            }
+            else if (INTRO_DATA.timer == 12 * DELTA_TIME)
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG3);
+                WRITE_16(REG_BG2CNT, CREATE_BGCNT(0, 29, BGCNT_LOW_MID_PRIORITY, BGCNT_SIZE_256x256));
+                WRITE_16(REG_BG3CNT, CREATE_BGCNT(0, 30, BGCNT_LOW_PRIORITY, BGCNT_SIZE_256x256));
+                WRITE_16(REG_BLDCNT, BLDCNT_BG1_FIRST_TARGET_PIXEL | BLDCNT_ALPHA_BLENDING_EFFECT | BLDCNT_BG2_SECOND_TARGET_PIXEL 
+                        | BLDCNT_BG3_SECOND_TARGET_PIXEL | BLDCNT_OBJ_SECOND_TARGET_PIXEL);
+                DMA3_COPY_32(sPal_5f4ed4, PALRAM_BASE + 4 * PAL_ROW_SIZE, 12 * PAL_ROW_SIZE / sizeof(u32));
+                gBg2XPosition = 0;
+                gBg2YPosition = 0;
+                gBg3XPosition = 0;
+                gBg3YPosition = 0;
+            }
+            else if (INTRO_DATA.timer == CONVERT_SECONDS(.5f))
+            {
+                WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) | DCNT_BG3);
+                INTRO_DATA.timer = 0;
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_UNK_255, 0, 0);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_1, 208, 100);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_2, 208, 100);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_3, 208, 100);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP, 196, 100);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_BSL, 6, 78);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_BG3_SCROLLER, 0, 0);
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_BG2_SCROLLER, 0, 0);
+                SoundPlay_3b1c(SOUND_245);
+                INTRO_DATA.subStage = 12;
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 12:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(1.f / 15))
+            {
+                INTRO_DATA.timer = 0;
+                
+                if (gWrittenToBldalpha_Evb < BLDALPHA_MAX_VALUE)
+                    gWrittenToBldalpha_Evb++;
+                
+                if (gWrittenToBldalpha_Eva)
+                    gWrittenToBldalpha_Eva--;
+
+                if (gWrittenToBldalpha_Evb == BLDALPHA_MAX_VALUE)
+                {
+                    if (!gWrittenToBldalpha_Eva)
+                    {
+                        WRITE_16(REG_DISPCNT, READ_16(REG_DISPCNT) & ~DCNT_BG1);
+                        INTRO_DATA.subStage = 13;
+                    }
+                }
+            }
+            
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 13:
+            INTRO_DATA.timer = 0;
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+
+        case 14:
+            if (INTRO_DATA.timer == CONVERT_SECONDS(4.f / 3))
+            {
+                INTRO_DATA.timer = 0;
+                gWrittenToBldy = 0;
+                WRITE_16(REG_BLDCNT, BLDCNT_SCREEN_FIRST_TARGET | BLDCNT_BRIGHTNESS_DECREASE_EFFECT);
+                finished = TRUE;
+            }
+
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+    
+    return finished;
+}
+
+ /**
+ * @brief 8ff44 | 90 | Main handler of the arriving at BSL cutscene
+ * 
+ */
+boolu32 NewFileIntroArrivingAtBsl(void)
+{
+    boolu32 finished;
+
+    finished = FALSE;
+    
+    switch (INTRO_DATA.stage)
+    {
+        case 0:
+            NewFileIntroArrivingAtBslInit();
+            INTRO_DATA.stage = 1;
+            break;
+        
+        case 1:
+            gWrittenToBldy = 0;
+            SoundPlay(SOUND_244);
+            
+            if (!gWrittenToBldy)
+                INTRO_DATA.stage = 2;
+            break;
+        
+        case 2:
+            if (NewFileIntroArrivingAtBslProcess())
+            {
+                INTRO_DATA.subStage = 0;
+                INTRO_DATA.unk_213 = 0;
+                INTRO_DATA.stage = 3;
+            }
+            break;
+        
+        case 3:
+            if (gWrittenToBldy < BLDY_MAX_VALUE)
+            {
+                gWrittenToBldy++;
+            }
+            else
+            {
+                INTRO_DATA.stage = 0;
+                finished = TRUE;
+            }
+        
+            SpecialCutsceneProcessOam();
+            SpecialCutsceneDrawAllOam();
+            break;
+    }
+    
+    return finished;
+}
+
+ /**
+ * @brief 8ffd4 | 270 | Processes Samus' ship in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessSamusShipArrivingAtBsl(struct SpecialCutsceneOam *pOam)
+{
+    const struct FrameData* frame;
+    s16 x;
+    s16 y;
+
+    pOam->unk_A++;
+    
+    if (pOam->stage == 0)
+    {
+        pOam->spawnX = pOam->xPosition;
+        pOam->spawnY = pOam->yPosition;
+        
+        if (pOam->unk_A == 20)
+        {
+            pOam->unk_A = 0;
+            pOam->animationDurationCounter = 0;
+            pOam->stage = 1;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->timer++;
+        if (pOam->timer == CONVERT_SECONDS(1.f / 30))
+        {
+            pOam->timer = 0;
+            pOam->scaling--;
+        }
+
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A >> 3);
+        
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->animationDurationCounter = 0;
+            pOam->spawnX = pOam->spawnX - (pOam->unk_A >> 3);
+            pOam->spawnY = pOam->yPosition;
+            pOam->timer = 0;
+            pOam->unk_A = 0;
+            pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        if (pOam->unk_A == 2)
+        {
+            NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_EXPLOSION, pOam->xPosition, pOam->yPosition);
+            pOam->rotation -= 1;
+        }
+        else if (pOam->unk_A == 4)
+        {
+            pOam->unk_A = 0;
+            pOam->stage = 3;
+            pOam->rotation -= 1;
+        }
+        
+        pOam->scaling--;
+        pOam->animationDurationCounter = 0;
+    }
+    else if (pOam->stage == 3)
+    {
+        pOam->scaling -= 2;
+        
+        NewFileIntroGetPositionAndSlotOfOamByType(INTRO_ARRIVING_AT_BSL_OAM_TYPE_BSL, &x, &y);
+        
+        if (pOam->rotation > Q_8_8(15.f / 16))
+            pOam->rotation--;
+
+        pOam->yPosition = pOam->spawnY - (pOam->unk_A >> 1);
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A << 1);
+
+        if (pOam->unk_A == 10)
+        {
+            pOam->unk_A = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 4;
+        }
+        
+        pOam->animationDurationCounter = 0;
+    }
+    else if (pOam->stage == 4)
+    {
+        pOam->scaling -= 4;
+        
+        NewFileIntroGetPositionAndSlotOfOamByType(INTRO_ARRIVING_AT_BSL_OAM_TYPE_BSL, &x, &y);
+        
+        if (pOam->rotation > Q_8_8(15.f / 16))
+            pOam->rotation--;
+        
+        pOam->yPosition = pOam->spawnY - pOam->unk_A;
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A << 2);
+        
+        if (x - pOam->xPosition > -20)
+        {
+            pOam->unk_A = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 5;
+        }
+        
+        pOam->animationDurationCounter = 0;
+    }
+    else if (pOam->stage == 5)
+    {
+        pOam->scaling -= 2;
+        
+        NewFileIntroGetPositionAndSlotOfOamByType(INTRO_ARRIVING_AT_BSL_OAM_TYPE_BSL, &x, &y);
+        
+        if ((u8)(pOam->rotation - Q_8_8(.04f)) > Q_8_8(.745f))
+            pOam->rotation++;
+
+        pOam->yPosition = pOam->spawnY - (pOam->unk_A >> 1);
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A << 1);
+        
+        if (x - pOam->xPosition > 10)
+        {
+            pOam->unk_A = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 6;
+        }
+        
+        pOam->animationDurationCounter = 0;
+    }
+    else if (pOam->stage == 6)
+    {
+        pOam->scaling--;
+
+        pOam->yPosition = pOam->spawnY - (pOam->unk_A >> 2);
+        pOam->xPosition = pOam->spawnX - (pOam->unk_A >> 1);
+    
+        if ((u8)(pOam->rotation - Q_8_8(.04f)) > Q_8_8(.745f))
+        {
+            pOam->rotation++;
+        }
+        else
+        {
+            pOam->unk_A = 0;
+            pOam->timer = 0;
+            pOam->spawnX = pOam->xPosition;
+            pOam->spawnY = pOam->yPosition;
+            pOam->stage = 7;
+        }
+    
+        pOam->animationDurationCounter = 0;
+    }
+    else if (pOam->stage == 7)
+    {
+        if ((u8)(pOam->rotation - Q_8_8(1.f / 16)) > Q_8_8(.72f))
+        {
+            pOam->timer++;
+            if (pOam->timer == CONVERT_SECONDS(.05f))
+            {
+                pOam->timer = 0;
+                pOam->rotation++;
+            }
+        }
+        
+        pOam->yPosition = pOam->spawnY - (pOam->unk_A >> 2);
+        pOam->xPosition = (pOam->unk_A >> 1) + pOam->spawnX;
+        
+        pOam->scaling -= 2;
+        if (pOam->scaling < Q_8_8(1.f / 8))
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+            INTRO_DATA.subStage = 14;
+        }
+        
+        pOam->animationDurationCounter = 0;
+    }
+    
+    if (pOam->scaling <= Q_8_8(1))
+        pOam->affineMode = 1;
+}
+
+ /**
+ * @brief 90244 | 20 | Processes the BSL in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessBslPreview(struct SpecialCutsceneOam* pOam)
+{
+    pOam->timer++;
+    if (pOam->timer == CONVERT_SECONDS(1.f / 10))
+    {
+        pOam->timer = 0;
+        pOam->xPosition++;
+    }
+}
+
+ /**
+ * @brief 90264 | 1ac | Processes the ship's thrusters in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessSamusShipArrivingAtBslThrusters(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+    u8 slot;
+    s16 x;
+    s16 y;
+
+    frame = &pOam->pOam[pOam->currentAnimationFrame];
+    if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+    {
+        pOam->currentAnimationFrame = 0;
+        pOam->animationDurationCounter = 0;
+    }
+
+    pOam->timer++;
+    if (pOam->timer == 4)
+    {
+        pOam->timer = 0;
+
+        switch (pOam->type)
+        {
+            case 3:
+                slot = NewFileIntroGetPositionAndSlotOfOamByType(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_2, &x, &y);
+                if (slot == ARRAY_SIZE(INTRO_DATA.oam))
+                {
+                    pOam->type = 0;
+                    pOam->unk_18_0 = 0;
+                    break;
+                }
+
+                pOam->scaling = INTRO_DATA.oam[slot].scaling;
+                pOam->affineMode = INTRO_DATA.oam[slot].affineMode;
+                pOam->xPosition = x;
+                pOam->yPosition = y;
+                break;
+
+            case 4:
+                slot = NewFileIntroGetPositionAndSlotOfOamByType(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_3, &x, &y);
+                if (slot == ARRAY_SIZE(INTRO_DATA.oam))
+                {
+                    pOam->type = 0;
+                    pOam->unk_18_0 = 0;
+                    break;
+                }
+
+                pOam->scaling = INTRO_DATA.oam[slot].scaling;
+                pOam->affineMode = INTRO_DATA.oam[slot].affineMode;
+                pOam->xPosition = x;
+                pOam->yPosition = y;
+                break;
+
+            case 5:
+                slot = NewFileIntroGetPositionAndSlotOfOamByType(INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP, &x, &y);
+                if (slot == ARRAY_SIZE(INTRO_DATA.oam))
+                {
+                    pOam->type = 0;
+                    pOam->unk_18_0 = 0;
+                    break;
+                }
+
+                pOam->scaling = INTRO_DATA.oam[slot].scaling;
+                pOam->affineMode = INTRO_DATA.oam[slot].affineMode;
+
+                if (INTRO_DATA.oam[slot].stage < 2)
+                {
+                    pOam->yPosition = y;
+
+                    switch (INTRO_DATA.oam[slot].currentAnimationFrame)
+                    {
+                        case 0:
+                            pOam->xPosition = x + 12;
+                            break;
+                
+                        case 1:
+                            pOam->xPosition = x + 10;
+                            break;
+                
+                        case 2:
+                            pOam->xPosition = x + 8;
+                            break;
+                
+                        case 3:
+                            pOam->xPosition = x + 6;
+                            break;
+                
+                        case 4:
+                            pOam->xPosition = x + 5;
+                            break;
+                
+                        case 5:
+                            pOam->xPosition = x + 4;
+                            break;
+                
+                        case 6:
+                            pOam->xPosition = x + 3;
+                            break;
+                
+                        case 7:
+                            pOam->xPosition = x + 2;
+                            break;
+                
+                        case 8:
+                            pOam->xPosition = x + 1;
+                            break;
+
+                        default:
+                            pOam->xPosition = x;
+                            break;
+                    }
+                }
+                else
+                {
+                    pOam->yPosition = y;
+                    pOam->xPosition = x;
+                }
+                break;
+        }
+    }
+}
+
+ /**
+ * @brief 90410 | 2c | Processes the ship's thrusters flaring up in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessSamusShipArrivingAtBslThrusterExplosion(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+    
+    frame = &pOam->pOam[pOam->currentAnimationFrame];
+    if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+    {
+        pOam->type = 0;
+        pOam->unk_18_0 = 0;
+    }
+}
+
+ /**
+ * @brief 9043c | 8 | To document
+ * 
+ */
+void unk_9043c(struct SpecialCutsceneOam* pOam)
+{
+    pOam->type = 0;
+}
+
+ /**
+ * @brief 90444 | 34 | Processes the background scrolling in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessSamusArrivingAtBslBg3Scrolling(struct SpecialCutsceneOam* pOam)
+{
+    pOam->timer++;
+    if (pOam->timer == TWO_THIRD_SECOND)
+    {
+        pOam->timer = 0;
+        
+        if (pOam->xPosition < 16)
+        {
+            pOam->xPosition++;
+            gBg3XPosition++;
+        }
+    }
+}
+
+ /**
+ * @brief 90478 | 34 | Processes the BG2 scrolling in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessSamusArrivingAtBslBg2Scrolling(struct SpecialCutsceneOam* pOam)
+{
+    pOam->timer++;
+    if (pOam->timer == CONVERT_SECONDS(.5f))
+    {
+        pOam->timer = 0;
+        
+        if (pOam->xPosition < 16)
+        {
+            pOam->xPosition++;
+            gBg2XPosition--;
+        }
+    }
+}
+
+ /**
+ * @brief 904ac | 19c | Processes the Adam panel in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessAdamPanel(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+
+    if (pOam->stage == 0)
+    {
+        pOam->animationDurationCounter = 0;
+        pOam->currentAnimationFrame = 0;
+            
+        if (pOam->yPosition > 128)
+        {
+            pOam->yPosition -= 8;
+            return;
+        }
+            
+        pOam->yPosition = 128;
+            
+        if (pOam->type == 20)
+            SoundPlay(SOUND_20A);
+            
+        pOam->stage = 1;
+    }
+    else if (pOam->stage == 1)
+    {
+        frame = &pOam->pOam[pOam->currentAnimationFrame];
+        if (frame[0].timer == pOam->animationDurationCounter)
+        {
+            if (frame[1].timer == 0)
+            {
+                pOam->animationDurationCounter = 0;
+                pOam->stage = 2;
+            }
+            
+            if (pOam->type != 20)
+                return;
+
+            if (pOam->currentAnimationFrame == 10)
+                NewFileIntroArrivingAtBslSetupOam(INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_LENS, pOam->xPosition, pOam->yPosition);
+        }
+        
+        if (pOam->type == 20)
+        {
+            if (pOam->currentAnimationFrame == 11)
+            {
+                if (pOam->animationDurationCounter == 15)
+                {
+                    INTRO_DATA.unk_212 = 0;
+                    INTRO_DATA.unk_E = 0;
+                    INTRO_DATA.unk_C = 0;
+                    INTRO_DATA.pText = sMonologueTextPointers[gLanguage][18];
+                }
+            }
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        pOam->animationDurationCounter = 0;
+        pOam->timer++;
+        if (pOam->timer == 1)
+        {
+            pOam->timer = 0;
+            pOam->stage = 3;
+        }
+    }
+    else if (pOam->stage == 3)
+    {
+        pOam->animationDurationCounter = 0;
+        
+        if (INTRO_DATA.subStage == 4)
+        {
+            pOam->currentAnimationFrame = 0;
+            
+            if (pOam->type == 20)
+            {
+                pOam->pOam = sIntroArrivingAtBslAdamPanelFrameOam_Closing;
+                SoundPlay(SOUND_20B);
+            }
+            else if (pOam->type == 21)
+            {
+                pOam->pOam = sIntroArrivingAtBslAdamPanelBackgroundOam_Closing;
+            }
+
+            pOam->stage = 4;
+        }
+    }
+    else if (pOam->stage == 4)
+    {
+        if (pOam->currentAnimationFrame == 11 && pOam->animationDurationCounter == 3)
+        {
+            if (pOam->type == 20)
+                SpecialCutsceneDestroyOamOfType(22);
+            
+            pOam->animationDurationCounter = 0;
+            pOam->stage = 5;
+        }
+    }
+    else if (pOam->stage == 5)
+    {
+        pOam->animationDurationCounter = 0;
+        
+        if (pOam->yPosition < 192)
+        {
+            pOam->yPosition += 8;
+        }
+        else
+        {
+            if (pOam->type == 20)
+                INTRO_DATA.subStage = 5;
+
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+}
+
+ /**
+ * @brief 90648 | 88 | Processes Adam's lens in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessAdamLens(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+
+    frame = &pOam->pOam[pOam->currentAnimationFrame];
+
+    if (pOam->stage == 0)
+    {
+        if (pOam->currentAnimationFrame == 3)
+        {
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroArrivingAtBslAdamLensOam_Glowing;
+            pOam->stage = 1;
+        }
+        
+        if (INTRO_DATA.subStage == 4)
+        {
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroArrivingAtBslAdamLensOam_Closing;
+            pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        if (INTRO_DATA.subStage == 4)
+        {
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroArrivingAtBslAdamLensOam_Closing;
+            pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+            pOam->animationDurationCounter = 0;
+    }
+}
+
+ /**
+ * @brief 906d0 | 8c | Processes the Adam text cursor in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessAdamTextCursor(struct SpecialCutsceneOam* pOam)
+{
+    if (*INTRO_DATA.pText == CHAR_TERMINATOR)
+    {
+        pOam->xPosition = 290;
+    }
+    else if (*INTRO_DATA.pText != CHAR_NEW_LINE)
+    {
+        if (*INTRO_DATA.pText == CHAR_NEW_PAGE)
+        {
+            pOam->xPosition = 290;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroArrivingAtBslAdamTextCursorOam;
+        }
+        else if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW)
+        {
+            pOam->xPosition = SCREEN_X_MIDDLE;
+            pOam->yPosition = 154;
+            pOam->pOam = sIntroArrivingAtBslMonologueCursorOam;
+        }
+        else
+        {
+            pOam->xPosition = INTRO_DATA.unk_C * 8 + INTRO_DATA.unk_212 + 14;
+            pOam->yPosition = INTRO_DATA.unk_E * 8 + 132;
+            pOam->animationDurationCounter = 0;
+            pOam->currentAnimationFrame = 0;
+        }
+    }
+    else
+    {
+        pOam->xPosition = INTRO_DATA.unk_C * 8 + INTRO_DATA.unk_212 + 14;
+        pOam->yPosition = INTRO_DATA.unk_E * 8 + 132;
+        pOam->animationDurationCounter = 0;
+        pOam->currentAnimationFrame = 0;
+    }
+}
+
+ /**
+ * @brief 9075c | 9c | Processes the BSL preview popup in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessBslPopUp(struct SpecialCutsceneOam* pOam)
+{
+    const struct FrameData* frame;
+
+    frame = &pOam->pOam[pOam->currentAnimationFrame];
+    
+    if (pOam->stage == 0)
+    {
+        if (pOam->currentAnimationFrame == 1 && pOam->animationDurationCounter == 1)
+            SoundPlay(SOUND_11C);
+
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->animationDurationCounter = 0;
+            pOam->stage = 1;
+        }
+    }
+    else if (pOam->stage == 1)
+    {
+        pOam->animationDurationCounter = 0;
+        
+        if (INTRO_DATA.subStage == 4)
+        {
+            pOam->currentAnimationFrame = 0;
+            pOam->pOam = sIntroArrivingAtBslBslPopupOam_Closing;
+            SoundPlay(SOUND_11D);
+            pOam->stage = 2;
+        }
+    }
+    else if (pOam->stage == 2)
+    {
+        if (frame[0].timer == pOam->animationDurationCounter && frame[1].timer == 0)
+        {
+            pOam->type = 0;
+            pOam->unk_18_0 = 0;
+        }
+    }
+}
+
+ /**
+ * @brief 907f8 | 30 | Processes the monologue cursor in the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroProcessMonologueCursor(struct SpecialCutsceneOam* pOam)
+{
+    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW)
+    {
+        pOam->xPosition = 118;
+        pOam->yPosition = INTRO_DATA.unk_E * 8 + 24;
+    }
+    else
+    {
+        pOam->xPosition = 260;
+    }
+}
+
+ /**
+ * @brief 90828 | 438 | Spawns an OAM for the intro arriving at BSL cutscene
+ * 
+ */
+u8 NewFileIntroArrivingAtBslSetupOam(IntroArrivingAtBslOamType type, s16 xPosition, s16 yPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == 0)
+            break;
+    }
+
+    if (slot >= ARRAY_SIZE(INTRO_DATA.oam))
+        return ARRAY_SIZE(INTRO_DATA.oam);
+    
+    DMA3_FILL_32(0, &INTRO_DATA.oam[slot], sizeof(struct SpecialCutsceneOam));
+
+    INTRO_DATA.oam[slot].xPosition = xPosition;
+    INTRO_DATA.oam[slot].yPosition = yPosition;
+    INTRO_DATA.oam[slot].type = type;
+    INTRO_DATA.oam[slot].unk_18_0 = 1;
+
+    if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1.5f);
+        INTRO_DATA.oam[slot].affineMode = 3;
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslSamusShipOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusShipArrivingAtBsl;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_BSL)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslBslOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessBslPreview;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_1)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1.5f);
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].affineMode = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslThrustersOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusShipArrivingAtBslThrusters;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_2)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1.5f);
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].affineMode = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslThrustersOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusShipArrivingAtBslThrusters;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_3)
+    {
+        INTRO_DATA.oam[slot].scaling = Q_8_8(1.5f);
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].affineMode = 3;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslThrustersOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusShipArrivingAtBslThrusters;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_THRUSTER_EXPLOSION)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslThrusterExplosionOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusShipArrivingAtBslThrusterExplosion;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_BG3_SCROLLER)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusArrivingAtBslBg3Scrolling;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_BG2_SCROLLER)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessSamusArrivingAtBslBg2Scrolling;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_PANEL_FRAME)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslAdamPanelFrameOam_Opening;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessAdamPanel;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_PANEL_BACKGROUND)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslAdamPanelBackgroundOam_Opening;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessAdamPanel;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_LENS)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslAdamLensOam_Opening;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessAdamLens;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_ADAM_TEXT_CURSOR)
+    {
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslAdamTextCursorOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessAdamTextCursor;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_SHIP_TRAJECTORY)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslShipTrajectoryOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroArrivingAtBslProcessOam_Empty;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_PLANETS_AND_SHIP)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslPlanetsAndShipOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroArrivingAtBslProcessOam_Empty;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_BSL_POPUP)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslBslPopupOam_Opening;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessBslPopUp;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_SCREEN_GLARE)
+    {
+        INTRO_DATA.oam[slot].priority = 2;
+        INTRO_DATA.oam[slot].pOam = sIntroSamusCuredScreenGlareOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroArrivingAtBslProcessOam_Empty;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_MONOLOGUE_CURSOR)
+    {
+        INTRO_DATA.oam[slot].priority = 1;
+        INTRO_DATA.oam[slot].pOam = sIntroArrivingAtBslMonologueCursorOam;
+        INTRO_DATA.oam[slot].pFunction = NewFileIntroProcessMonologueCursor;
+    }
+    else if (type == INTRO_ARRIVING_AT_BSL_OAM_TYPE_UNK_255)
+    {
+        INTRO_DATA.oam[slot].unk_18_0 = 0;
+        INTRO_DATA.oam[slot].pFunction = unk_9043c;
+    }
+
+    return slot;
+}
+
+ /**
+ * @brief 90c60 | 9c | V-blank for the arriving at BSL cutscene
+ * 
+ */
+void NewFileIntroArrivingAtBslVblank(void)
+{
+    DMA3_COPY_32(gOamData, OAM_BASE, OAM_SIZE / sizeof(u32));
+    
+    WRITE_16(REG_BLDALPHA, C_16_2_8(gWrittenToBldalpha_Evb, gWrittenToBldalpha_Eva));
+    WRITE_16(REG_BLDY, gWrittenToBldy);
+    WRITE_16(REG_BG0HOFS, gBg0XPosition);
+    WRITE_16(REG_BG0VOFS, gBg0YPosition);
+    WRITE_16(REG_BG2HOFS, gBg2XPosition);
+    WRITE_16(REG_BG2VOFS, gBg2YPosition);
+    WRITE_16(REG_BG3HOFS, gBg3XPosition);
+    WRITE_16(REG_BG3VOFS, gBg3YPosition);
+    
+    unk_98158();
+}
+
+ /**
+ * @brief 90cfc | 60 | Returns slot, X and Y position of a new file intro OAM
+ * 
+ */
+u8 NewFileIntroGetPositionAndSlotOfOamByType(IntroArrivingAtBslOamType type, s16* pXPosition, s16* pYPosition)
+{
+    u8 slot;
+
+    for (slot = 0; slot < ARRAY_SIZE(INTRO_DATA.oam); slot++)
+    {
+        if (INTRO_DATA.oam[slot].type == type)
+        {
+            *pXPosition = INTRO_DATA.oam[slot].xPosition;
+            *pYPosition = INTRO_DATA.oam[slot].yPosition;
+        
+            return slot;
+        }
+    }
+
+    // Default values if not found
+    *pXPosition = 300;
+    *pYPosition = 200;
+        
+    return ARRAY_SIZE(INTRO_DATA.oam);
+}
+
+ /**
+ * @brief 90d5c | 4 | Empty OAM handler function
+ * 
+ */
+void NewFileIntroArrivingAtBslProcessOam_Empty(struct SpecialCutsceneOam* pOam)
+{
+    return;
+}
+
+ /**
+ * @brief  |  | To document
+ * 
+ */
+

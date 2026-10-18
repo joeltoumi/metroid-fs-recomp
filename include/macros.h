@@ -1,0 +1,279 @@
+#include "types.h"
+
+#define LOW_NIBBLE(value) ((value) & 0xF)
+#define HIGH_NIBBLE(value) ((value) >> 4)
+
+#define LOW_BYTE(value) ((value) & UCHAR_MAX)
+#define HIGH_BYTE(value) (((value) & UCHAR_MAX << 8) >> 8)
+
+#define LOW_SHORT(value) ((value) & USHORT_MAX)
+#define HIGH_SHORT(value) ((value) >> 16)
+
+#define OAM_PART_SIZE 3
+#define OAM_DATA_SIZE(nbrOfParts) (1 + (nbrOfParts) * OAM_PART_SIZE)
+#define GET_OAM_DATA_SIZE(size) (((size) - 1) / OAM_PART_SIZE)
+
+#define OPPOSITE_DIRECTION(dir) ((dir) ^ (KEY_RIGHT | KEY_LEFT))
+
+#define CAST_TO_ARRAY(type, sizes, ptr) (*((type (*)sizes)((ptr))))
+#define ARRAY_SIZE(a) ((int)(sizeof((a)) / sizeof((a)[0])))
+#define OFFSET_OF(type, element) ((int)&(((type*)0)->element))
+#define CHECK_ALL_FLAGS(value, flags) (((value) & (flags)) == (flags))
+#define PALETTE_NBR_ROWS(pal) (ARRAY_SIZE((pal)) / 16)
+
+#define CEIL(v) ((int)(((float)v) + .5) == (int)(v) ? ((int)(v)) : (int)(((float)v) + .5))
+
+#define CLAMP(value, min, max)\
+{                             \
+    if (value > (max))        \
+        value = (max);        \
+    else if (value < (min))   \
+        value = (min);        \
+}
+#define CLAMP2(value, min, max)\
+{                              \
+    if (value < (min))         \
+        value = (min);         \
+    else if (value > (max))    \
+        value = (max);         \
+}
+
+#define SET_ABS_SUB(var, v1, v2)\
+{                               \
+    if ((v1) > (v2))            \
+        var = (v1) - (v2);      \
+    else                        \
+        var = (v2) - (v1);      \
+}
+
+/**
+ * @brief Performs a modulo (value % mod) operation on a value using the and operation (WARNING only use a value for mod that is a power of 2)
+ * 
+ * @param value Value
+ * @param mod Modulo
+ */
+#define MOD_AND(value, mod) ((value) & ((mod) - 1))
+
+/**
+ * @brief Gets the binary logarithm of a value (WARNING only use a value that is a power of 2 and <= 1024)
+ *
+ * @param value Value
+ */
+#define LOG2(value) ((value) == 2 ? 1 : ((value) == 4 ? 2 : ((value) == 8 ? 3 : ((value) == 16 ? 4 : ((value) == 32 ? 5 : ((value) == 64 ? 6 : ((value) == 128 ? 7 : ((value) == 256 ? 8 : ((value) == 512 ? 9 : ((value) == 1024 ? 10 : 0))))))))))
+
+/**
+ * @brief Performs a division (value / div) operation on a value using the right shift operation (WARNING only use a value for div that is a power of 2 and <= 1024)
+ * 
+ * @param value Value
+ * @param div Divisor
+ */
+#define DIV_SHIFT(value, div) ((value) >> ((div) == 2 ? 1 : ((div) == 4 ? 2 : ((div) == 8 ? 3 : ((div) == 16 ? 4 : ((div) == 32 ? 5 : ((div) == 64 ? 6 : ((div) == 128 ? 7 : ((div) == 256 ? 8 : ((div) == 512 ? 9 : ((div) == 1024 ? 10 : 0)))))))))))
+
+/**
+ * @brief Performs a multiplaction (value * mul) operation on a value using the left shift operation (WARNING only use a value for div that is a power of 2 and <= 256)
+ * 
+ * @param value Value
+ * @param mul Multiplier
+ * @return Result (value * mul)
+ */
+#define MUL_SHIFT(value, mul) ((value) << ((mul) == 2 ? 1 : ((mul) == 4 ? 2 : ((mul) == 8 ? 3 : ((mul) == 16 ? 4 : ((mul) == 32 ? 5 : ((mul) == 64 ? 6 : ((mul) == 128 ? 7 : ((mul) == 256 ? 8 : ((mul) == 512 ? 9 : ((mul) == 1024 ? 10 : 0)))))))))))
+
+/**
+ * @brief Multiplies a number by a fraction (num/den)
+ * 
+ * @param value Value
+ * @param num Numerator
+ * @param den Denominator
+ */
+#define FRACT_MUL(value, num, den) ((value) * (num) / (den))
+
+/**
+ * @brief Constructs an uint from 2 ushorts (high << 16 | low)
+ * 
+ * @param high High
+ * @param low Low
+ */
+#define C_32_2_16(high, low) ((high) << 16 | (low))
+
+/**
+ * @brief Constructs an ushort from 2 bytes (high << 8 | low)
+ * 
+ * @param high High
+ * @param low Low
+ */
+#define C_16_2_8(high, low) ((high) << 8 | (low))
+
+/**
+ * @brief Constructs an @c u16 from 2 @c u8
+ * 
+ * @param high High
+ * @param low Low
+ * @return Value (low | high << 8)
+ */
+#define C_16_2_8_(high, low) ((low) | (high) << 8)
+
+/**
+ * @brief Creates a signed 8-bit value from an @c s16
+ * 
+ * @param value Value
+ * @return Result
+ */
+#define C_S8_2_S16(value) ((value) & 0x80 ? 0x100 + (value) : (value))
+
+/**
+ * @brief Creates a signed 9-bit value from an @c s16
+ * 
+ * @param value Value
+ * @return Result
+ */
+#define C_S9_2_S16(value) ((value) & 0x100 ? 0x200 + (value) : (value))
+
+/**
+ * @brief Constructs a byte from 8 bits
+ * 
+ */
+#define C_8_8_1(bit0, bit1, bit2, bit3, bit4, bit5, bit6, bit7) (((bit0) << 0) | ((bit1) << 1) | ((bit2) << 2) | ((bit3) << 3) | ((bit4) << 4) | ((bit5) << 5) | ((bit6) << 6) | ((bit7) << 7))
+
+// Converts a number to Q8.8 fixed-point format
+#define Q_8_8(n) ((s16)((n) * 256))
+
+// Converts a Q8.8 fixed-point format number to a regular short
+#define Q_8_8_TO_SHORT(n) ((s16)((n) >> 8))
+
+// Converts a Q8.8 fixed-point format number to a regular short
+#define Q_8_8_TO_SHORT_DIV(n) (((n) / 256))
+
+// Converts a number to Q4.12 fixed-point format
+#define Q_4_12(n)  ((s16)((n) * 4096))
+
+// Converts a number to Q16.16 fixed-point format
+#define Q_16_16(n)  ((s32)((n) * 65536))
+
+// Converts a number to Q24.8 fixed-point format
+#define Q_24_8(n)  ((s32)((n) << 8))
+
+// Converts a Q8.8 fixed-point format number to a regular integer
+#define Q_8_8_TO_INT(n) ((s32)((n) / 256))
+
+// Converts a Q4.12 fixed-point format number to a regular integer
+#define Q_4_12_TO_INT(n)  ((s32)((n) / 4096))
+
+// Converts a Q24.8 fixed-point format number to a regular integer
+#define Q_24_8_TO_INT(n) ((s32)((n) >> 8))
+
+#define PI (Q_8_8(.5f))
+
+#define SIN(angle) (sSineTable[angle])
+#define COS(angle) (sSineTable[angle + PI / 2])
+
+#define EMPTY_DO_WHILE {do {} while(0);}
+
+#define COLOR_RANGE (1 << 5)
+#define COLOR_MASK (COLOR_RANGE - 1)
+#define COLOR_MAX (COLOR_RANGE - 1)
+#define RED(c) ((c) & COLOR_MASK)
+#define GREEN(c) (((c) & (COLOR_MASK << 5)) >> 5)
+#define BLUE(c) (((c) & (COLOR_MASK << 10)) >> 10)
+#define COLOR(r, g, b) (((b) << 10) | ((g) << 5) | (r))
+#define COLOR_GRAD(r, g, b) ((r) | ((g) << 5) | ((b) << 10))
+#define COLOR_WHITE COLOR(COLOR_MAX, COLOR_MAX, COLOR_MAX)
+#define COLOR_BLACK COLOR(0, 0, 0)
+#define COLOR_GREEN COLOR(0, COLOR_MAX, 0)
+
+#define SET_BACKDROP_COLOR(color) (WRITE_16(PALRAM_BASE, (color)))
+
+#define SUB_PIXEL_TO_PIXEL(pixel) ((pixel) / SUB_PIXEL_RATIO)
+#define SUB_PIXEL_TO_PIXEL_(pixel) (DIV_SHIFT(pixel, SUB_PIXEL_RATIO))
+#define PIXEL_TO_SUB_PIXEL(pixel) ((s32)((pixel) * SUB_PIXEL_RATIO))
+#define SUB_PIXEL_TO_BLOCK(pixel) ((pixel) / BLOCK_SIZE)
+#define SUB_PIXEL_TO_BLOCK_(pixel) (DIV_SHIFT((pixel), BLOCK_SIZE))
+#define BLOCK_TO_SUB_PIXEL(block) ((s32)((block) * BLOCK_SIZE))
+#define BLOCK_TO_PIXEL(block) ((s32)((block) * PIXEL_PER_BLOCK))
+#define VELOCITY_TO_SUB_PIXEL(velocity) (DIV_SHIFT((velocity), 8))
+#define SUB_PIXEL_TO_VELOCITY(velocity) ((s32)((velocity) * 8))
+#define PIXEL_TO_VELOCITY(velocity) ((s32)((velocity) * SUB_PIXEL_RATIO * 8))
+
+#define SCREEN_SIZE_X_SUB_PIXEL (PIXEL_TO_SUB_PIXEL(SCREEN_SIZE_X))
+#define SCREEN_SIZE_Y_SUB_PIXEL (PIXEL_TO_SUB_PIXEL(SCREEN_SIZE_Y))
+
+#define SCREEN_SIZE_X_BLOCKS (SUB_PIXEL_TO_BLOCK(SCREEN_SIZE_X_SUB_PIXEL))
+#define SCREEN_SIZE_Y_BLOCKS (SUB_PIXEL_TO_BLOCK(SCREEN_SIZE_Y_SUB_PIXEL))
+
+/**
+ * @brief How many blocks of padding there is on each X edge of a room
+ * 
+ */
+#define SCREEN_X_PADDING 2
+
+/**
+ * @brief How many blocks of padding there is on each X edge of a room, in sub-pixel
+ * 
+ */
+#define SCREEN_X_BLOCK_PADDING (BLOCK_TO_SUB_PIXEL(SCREEN_X_PADDING))
+
+/**
+ * @brief How many blocks of padding there is on each Y edge of a room
+ * 
+ */
+#define SCREEN_Y_PADDING 2
+
+/**
+ * @brief How many blocks of padding there is on each Y edge of a room, in sub-pixel
+ * 
+ */
+#define SCREEN_Y_BLOCK_PADDING (BLOCK_TO_SUB_PIXEL(SCREEN_Y_PADDING))
+
+#define INCTEXT(x)  {0}
+#define SHIFT_JIS(x) {0}
+
+#define INCBIN(...) {0}
+#define INCBIN_U8   INCBIN
+#define INCBIN_U16  INCBIN
+#define INCBIN_U32  INCBIN
+#define INCBIN_S8   INCBIN
+#define INCBIN_S16  INCBIN
+#define INCBIN_S32  INCBIN
+#define _INCBIN_U8  INCBIN
+#define _INCBIN_U16 INCBIN
+#define _INCBIN_U32 INCBIN
+#define _INCBIN_S8  INCBIN
+#define _INCBIN_S16 INCBIN
+#define _INCBIN_S32 INCBIN
+
+#define FORCE_RODATA __attribute__((section(".rodata")))
+#define NAKED_FUNCTION __attribute__((naked))
+#define PACKED __attribute__((packed))
+
+#define ALIGN_2() asm(".align 2, 0")
+#define ALIGN_4() asm(".align 4, 0")
+
+/**
+ * @brief Creates an enum and its underlying type
+ * 
+ * The underlying type will have the enum name, and the provided type.
+ * 
+ * The enum will have the name provided followed by an underscore (_).
+ * 
+ * e.g. Using the macro like this :
+ * 
+ * `MAKE_ENUM(u8, Event)`
+ * 
+ * will create this :
+ * 
+ * `typedef u8 Event;`
+ * 
+ * `enum Event_`
+ * 
+ * @param type Underlying enum type
+ * @param name Enum name
+ * 
+ */
+#define MAKE_ENUM(type, name)   \
+typedef type name;              \
+enum name ##_
+
+/**
+ * @brief Indicates that an enum is a list of flags.
+ * 
+ */
+#define ENUM_FLAG

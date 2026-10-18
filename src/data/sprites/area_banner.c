@@ -1,0 +1,406 @@
+#include "data/sprites/area_banner.h"
+#include "macros.h"
+
+const u32 sAreaBannerGfx[1 * 512] = INCBIN_U32("data/sprites/area_banner.gfx");
+const u16 sAreaBannerPal[1 * 16] = INCBIN_U16("data/sprites/area_banner.pal");
+const u16 sAreaBannerLocationPal[1 * 16] = INCBIN_U16("data/sprites/area_banner_location.pal");
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame0[OAM_DATA_SIZE(2)] = {
+    2,
+    OAM_ENTRY(-8, -4, OAM_DIMS_8x8, OAM_NO_FLIP, 540, 8, 0),
+    OAM_ENTRY(0, -4, OAM_DIMS_8x8, OAM_X_FLIP, 540, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame1[OAM_DATA_SIZE(4)] = {
+    4,
+    OAM_ENTRY(-40, -4, OAM_DIMS_8x8, OAM_NO_FLIP, 540, 8, 0),
+    OAM_ENTRY(32, -4, OAM_DIMS_8x8, OAM_X_FLIP, 540, 8, 0),
+    OAM_ENTRY(-32, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(0, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame2[OAM_DATA_SIZE(6)] = {
+    6,
+    OAM_ENTRY(-72, -4, OAM_DIMS_8x8, OAM_NO_FLIP, 540, 8, 0),
+    OAM_ENTRY(64, -4, OAM_DIMS_8x8, OAM_X_FLIP, 540, 8, 0),
+    OAM_ENTRY(-32, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(32, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(0, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-64, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame3[OAM_DATA_SIZE(8)] = {
+    8,
+    OAM_ENTRY(-104, -4, OAM_DIMS_8x8, OAM_NO_FLIP, 540, 8, 0),
+    OAM_ENTRY(96, -4, OAM_DIMS_8x8, OAM_X_FLIP, 540, 8, 0),
+    OAM_ENTRY(0, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(64, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(32, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-96, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-32, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-64, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame4[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-120, -4, OAM_DIMS_8x8, OAM_NO_FLIP, 540, 8, 0),
+    OAM_ENTRY(112, -4, OAM_DIMS_8x8, OAM_X_FLIP, 540, 8, 0),
+    OAM_ENTRY(-112, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-80, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-48, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(16, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(48, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(80, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-16, -4, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame5[OAM_DATA_SIZE(18)] = {
+    18,
+    OAM_ENTRY(-120, -5, OAM_DIMS_8x8, OAM_NO_FLIP, 541, 8, 0),
+    OAM_ENTRY(112, -5, OAM_DIMS_8x8, OAM_X_FLIP, 541, 8, 0),
+    OAM_ENTRY(-120, -3, OAM_DIMS_8x8, OAM_NO_FLIP, 542, 8, 0),
+    OAM_ENTRY(112, -3, OAM_DIMS_8x8, OAM_X_FLIP, 542, 8, 0),
+    OAM_ENTRY(-112, -5, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-80, -5, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-48, -5, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-16, -5, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(16, -5, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(48, -5, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(80, -5, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-112, -3, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-80, -3, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-48, -3, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-16, -3, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(16, -3, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(48, -3, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(80, -3, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame6[OAM_DATA_SIZE(18)] = {
+    18,
+    OAM_ENTRY(-120, -6, OAM_DIMS_8x8, OAM_NO_FLIP, 541, 8, 0),
+    OAM_ENTRY(112, -6, OAM_DIMS_8x8, OAM_X_FLIP, 541, 8, 0),
+    OAM_ENTRY(-120, -2, OAM_DIMS_8x8, OAM_NO_FLIP, 542, 8, 0),
+    OAM_ENTRY(112, -2, OAM_DIMS_8x8, OAM_X_FLIP, 542, 8, 0),
+    OAM_ENTRY(-112, -6, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-80, -6, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-48, -6, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-16, -6, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(16, -6, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(48, -6, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(80, -6, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-112, -2, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-80, -2, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-48, -2, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-16, -2, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(16, -2, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(48, -2, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(80, -2, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningMiddle_Frame7[OAM_DATA_SIZE(18)] = {
+    18,
+    OAM_ENTRY(-120, -7, OAM_DIMS_8x8, OAM_NO_FLIP, 541, 8, 0),
+    OAM_ENTRY(112, -7, OAM_DIMS_8x8, OAM_X_FLIP, 541, 8, 0),
+    OAM_ENTRY(-120, -1, OAM_DIMS_8x8, OAM_NO_FLIP, 542, 8, 0),
+    OAM_ENTRY(112, -1, OAM_DIMS_8x8, OAM_X_FLIP, 542, 8, 0),
+    OAM_ENTRY(-112, -7, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-80, -7, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-48, -7, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-16, -7, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(16, -7, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(48, -7, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(80, -7, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-112, -1, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-80, -1, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-48, -1, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(-16, -1, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(16, -1, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(48, -1, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+    OAM_ENTRY(80, -1, OAM_DIMS_32x8, OAM_NO_FLIP, 572, 8, 0),
+};
+
+static const u16 sAreaBannerOam_StaticMiddle_Frame0[OAM_DATA_SIZE(11)] = {
+    11,
+    OAM_ENTRY(-120, -8, OAM_DIMS_8x8, OAM_NO_FLIP, 541, 8, 0),
+    OAM_ENTRY(112, -8, OAM_DIMS_8x8, OAM_X_FLIP, 541, 8, 0),
+    OAM_ENTRY(-120, 0, OAM_DIMS_8x8, OAM_NO_FLIP, 542, 8, 0),
+    OAM_ENTRY(112, 0, OAM_DIMS_8x8, OAM_X_FLIP, 542, 8, 0),
+    OAM_ENTRY(-112, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+};
+
+static const u16 sAreaBannerOam_2f855[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, 8, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, 8, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, 8, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, 8, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, 8, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, 8, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, 8, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(112, 8, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(-120, 8, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningBottom_Frame0[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, 6, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, 6, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, 6, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, 6, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, 6, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, 6, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, 6, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(112, 6, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(-120, 6, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningBottom_Frame1[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, 4, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, 4, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, 4, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, 4, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, 4, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, 4, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, 4, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(112, 4, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(-120, 4, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningBottom_Frame2[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, 2, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, 2, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, 2, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, 2, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, 2, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, 2, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, 2, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(112, 2, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(-120, 2, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningBottom_Frame3[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, 0, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, 0, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, 0, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, 0, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, 0, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, 0, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, 0, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(-120, 0, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(112, 0, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningBottom_Frame4[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, -2, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, -2, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, -2, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, -2, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, -2, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, -2, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, -2, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(112, -2, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(-120, -2, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningBottom_Frame5[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, -4, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, -4, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, -4, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, -4, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, -4, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, -4, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, -4, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(-120, -4, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(112, -4, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_SpawningBottom_Frame6[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, -6, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, -6, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, -6, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, -6, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, -6, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, -6, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, -6, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(112, -6, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(-120, -6, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+static const u16 sAreaBannerOam_StaticBottom_Frame0[OAM_DATA_SIZE(9)] = {
+    9,
+    OAM_ENTRY(-112, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 512, 8, 0),
+    OAM_ENTRY(-80, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 516, 8, 0),
+    OAM_ENTRY(-48, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 520, 8, 0),
+    OAM_ENTRY(-16, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 524, 8, 0),
+    OAM_ENTRY(16, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 528, 8, 0),
+    OAM_ENTRY(48, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 532, 8, 0),
+    OAM_ENTRY(80, -8, OAM_DIMS_32x16, OAM_NO_FLIP, 536, 8, 0),
+    OAM_ENTRY(-120, -8, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+    OAM_ENTRY(112, -8, OAM_DIMS_8x16, OAM_NO_FLIP, 543, 8, 0),
+};
+
+
+const struct FrameData sAreaBannerOam_StaticMiddle[2] = {
+    [0] = {
+        .pFrame = sAreaBannerOam_StaticMiddle_Frame0,
+        .timer = UCHAR_MAX
+    },
+    [1] = FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sAreaBannerOam_SpawningMiddle[9] = {
+    [0] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame0,
+        .timer = 1
+    },
+    [1] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame1,
+        .timer = 1
+    },
+    [2] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame2,
+        .timer = 1
+    },
+    [3] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame3,
+        .timer = 1
+    },
+    [4] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame4,
+        .timer = 2
+    },
+    [5] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame5,
+        .timer = 2
+    },
+    [6] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame6,
+        .timer = 2
+    },
+    [7] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame7,
+        .timer = 2
+    },
+    [8] = FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sAreaBannerOam_DespawningMiddle[9] = {
+    [0] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame7,
+        .timer = 1
+    },
+    [1] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame6,
+        .timer = 1
+    },
+    [2] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame5,
+        .timer = 1
+    },
+    [3] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame4,
+        .timer = 1
+    },
+    [4] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame3,
+        .timer = 1
+    },
+    [5] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame2,
+        .timer = 1
+    },
+    [6] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame1,
+        .timer = 1
+    },
+    [7] = {
+        .pFrame = sAreaBannerOam_SpawningMiddle_Frame0,
+        .timer = 1
+    },
+    [8] = FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sAreaBannerOam_StaticBottom[2] = {
+    [0] = {
+        .pFrame = sAreaBannerOam_StaticBottom_Frame0,
+        .timer = UCHAR_MAX
+    },
+    [1] = FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sAreaBannerOam_SpawningBottom[8] = {
+    [0] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame0,
+        .timer = 1
+    },
+    [1] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame1,
+        .timer = 1
+    },
+    [2] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame2,
+        .timer = 1
+    },
+    [3] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame3,
+        .timer = 1
+    },
+    [4] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame4,
+        .timer = 2
+    },
+    [5] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame5,
+        .timer = 2
+    },
+    [6] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame6,
+        .timer = 2
+    },
+    [7] = FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sAreaBannerOam_DespawningBottom[8] = {
+    [0] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame6,
+        .timer = 2
+    },
+    [1] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame5,
+        .timer = 2
+    },
+    [2] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame4,
+        .timer = 1
+    },
+    [3] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame3,
+        .timer = 1
+    },
+    [4] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame2,
+        .timer = 1
+    },
+    [5] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame1,
+        .timer = 1
+    },
+    [6] = {
+        .pFrame = sAreaBannerOam_SpawningBottom_Frame0,
+        .timer = 1
+    },
+    [7] = FRAME_DATA_TERMINATOR
+};
