@@ -10,6 +10,8 @@
 #include "structs/connection.h"
 #include "structs/sprite.h"
 
+extern const u16 sAreaBannerLocationPal[1 * 16];
+
 /**
  * @brief 14310 | 190 | Gets the location text for the main deck
  * 
@@ -468,7 +470,7 @@ u8 LocationTextCheckLoad(void)
             
             if (locationText < LT_NAVIGATION_ROOM)
             {
-                DMA3_COPY_16(0x82f82ec, PALRAM_OBJ + 0x100 + gfxSlot * 16 * sizeof(u16), 16);
+                DMA3_COPY_16(sAreaBannerLocationPal, PALRAM_OBJ + 0x100 + gfxSlot * 16 * sizeof(u16), 16);
             }
         }
     }

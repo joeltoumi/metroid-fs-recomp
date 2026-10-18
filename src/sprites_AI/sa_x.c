@@ -801,7 +801,7 @@ void SaXInit(void)
 
     // FIME
     // gCurrentSprite.pOam = sSaXOam_Idle;
-    gCurrentSprite.pOam = (const struct FrameData*)0x82e7f70;
+    gCurrentSprite.pOam = (const struct FrameData*)sSaXOam_Placeholder;
     gCurrentSprite.animationDurationCounter = 0;
     gCurrentSprite.currentAnimationFrame = 0;
 

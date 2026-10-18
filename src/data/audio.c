@@ -7,6 +7,9 @@
 
 #include "constants/audio_engine.h"
 
+void unk_4a3c(void); // asm
+void unk_4a7c(void); // asm
+
 const u16 sUnk_a5278[128] = {
     0x2c, 0x9d, 0x107, 0x16b, 0x1ca, 0x223, 0x277, 0x2c7, 0x312, 0x358, 0x39b, 0x3da, 0x2c, 0x9d, 0x107, 0x16b,
     0x1ca, 0x223, 0x277, 0x2c7, 0x312, 0x358, 0x39b, 0x3da, 0x2c, 0x9d, 0x107, 0x16b, 0x1ca, 0x223, 0x277, 0x2c7,
@@ -112,8 +115,8 @@ static const u16 sAudio_a5696 = DMA_ENABLE | DMA_INTR_ENABLE | DMA_START_SPECIAL
 
 const MusicFunc_T sMusicCommandFunctionPointers[30] = {
     [FINE - FINE] = Music_EmptyCommand,
-    [GOTO - FINE] = (MusicFunc_T)0x8004a3d, // AudioCommand_Goto
-    [PATT - FINE] = (MusicFunc_T)0x8004a7d, // AudioCommand_PatternPlay
+    [GOTO - FINE] = (MusicFunc_T)unk_4a3c, // AudioCommand_Goto
+    [PATT - FINE] = (MusicFunc_T)unk_4a7c, // AudioCommand_PatternPlay
     [PEND - FINE] = AudioCommand_PatternEnd,
     [REPT - FINE] = AudioCommand_Repeat,
     [5] = Music_EmptyCommand,

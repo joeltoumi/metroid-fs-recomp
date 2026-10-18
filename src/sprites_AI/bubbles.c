@@ -10,6 +10,12 @@
 #include "structs/clipdata.h"
 #include "structs/sprite.h"
 
+extern const struct FrameData sBubbles1Oam_Idle[9];
+extern const struct FrameData sBubbles2Oam_Idle[10];
+extern const struct FrameData sWaterDropOam_Falling[2];
+extern const struct FrameData sWaterDropOam_Spawning[6];
+extern const struct FrameData sWaterDropOam_Splashing[6];
+
 // FIXME oam undefined
 
 /**
@@ -51,7 +57,7 @@ void Bubbles1(void)
             gCurrentSprite.currentAnimationFrame = 0;
 
             // gCurrentSprite.pOam = sBubbles1Oam_Idle;
-            gCurrentSprite.pOam = (const struct FrameData*)0x83ec2b0;
+            gCurrentSprite.pOam = (const struct FrameData*)sBubbles1Oam_Idle;
 
             gCurrentSprite.pose = 2;
 
@@ -102,7 +108,7 @@ void Bubbles2(void)
 
             gCurrentSprite.currentAnimationFrame = gSpriteRandomNumber / 2;
             // gCurrentSprite.pOam = sBubbles2Oam_Idle;
-            gCurrentSprite.pOam = (const struct FrameData*)0x83ec2f8;
+            gCurrentSprite.pOam = (const struct FrameData*)sBubbles2Oam_Idle;
 
             SpriteUtilCheckCollisionAtPosition(gCurrentSprite.yPosition - HALF_BLOCK_SIZE, gCurrentSprite.xPosition + BLOCK_SIZE);
             if (gPreviousCollisionCheck == COLLISION_SOLID)
@@ -161,7 +167,7 @@ void WaterDrop(void)
 
             gCurrentSprite.currentAnimationFrame = 0;
             // gCurrentSprite.pOam = sWaterDropOam_Spawning;
-            gCurrentSprite.pOam = (const struct FrameData*)0x83ec240;
+            gCurrentSprite.pOam = (const struct FrameData*)sWaterDropOam_Spawning;
 
             gCurrentSprite.workY = gCurrentSprite.yPosition;
             gCurrentSprite.workX = gCurrentSprite.xPosition;
@@ -176,7 +182,7 @@ void WaterDrop(void)
             if (SpriteUtilHasCurrentAnimationEnded())
             {
                 // gCurrentSprite.pOam = sWaterDropOam_Falling;
-                gCurrentSprite.pOam = (const struct FrameData*)0x83ec270;
+                gCurrentSprite.pOam = (const struct FrameData*)sWaterDropOam_Falling;
                 gCurrentSprite.currentAnimationFrame = 0;
                 gCurrentSprite.animationDurationCounter = 0;
 
@@ -229,7 +235,7 @@ void WaterDrop(void)
 
         case 7:
             // gCurrentSprite.pOam = sWaterDropOam_Splashing;
-            gCurrentSprite.pOam = (const struct FrameData*)0x83ec280;
+            gCurrentSprite.pOam = (const struct FrameData*)sWaterDropOam_Splashing;
             gCurrentSprite.currentAnimationFrame = 0;
             gCurrentSprite.animationDurationCounter = 0;
 
@@ -253,7 +259,7 @@ void WaterDrop(void)
             if (gCurrentSprite.work1 == 0)
             {
                 // gCurrentSprite.pOam = sWaterDropOam_Spawning;
-                gCurrentSprite.pOam = (const struct FrameData*)0x83ec240;
+                gCurrentSprite.pOam = (const struct FrameData*)sWaterDropOam_Spawning;
                 gCurrentSprite.currentAnimationFrame = 0;
                 gCurrentSprite.animationDurationCounter = 0;
 

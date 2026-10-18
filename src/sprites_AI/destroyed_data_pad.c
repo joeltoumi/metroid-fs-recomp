@@ -12,6 +12,9 @@
 #include "structs/samus.h"
 #include "structs/sprite.h"
 
+extern const struct FrameData sDataPadOam_321aec[2];
+extern const struct FrameData sDataPadOam_321afc[4];
+
 /**
  * @brief 4378c | 2fc | Destroyed data pad AI
  * 
@@ -48,7 +51,7 @@ void DestroyedDataPad(void)
 
             if (EventCheckOn_EscapedSaXNoc())
             {
-                gCurrentSprite.pOam = (const struct FrameData*)0x8321afc;
+                gCurrentSprite.pOam = (const struct FrameData*)sDataPadOam_321afc;
                 gCurrentSprite.work1 = 60 * 2;
                 gCurrentSprite.pose = SPRITE_POSE_IDLE;
             }
@@ -63,7 +66,7 @@ void DestroyedDataPad(void)
             gCurrentSprite.work1--;
             if (gCurrentSprite.work1 == 0)
             {
-                gCurrentSprite.pOam = (const struct FrameData*)0x8321aec;
+                gCurrentSprite.pOam = (const struct FrameData*)sDataPadOam_321aec;
                 gCurrentSprite.animationDurationCounter = 0;
                 gCurrentSprite.currentAnimationFrame = 0;
                 gCurrentSprite.pose = 0x18;

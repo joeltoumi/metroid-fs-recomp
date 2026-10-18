@@ -20,21 +20,23 @@
 #include "structs/room.h"
 #include "structs/samus.h"
 
+extern const u8 sBlob_5657a8_575a60[];
+
 extern u32 sExploredMinimapBitFlags[32];
 
 // Minimap data?
 static u8* sUnk_79be5c[11] = {
-    (u8*)0x8572D48,
-    (u8*)0x8572F9C,
-    (u8*)0x8573748,
-    (u8*)0x857317C,
-    (u8*)0x8573538,
-    (u8*)0x857395C,
-    (u8*)0x8573364,
-    (u8*)0x8572D48,
-    (u8*)0x8572D48,
-    (u8*)0x8573B54,
-    (u8*)0x8572C4C,
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xd5a0),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xd7f4),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xdfa0),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xd9d4),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xdd90),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xe1b4),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xdbbc),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xd5a0),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xd5a0),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xe3ac),
+    (u8*)((const u8*)sBlob_5657a8_575a60 + 0xd4a4),
 };
 
 // 4 byte struct?
@@ -50,11 +52,11 @@ static u8 sUnk_79be88[32] = {
 };
 
 static u8* sUnk_79bea8[5] = {
-    (u8*)0x8576168,
-    (u8*)0x857616D,
-    (u8*)0x8576171,
-    (u8*)0x8576173,
-    (u8*)0x8576175,
+    (u8*)sPauseDebugBeamFlags,
+    (u8*)((const u8*)sPauseDebugBeamFlags + 0x5),
+    (u8*)((const u8*)sPauseDebugMissileFlags + 0x4),
+    (u8*)((const u8*)sPauseDebugBombFlags + 0x2),
+    (u8*)((const u8*)sPauseDebugSuitFlags + 0x2),
 };
 
 static u8 sUnk_79bebc[4] = {

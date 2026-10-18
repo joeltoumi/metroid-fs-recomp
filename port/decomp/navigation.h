@@ -81,6 +81,18 @@ struct NavigationPopUpConversation {
 #define sNavigation_5807d0 (sBlob_5766D4_581510 + 0xA0FC)
 #define sNavigation_580d68 (sBlob_5766D4_581510 + 0xA694)
 
+/* 0x0857bec4: palette of the special conversation 0x35 */
+#define sNavigation_57bec4 ((const u16*)(sBlob_5766D4_581510 + 0x57F0))
+/* 0x08581300: u16 [6][16], animated minimap palette colors */
+#define sNavigation_581300 ((const u16*)(sBlob_5766D4_581510 + 0xAC2C))
+/* 0x0879c17c: u8 [4], durations of the special conversation 0x35 */
+#define sNavigation_79c17c (sBlob_79c170_79c27c + 0xC)
+/* 0x0879c180: u8 [36], oam ids of the navigation map compass */
+#define sNavigation_79c180 (sBlob_79c170_79c27c + 0x10)
+/* 0x0879c1a4, 0x0879c210: s8 (x offset, y offset, oam id) triples */
+#define sNavigation_79c1a4 ((const s8*)(sBlob_79c170_79c27c + 0x34))
+#define sNavigation_79c210 ((const s8*)(sBlob_79c170_79c27c + 0xA0))
+
 /* 0x085766e0: u8 pairs, Y position of the text cursor object per text line (indexed by line * 2) */
 #define sNavigationTextCursorYPositions (sBlob_5766D4_581510 + 0xC)
 /* 0x085766e4 */
@@ -121,6 +133,8 @@ void GetMinimapData(u8 area, void* dst);
 void PauseScreenSetNavigationTextPanelOam(u8 arg0);
 void unk_78c44(void);
 void NavigationConversationUpdatePanel(void);
+void PauseScreenVBLank(void);
+void PauseScreenVBLank_Unused(void);
 
 /* ---------------------------------------------------------------------------------------------- */
 /* Functions                                                                                       */
@@ -149,5 +163,9 @@ void NavigationConversationClearPopUpGraphics(void);
 void unk_7c3b4(void);
 void unk_7c440(void);
 void NavigationConversationLoadSpecialGraphics(void);
+void unk_7c630(void);
+void unk_7ce6c(void);
+void unk_7cfb0(void);
+void unk_7d27c(void);
 
 #endif /* NAVIGATION_H */

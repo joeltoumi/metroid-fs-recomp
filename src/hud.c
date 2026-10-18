@@ -657,7 +657,7 @@ void HudUpdateGfx(void)
     {
         if (!(gSamusData.weaponHighlighted & 0x1))
         {
-            DMA3_COPY_16(0x83e799c, VRAM_OBJ + 0xB00, 0x20);
+            DMA3_COPY_16(sMissileIconGfx, VRAM_OBJ + 0xB00, 0x20);
 
             gMissileHighlightStatus = FALSE;
             HudDrawMissiles(TRUE);
@@ -667,7 +667,7 @@ void HudUpdateGfx(void)
     {
         if (gSamusData.weaponHighlighted & 0x1)
         {
-            DMA3_COPY_16(0x83e79dc, VRAM_OBJ + 0xB00, 0x20);
+            DMA3_COPY_16(((const u8*)sMissileIconGfx + 0x40), VRAM_OBJ + 0xB00, 0x20);
 
             gMissileHighlightStatus = TRUE;
             HudDrawMissiles(TRUE);
@@ -678,7 +678,7 @@ void HudUpdateGfx(void)
     {
         if (!(gSamusData.weaponHighlighted & 0x10))
         {
-            DMA3_COPY_16(0x83e7a1c, VRAM_OBJ + 0xB40, 0x20);
+            DMA3_COPY_16(sPowerBombIconGfx, VRAM_OBJ + 0xB40, 0x20);
 
             gPowerBombHighlightStatus = FALSE;
             HudDrawPowerBombs(TRUE);
@@ -688,7 +688,7 @@ void HudUpdateGfx(void)
     {
         if (gSamusData.weaponHighlighted & 0x10)
         {
-            DMA3_COPY_16(0x83e7a5c, VRAM_OBJ + 0xB40, 0x20);
+            DMA3_COPY_16(((const u8*)sPowerBombIconGfx + 0x40), VRAM_OBJ + 0xB40, 0x20);
 
             gPowerBombHighlightStatus = TRUE;
             HudDrawPowerBombs(TRUE);

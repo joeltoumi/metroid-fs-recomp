@@ -1232,6 +1232,7 @@ void NewFileIntroSamusGettingCuredSetupWindow(void)
     if (end > 159)
         end = 160;
 
+    // PORT: unk_1F3 is not bounds checked (the table has 161 entries), like the original
     pValues = sHaze_PowerBomb_WindowValuesPointers[INTRO_DATA.unk_1F3];
     dst = gSpecialCutsceneWindowValues;
 

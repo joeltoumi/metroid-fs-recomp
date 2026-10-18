@@ -132,20 +132,20 @@ void unk_8690c(void)
     WRITE_16(REG_BG2Y + 2, 0);
 
     // FIXME LZ77UncompVram(sTitleScreenSpaceBackgroundGfx, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 0);
-    LZ77UncompVram((const void*)0x8605d08, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 0);
+    LZ77UncompVram((const void*)sTitleScreenSpaceBackgroundGfx, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 0);
     LZ77UncompVram(sTitleScreenLogoGfx, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 2);
     LZ77UncompVram(sTitleScreenLogoTileTable, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 30);
     // FIXME LZ77UncompVram(sTitleScreenSpaceBackgroundTileTable, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 31);
-    LZ77UncompVram((const void*)0x8609220, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 31);
+    LZ77UncompVram((const void*)sTitleScreenSpaceBackgroundTilemap, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 31);
 
     DMA3_COPY_32(sTitleScreenLogoPal, PALRAM_BASE, sizeof(sTitleScreenLogoPal) / sizeof(u32));
     // DMA3_COPY_32(sTitleScreenSpaceBackgroundPal, PALRAM_BASE + 0x100, sizeof(sTitleScreenSpaceBackgroundPal) / sizeof(u32));
-    DMA3_COPY_32((const void*)0x8609120, PALRAM_BASE + 0x100, sizeof(sTitleScreenSpaceBackgroundPal) / sizeof(u32));
+    DMA3_COPY_32((const void*)sTitleScreenSpaceBackgroundPal, PALRAM_BASE + 0x100, sizeof(sTitleScreenSpaceBackgroundPal) / sizeof(u32));
 
     SET_BACKDROP_COLOR(COLOR_BLACK);
 
     // FIXME TitleScreenDrawDebugText(sTitleScreenDebugTextPointer, VRAM_BASE + 0xF000 + BGCNT_VRAM_TILE_SIZE * 1, 0);
-    TitleScreenDrawDebugText(*(const u8** const)0x879c2c8, VRAM_BASE + 0xF000 + BGCNT_VRAM_TILE_SIZE * 1, 0);
+    TitleScreenDrawDebugText(*(const u8** const)&sTitleScreenDebugTextPointer, VRAM_BASE + 0xF000 + BGCNT_VRAM_TILE_SIZE * 1, 0);
 
     LZ77UncompVram(sTitleScreenObjectsGfx, VRAM_OBJ);
     DMA3_COPY_32(sTitleScreenObjectsPal, PALRAM_OBJ, sizeof(sTitleScreenObjectsPal) / sizeof(u32));
@@ -612,20 +612,20 @@ void TitleScreenInit(void)
     WRITE_16(REG_BG2Y + 2, 0);
 
     // FIXME LZ77UncompVram(sTitleScreenSpaceBackgroundGfx, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 0);
-    LZ77UncompVram((const void*)0x8605d08, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 0);
+    LZ77UncompVram((const void*)sTitleScreenSpaceBackgroundGfx, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 0);
     LZ77UncompVram(sTitleScreenLogoGfx, VRAM_BASE + BGCNT_VRAM_CHAR_SIZE * 2);
     LZ77UncompVram(sTitleScreenLogoTileTable, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 30);
     // FIXME LZ77UncompVram(sTitleScreenSpaceBackgroundTileTable, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 31);
-    LZ77UncompVram((const void*)0x8609220, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 31);
+    LZ77UncompVram((const void*)sTitleScreenSpaceBackgroundTilemap, VRAM_BASE + BGCNT_VRAM_TILE_SIZE * 31);
 
     DMA3_COPY_32(sTitleScreenLogoPal, PALRAM_BASE, sizeof(sTitleScreenLogoPal) / sizeof(u32));
     // DMA3_COPY_32(sTitleScreenSpaceBackgroundPal, PALRAM_BASE + 0x100, sizeof(sTitleScreenSpaceBackgroundPal) / sizeof(u32));
-    DMA3_COPY_32((const void*)0x8609120, PALRAM_BASE + 0x100, sizeof(sTitleScreenSpaceBackgroundPal) / sizeof(u32));
+    DMA3_COPY_32((const void*)sTitleScreenSpaceBackgroundPal, PALRAM_BASE + 0x100, sizeof(sTitleScreenSpaceBackgroundPal) / sizeof(u32));
 
     SET_BACKDROP_COLOR(COLOR_BLACK);
 
     // FIXME TitleScreenDrawDebugText(sTitleScreenDebugTextPointer, VRAM_BASE + 0xF000 + BGCNT_VRAM_TILE_SIZE * 1, 0);
-    TitleScreenDrawDebugText(*(const u8** const)0x879c2c8, VRAM_BASE + 0xF000 + BGCNT_VRAM_TILE_SIZE * 1, 0);
+    TitleScreenDrawDebugText(*(const u8** const)&sTitleScreenDebugTextPointer, VRAM_BASE + 0xF000 + BGCNT_VRAM_TILE_SIZE * 1, 0);
 
     LZ77UncompVram(sTitleScreenObjectsGfx, VRAM_OBJ);
     DMA3_COPY_32(sTitleScreenObjectsPal, PALRAM_OBJ, sizeof(sTitleScreenObjectsPal) / sizeof(u32));

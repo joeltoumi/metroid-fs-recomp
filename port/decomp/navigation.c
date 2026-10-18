@@ -2107,3 +2107,489 @@ void NavigationConversationLoadSpecialGraphics(void)
         LZ77UncompVram(sSaXCloseUpGfx, (u8*)EWRAM_BASE + 0x0);
     }
 }
+
+/**
+ * @brief 7c630 | 83c | Handles the special navigation conversation graphics sequences (SA-X close up, ...)
+ *
+ */
+void unk_7c630(void)
+{
+    switch (PAUSE_SCREEN_DATA.unk_265)
+    {
+        case 0:
+            PAUSE_SCREEN_DATA.dispcntBackup = READ_16(REG_DISPCNT);
+            PAUSE_SCREEN_DATA.bg3CntBackup = READ_16(REG_BG3CNT);
+            PAUSE_SCREEN_DATA.bg2CntBackup = READ_16(REG_BG2CNT);
+            PAUSE_SCREEN_DATA.bldcntBackup = READ_16(REG_BLDCNT);
+            PAUSE_SCREEN_DATA.bldalphaBackup = READ_16(REG_BLDALPHA);
+            PAUSE_SCREEN_DATA.dispcnt = 0;
+            DMA3_COPY_16(PALRAM_BASE, (u8*)EWRAM_BASE + 0x35000, PALRAM_SIZE / 2 / 2);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 1:
+            DmaTransfer(3, (u8*)VRAM_BASE + 0x4000, (u8*)EWRAM_BASE + 0x8000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 2:
+            DmaTransfer(3, (u8*)VRAM_BASE + 0x5000, (u8*)EWRAM_BASE + 0x9000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 3:
+            DmaTransfer(3, (u8*)VRAM_BASE + 0x6000, (u8*)EWRAM_BASE + 0xA000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 4:
+            DmaTransfer(3, (u8*)VRAM_BASE + 0x7000, (u8*)EWRAM_BASE + 0xB000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 5:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x0, (u8*)VRAM_BASE + 0x4000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 6:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x1000, (u8*)VRAM_BASE + 0x5000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 7:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x2000, (u8*)VRAM_BASE + 0x6000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 8:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x3000, (u8*)VRAM_BASE + 0x7000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 9:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x4000, (u8*)VRAM_BASE + 0x8000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 10:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x5000, (u8*)VRAM_BASE + 0x9000, 0x1000, 16);
+            if (PAUSE_SCREEN_DATA.conversationNumber == 0x35)
+            {
+                PAUSE_SCREEN_DATA.unk_265 = 0xD;
+                break;
+            }
+            gWrittenToBldalpha_Evb = 0;
+            gWrittenToBldalpha_Eva = 0x10;
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 11:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x6000, (u8*)VRAM_BASE + 0xA000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 12:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x7000, (u8*)VRAM_BASE + 0xB000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265 = 0x15;
+            break;
+
+        case 13:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x6000, (u8*)VRAM_BASE + 0xA000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 14:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x7000, (u8*)VRAM_BASE + 0xB000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 15:
+            DMA3_COPY_16(sNavigation_57bec4, PALRAM_BASE, PALRAM_SIZE / 2 / 2);
+            CallbackSetVBlank(PauseScreenVBLank_Unused);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 16:
+            gUnk_300000a = 0x1407;
+            PAUSE_SCREEN_DATA.dispcnt |= DCNT_BG3;
+            PAUSE_SCREEN_DATA.unk_265++;
+            PAUSE_SCREEN_DATA.unk_266 = 0;
+            break;
+
+        case 17:
+            PAUSE_SCREEN_DATA.unk_266++;
+            if (PAUSE_SCREEN_DATA.unk_266 > sNavigation_79c17c[0])
+            {
+                gUnk_300000a = 0x1507;
+                PAUSE_SCREEN_DATA.unk_265++;
+                PAUSE_SCREEN_DATA.unk_266 = 0;
+            }
+            break;
+
+        case 18:
+            PAUSE_SCREEN_DATA.unk_266++;
+            if (PAUSE_SCREEN_DATA.unk_266 > sNavigation_79c17c[1])
+            {
+                gUnk_300000a = 0x1607;
+                PAUSE_SCREEN_DATA.unk_265++;
+                PAUSE_SCREEN_DATA.unk_266 = 0;
+            }
+            break;
+
+        case 19:
+            PAUSE_SCREEN_DATA.unk_266++;
+            if (PAUSE_SCREEN_DATA.unk_266 > sNavigation_79c17c[2])
+            {
+                gUnk_300000a = 0x1707;
+                PAUSE_SCREEN_DATA.unk_265++;
+                PAUSE_SCREEN_DATA.unk_266 = 0;
+            }
+            break;
+
+        case 20:
+            PAUSE_SCREEN_DATA.unk_266++;
+            if (PAUSE_SCREEN_DATA.unk_266 > sNavigation_79c17c[3])
+            {
+                PAUSE_SCREEN_DATA.unk_265 = 0x1B;
+                PAUSE_SCREEN_DATA.unk_266 = 0;
+            }
+            break;
+
+        case 21:
+            LZ77UncompVram(sSaXCloseUpTileTable1, (u8*)VRAM_BASE + 0x7800);
+            LZ77UncompVram(sSaXCloseUpTileTable2, (u8*)VRAM_BASE + 0xB800);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 22:
+            DMA3_COPY_16(sSaXCloseUpPalGrayscale, PALRAM_BASE, PALRAM_SIZE / 2 / 2);
+            CallbackSetVBlank(PauseScreenVBLank_Unused);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 23:
+            WRITE_16(REG_BG2CNT, 0xF06);
+            WRITE_16(REG_BG3CNT, 0x1707);
+            WRITE_16(REG_BLDCNT, 0x844);
+            PAUSE_SCREEN_DATA.dispcnt |= DCNT_BG2 | DCNT_BG3;
+            PAUSE_SCREEN_DATA.unk_265++;
+            PAUSE_SCREEN_DATA.unk_266 = 0;
+            break;
+
+        case 24:
+            PAUSE_SCREEN_DATA.unk_266++;
+            if (PAUSE_SCREEN_DATA.unk_266 > sSaXCloseUpDurations[0])
+            {
+                PAUSE_SCREEN_DATA.unk_265++;
+                PAUSE_SCREEN_DATA.unk_266 = 0;
+            }
+            break;
+
+        case 25:
+            if (gWrittenToBldalpha_Eva == 0)
+            {
+                PAUSE_SCREEN_DATA.unk_265++;
+                PAUSE_SCREEN_DATA.unk_266 = 0;
+            }
+            else
+            {
+                gWrittenToBldalpha_Eva--;
+                gWrittenToBldalpha_Evb = 0x10 - gWrittenToBldalpha_Eva;
+            }
+            break;
+
+        case 26:
+            PAUSE_SCREEN_DATA.unk_266++;
+            if (PAUSE_SCREEN_DATA.unk_266 > sSaXCloseUpDurations[1])
+            {
+                PAUSE_SCREEN_DATA.unk_265 = 0x1B;
+                PAUSE_SCREEN_DATA.unk_266 = 0;
+            }
+            break;
+
+        case 27:
+            PAUSE_SCREEN_DATA.dispcnt = 0;
+            PAUSE_SCREEN_DATA.unk_265++;
+            PAUSE_SCREEN_DATA.unk_266 = 0;
+            break;
+
+        case 28:
+            DmaTransfer(3, sMinimapTilesGfx, (u8*)VRAM_BASE + 0x8000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 29:
+            DmaTransfer(3, sMinimapTilesGfx + 0x1000, (u8*)VRAM_BASE + 0x9000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 30:
+            DmaTransfer(3, sMinimapTilesGfx + 0x2000, (u8*)VRAM_BASE + 0xA000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 31:
+            DmaTransfer(3, sMinimapTilesGfx + 0x3000, (u8*)VRAM_BASE + 0xB000, 0x800, 16);
+            DMA3_COPY_16((u8*)VRAM_BASE + 0x9800, (u8*)VRAM_BASE + 0x9400, 0x200);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 32:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x8000, (u8*)VRAM_BASE + 0x4000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 33:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0x9000, (u8*)VRAM_BASE + 0x5000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 34:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0xA000, (u8*)VRAM_BASE + 0x6000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 35:
+            DmaTransfer(3, (u8*)EWRAM_BASE + 0xB000, (u8*)VRAM_BASE + 0x7000, 0x1000, 16);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 36:
+            DMA3_COPY_16((u8*)EWRAM_BASE + 0x35000, PALRAM_BASE, PALRAM_SIZE / 2 / 2);
+            CallbackSetVBlank(PauseScreenVBLank);
+            PAUSE_SCREEN_DATA.unk_265++;
+            break;
+
+        case 37:
+            WRITE_16(REG_BG3CNT, PAUSE_SCREEN_DATA.bg3CntBackup);
+            WRITE_16(REG_BG2CNT, PAUSE_SCREEN_DATA.bg2CntBackup);
+            WRITE_16(REG_BLDCNT, PAUSE_SCREEN_DATA.bldcntBackup);
+            WRITE_16(REG_BLDALPHA, PAUSE_SCREEN_DATA.bldalphaBackup);
+            PAUSE_SCREEN_DATA.dispcnt = PAUSE_SCREEN_DATA.dispcntBackup;
+            PAUSE_SCREEN_DATA.unk_265 = 0;
+            PAUSE_SCREEN_DATA.unk_264 = 0;
+            break;
+    }
+}
+
+/**
+ * @brief 7ce6c | 144 | Initializes the navigation map compass
+ *
+ */
+void unk_7ce6c(void)
+{
+    if (gCurrentArea > 6)
+        return;
+
+    // Original copies 16 bytes from sBlob_5766D4_581510 + 0xae2c (0x08581500), which are all 0
+    PAUSE_SCREEN_DATA.unk_240 = 0;
+    PAUSE_SCREEN_DATA.unk_241 = 0;
+    PAUSE_SCREEN_DATA.unk_242 = 0;
+    PAUSE_SCREEN_DATA.unk_243 = 0;
+    PAUSE_SCREEN_DATA.unk_244 = 0;
+    PAUSE_SCREEN_DATA.unk_245 = 0;
+    PAUSE_SCREEN_DATA.unk_246 = 0;
+    PAUSE_SCREEN_DATA.unk_247 = 0;
+    PAUSE_SCREEN_DATA.unk_248 = 0;
+    PAUSE_SCREEN_DATA.unk_249 = 0;
+    PAUSE_SCREEN_DATA.unk_24A = 0;
+    PAUSE_SCREEN_DATA.unk_24B = 0;
+    PAUSE_SCREEN_DATA.unk_24C = 0;
+    PAUSE_SCREEN_DATA.unk_24D = 0;
+    PAUSE_SCREEN_DATA.unk_24E = 0;
+    PAUSE_SCREEN_DATA.unk_24F = 0;
+
+    if (PAUSE_SCREEN_DATA.unk_0 == 0 || gPauseScreenFlag == 4)
+        return;
+
+    if (gCurrentArea != 0)
+        PAUSE_SCREEN_DATA.unk_244 = sEvent_57607D[sEvent_576073[gCurrentArea]];
+    else
+        PAUSE_SCREEN_DATA.unk_244 = sEvent_57607D[7];
+
+    NAV_OAM(12).oamId = sNavigation_79c180[(s8)PAUSE_SCREEN_DATA.unk_244];
+    NAV_OAM(12).xPosition = 0x1C;
+    NAV_OAM(12).yPosition = 0x32;
+    NAV_OAM(12).priority = 1;
+    NAV_OAM(12).objMode = 0;
+
+    UpdateMenuOamDataId(10, 0);
+    NAV_OAM(10).priority = 1;
+
+    if (gCurrentArea != 0)
+        PAUSE_SCREEN_DATA.unk_249 = sEvent_576073[gCurrentArea];
+    else
+        PAUSE_SCREEN_DATA.unk_249 = sBlob_5760e8_576168[gCurrentRoom + 1];
+
+    unk_7d27c();
+
+    DMA3_FILL_16(0x7A73, (u8*)PALRAM_BASE + 0x342, 12 * 2);
+}
+
+/**
+ * @brief 7cfb0 | 2cc | Updates the navigation map compass
+ *
+ */
+void unk_7cfb0(void)
+{
+    s32 i;
+    const s8* pData;
+
+    if (PAUSE_SCREEN_DATA.unk_0 == 0 || gPauseScreenFlag == 4)
+        return;
+
+    PAUSE_SCREEN_DATA.unk_248++;
+    if (PAUSE_SCREEN_DATA.unk_248 > 7)
+    {
+        PAUSE_SCREEN_DATA.unk_248 = 0;
+        PAUSE_SCREEN_DATA.unk_247++;
+        if (PAUSE_SCREEN_DATA.unk_247 > 5)
+            PAUSE_SCREEN_DATA.unk_247 = 0;
+
+        ((u16*)((u8*)PALRAM_BASE + 0x340))[PAUSE_SCREEN_DATA.unk_249] =
+            sNavigation_581300[PAUSE_SCREEN_DATA.unk_247 * 16 + PAUSE_SCREEN_DATA.unk_249];
+    }
+
+    if (PAUSE_SCREEN_DATA.unk_24A == 2)
+    {
+        PAUSE_SCREEN_DATA.unk_24A = 3;
+        NAV_OAM(10).xPosition = 0x1C;
+        NAV_OAM(10).yPosition = 0x32;
+    }
+    else if (PAUSE_SCREEN_DATA.unk_24A == 3)
+    {
+        i = (s8)sEvent_57608A[gNavigationTargetLocation];
+        if (i >= 0)
+        {
+            i += (s8)PAUSE_SCREEN_DATA.unk_244;
+            if (i > 0x23)
+                i -= 0x24;
+            pData = &sNavigation_79c1a4[i * 3];
+        }
+        else
+        {
+            pData = &sNavigation_79c210[gNavigationTargetLocation * 3];
+        }
+
+        NAV_OAM(10).xPosition = pData[0] + NAV_OAM(12).xPosition;
+        NAV_OAM(10).yPosition = pData[1] + NAV_OAM(12).yPosition;
+        NAV_OAM(10).oamId = (u8)pData[2] + 0x16;
+    }
+
+    if (PAUSE_SCREEN_DATA.unk_240 == 0)
+        return;
+
+    PAUSE_SCREEN_DATA.unk_242++;
+
+    switch (PAUSE_SCREEN_DATA.unk_240)
+    {
+        case 1:
+            if (PAUSE_SCREEN_DATA.typeFlags & 0x400)
+                PAUSE_SCREEN_DATA.unk_240 = 2;
+            break;
+
+        case 2:
+            if (!(PAUSE_SCREEN_DATA.typeFlags & 0x400))
+            {
+                PAUSE_SCREEN_DATA.unk_24A = 2;
+                PAUSE_SCREEN_DATA.unk_240 = 1;
+            }
+            break;
+
+        case 3:
+            if (PAUSE_SCREEN_DATA.unk_242 > 8)
+            {
+                PAUSE_SCREEN_DATA.unk_242 = 0;
+                PAUSE_SCREEN_DATA.unk_244++;
+                if ((s8)PAUSE_SCREEN_DATA.unk_244 > 0x23)
+                    PAUSE_SCREEN_DATA.unk_244 = 0;
+                NAV_OAM(12).oamId = sNavigation_79c180[(s8)PAUSE_SCREEN_DATA.unk_244];
+            }
+            break;
+
+        case 4:
+            if (PAUSE_SCREEN_DATA.typeFlags & 0x400)
+            {
+                PAUSE_SCREEN_DATA.unk_240 = 5;
+                PAUSE_SCREEN_DATA.unk_241 = 1;
+            }
+            break;
+
+        case 5:
+            if (!(PAUSE_SCREEN_DATA.typeFlags & 0x400))
+            {
+                PAUSE_SCREEN_DATA.unk_240 = 6;
+                PAUSE_SCREEN_DATA.unk_24A = 2;
+            }
+            break;
+
+        case 6:
+            if ((s8)PAUSE_SCREEN_DATA.unk_244 == (s8)PAUSE_SCREEN_DATA.unk_245)
+            {
+                PAUSE_SCREEN_DATA.unk_240 = 4;
+                PAUSE_SCREEN_DATA.unk_241 = 0;
+            }
+            else if (PAUSE_SCREEN_DATA.unk_242 > 8)
+            {
+                PAUSE_SCREEN_DATA.unk_242 = 0;
+                PAUSE_SCREEN_DATA.unk_244 += PAUSE_SCREEN_DATA.unk_246;
+                if ((s8)PAUSE_SCREEN_DATA.unk_244 > 0x23)
+                    PAUSE_SCREEN_DATA.unk_244 = 0;
+                else if ((s8)PAUSE_SCREEN_DATA.unk_244 < 0)
+                    PAUSE_SCREEN_DATA.unk_244 = 0x23;
+                NAV_OAM(12).oamId = sNavigation_79c180[(s8)PAUSE_SCREEN_DATA.unk_244];
+            }
+            break;
+    }
+}
+
+/**
+ * @brief 7d27c | d0 | Sets up the rotation of the navigation map compass towards the target
+ *
+ */
+void unk_7d27c(void)
+{
+    s32 target;
+    s32 diff;
+    s32 sign;
+
+    if (gNavigationTargetLocation == 0)
+    {
+        PAUSE_SCREEN_DATA.unk_240 = 0;
+        return;
+    }
+
+    PAUSE_SCREEN_DATA.unk_240 = 1;
+    if (PAUSE_SCREEN_DATA.conversationNumber == gPreviousNavigationConversation)
+        PAUSE_SCREEN_DATA.unk_24A = 2;
+    else
+        PAUSE_SCREEN_DATA.unk_24A = 1;
+
+    target = (s8)sEvent_57607D[gNavigationTargetLocation];
+    if (target < 0)
+        return;
+
+    PAUSE_SCREEN_DATA.unk_245 = target;
+    if (target == (s8)PAUSE_SCREEN_DATA.unk_244)
+        return;
+
+    PAUSE_SCREEN_DATA.unk_240 = 4;
+
+    diff = (s8)PAUSE_SCREEN_DATA.unk_245 - (s8)PAUSE_SCREEN_DATA.unk_244;
+    sign = 1;
+    if (diff < 0)
+        sign = -1;
+    diff *= sign;
+
+    if (diff > 0x12)
+    {
+        PAUSE_SCREEN_DATA.unk_246 = -1 * sign;
+    }
+    else
+    {
+        if (diff == 0x12)
+            sign = 1;
+        PAUSE_SCREEN_DATA.unk_246 = 1 * sign;
+    }
+}
