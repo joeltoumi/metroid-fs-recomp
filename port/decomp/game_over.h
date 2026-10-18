@@ -70,7 +70,7 @@ void GameOverResetOam(u8 slot);
 void GameOverProcessOam(void);
 void GameOverDrawAllOam(void);
 void GameOverDrawOam(struct GameOverOam* pOam);
-u16 GameOverGetPositionAndSlotOfOamByType(u8 type, u16* pX, u16* pY);
+void GameOverGetPositionAndSlotOfOamByType(u8 type, u16* pX, u16* pY);
 void GameOverVblank(void);
 void unk_9e58c(void);
 

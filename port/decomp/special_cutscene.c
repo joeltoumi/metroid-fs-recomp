@@ -751,7 +751,7 @@ void unk_98158(void)
     u16 col;
     u16 row;
     u16 limit;
-    u16 index;
+    u32 index;
     u16* pTop;
     u16* pBottom;
     u16 top;

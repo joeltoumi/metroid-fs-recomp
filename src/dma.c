@@ -2,6 +2,8 @@
 #include "gba.h"
 #include "macros.h"
 
+#ifndef PLATFORM_PC // mf-android: port/src/dma.c has native versions
+
 struct Dma {
     const void* pSrc;
     void* pDst;
@@ -306,3 +308,5 @@ lbl_08003370: \n\
     ");
 }
 #endif
+
+#endif // !PLATFORM_PC

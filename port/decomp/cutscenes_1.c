@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "callbacks.h"
 #include "syscall_wrappers.h"
+#include "syscalls.h"
 #include "audio_wrappers.h"
 #include "music_wrappers.h"
 #include "oam.h"

@@ -111,9 +111,9 @@ int Port_Main(int argc, char** argv)
     Port_HostLoadSave(gPortSram, sizeof(gPortSram));
 
     if (setjmp(sExitJump) == 0) {
-        // asm/crt0.s: `bl agbmain; b _start` — agbmain returns on soft reset.
+        // asm/crt0.s: `bl AgbMain; b _start` — AgbMain returns on soft reset.
         while (!sQuit) {
-            agbmain();
+            AgbMain();
             Port_FlushSave();
         }
     }

@@ -8,7 +8,7 @@
 //   - the "mf_state" section: every game global (IWRAM_DATA) and the port's
 //     own hardware state (PORT_STATE: DMA channels, sound chip).
 //
-// States are only taken and restored at the end of agbmain's loop (see
+// States are only taken and restored at the end of AgbMain's loop (see
 // Port_HostFrameBoundary), where the C stack is always the same, so nothing
 // on it needs saving.
 //

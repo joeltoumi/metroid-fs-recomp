@@ -55,7 +55,13 @@ extern u16 gUnk_3005404;
 // PORT: these are views over a range of consecutive u8 fields of struct
 // IntroData, the offsets are relative to unk_14 so they stay valid with a
 // 64-bit layout (only u8 fields between unk_14 and unk_20C).
-#define SPECIAL_CUTSCENE_INTRO_BYTES ((u8*)INTRO_DATA.unk_14)
+#ifdef PLATFORM_PC
+#include <stddef.h>
+#define SPECIAL_CUTSCENE_UNK_14_OFFSET offsetof(struct IntroData, unk_14)
+#else
+#define SPECIAL_CUTSCENE_UNK_14_OFFSET OFFSET_OF(struct IntroData, unk_14)
+#endif
+#define SPECIAL_CUTSCENE_INTRO_BYTES ((u8*)&INTRO_DATA + SPECIAL_CUTSCENE_UNK_14_OFFSET)
 #define SPECIAL_CUTSCENE_INTRO_U8(offset) (SPECIAL_CUTSCENE_INTRO_BYTES[(offset) - 0x14])
 #define SPECIAL_CUTSCENE_TEXT_STATE(index) (SPECIAL_CUTSCENE_INTRO_BYTES[(index)])
 #define SPECIAL_CUTSCENE_TEXT_TIMER(index) (SPECIAL_CUTSCENE_INTRO_BYTES[0x110 - 0x14 + (index)])

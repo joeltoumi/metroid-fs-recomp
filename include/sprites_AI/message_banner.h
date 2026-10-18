@@ -1,4 +1,4 @@
-#ifdef MESSAGE_BANNER_AI_H
+#ifndef MESSAGE_BANNER_AI_H
 #define MESSAGE_BANNER_AI_H
 
 u8 TrySpawnMessageBanner(u8 type);

@@ -9,7 +9,7 @@
 #include "types.h"
 
 /* ---------------------------------------------------------------------------------------------- */
-/* Data blobs (static in src/data / src/*.c, externed here)                                       */
+/* Data blobs (static in src/data and src/ C files, externed here)                                       */
 /* ---------------------------------------------------------------------------------------------- */
 
 /* PORT: static in src/data/menus/pause_debug.c (0x0858217b), must be made visible for the native build */

@@ -9,9 +9,9 @@
 typedef void (*PortGameFunc)(void);
 
 // src/agbmain.c — the game's main loop. Returns on soft reset.
-void agbmain(void);
+void AgbMain(void);
 
-// src/data/generic_data.c — IRQ handler table indexed like asm/intr_main.s.
+// port/game/linker_glue.c — IRQ handler table indexed like asm/intr_main.s.
 extern const PortGameFunc sIntrTable[13];
 
 // Unwind from deep inside the game back to main() (quit request).

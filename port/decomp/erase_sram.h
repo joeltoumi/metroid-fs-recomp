@@ -11,7 +11,7 @@
 #include "structs/menus/pause_screen.h"
 
 /* ---------------------------------------------------------------------------------------------- */
-/* Data blobs (static in src/data / src/*.c, externed here)                                       */
+/* Data blobs (static in src/data and src/ C files, externed here)                                       */
 /* ---------------------------------------------------------------------------------------------- */
 
 /* PORT: static in src/data/sram_pointers.c (0x08582288), must be made visible for the native build */

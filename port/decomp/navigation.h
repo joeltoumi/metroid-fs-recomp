@@ -36,6 +36,51 @@ struct NavigationTargetInfo {
     u8 padding_5[3];
 };
 
+/**
+ * @brief Navigation pop-up info (0x0857bc50, 5 entries of 24 bytes)
+ */
+struct NavigationPopUpInfo {
+    const u8* pFrames; /* (frame, duration) pairs */
+    u8 frameCount;
+    u8 padding_5[3];
+    const u16* pPalette; /* 16 colors, faded in at obj palette row 15 */
+    const u16* pFlashingColors; /* 0 terminated, written to the last obj color */
+    u8 flashingColorDelay;
+    u8 tiles; /* low nibble: number of tile rows, high nibble: first tile row slot */
+    u8 type; /* low nibble: 8 (32x? object) or 4 */
+    u8 padding_13;
+    const u32* pGraphics; /* LZ77 */
+};
+
+/**
+ * @brief Navigation conversation pop-ups (0x0857bcc8, 3 entries)
+ */
+struct NavigationPopUpConversation {
+    s8 conversation;
+    u8 popUps[3];
+};
+
+/*
+ * PORT: 0x0857bc50, contains raw 32-bit GBA pointers; the native port has to provide a real table.
+ */
+#define sNavigationPopUps ((const struct NavigationPopUpInfo*)(sBlob_5766D4_581510 + 0x557C))
+#define sNavigationPopUpConversations ((const struct NavigationPopUpConversation*)(sBlob_5766D4_581510 + 0x55F4))
+/* 0x0857bcd4, 0x0857bcf4, 0x0857bd34, 0x0857bdb4: u16 tables (palette animations) */
+#define sNavigation_57bcd4 ((const u16*)(sBlob_5766D4_581510 + 0x5600))
+#define sNavigation_57bcf4 ((const u16*)(sBlob_5766D4_581510 + 0x5620))
+#define sNavigation_57bd34 ((const u16*)(sBlob_5766D4_581510 + 0x5660))
+#define sNavigation_57bdb4 ((const u16*)(sBlob_5766D4_581510 + 0x56E0))
+/* 0x0857beb4, 0x0857beb8, 0x0857bebc: u8 durations */
+#define sNavigation_57beb4 (sBlob_5766D4_581510 + 0x57E0)
+#define sNavigation_57beb8 (sBlob_5766D4_581510 + 0x57E4)
+#define sNavigation_57bebc (sBlob_5766D4_581510 + 0x57E8)
+/* LZ77 graphics of the special conversations (0x0857c0c4, 0x0857fca0, 0x08580238, 0x085807d0, 0x08580d68) */
+#define sNavigation_57c0c4 (sBlob_5766D4_581510 + 0x59F0)
+#define sNavigation_57fca0 (sBlob_5766D4_581510 + 0x95CC)
+#define sNavigation_580238 (sBlob_5766D4_581510 + 0x9B64)
+#define sNavigation_5807d0 (sBlob_5766D4_581510 + 0xA0FC)
+#define sNavigation_580d68 (sBlob_5766D4_581510 + 0xA694)
+
 /* 0x085766e0: u8 pairs, Y position of the text cursor object per text line (indexed by line * 2) */
 #define sNavigationTextCursorYPositions (sBlob_5766D4_581510 + 0xC)
 /* 0x085766e4 */
@@ -95,5 +140,14 @@ void unk_7b674(void);
 void ProcessPauseScreenText(void);
 void ProcessEasySleepText(void);
 u8 GetFlashingSectorNumber(void);
+void NavigationConversationLoadPopUpGraphics(void);
+void NavigationConversationUpdatePopUp(void);
+void unk_7bde0(void);
+void NavigationConversationFadeInPopUpPalette(void);
+void NavigationConversationUpdateXParasitePopUp(void);
+void NavigationConversationClearPopUpGraphics(void);
+void unk_7c3b4(void);
+void unk_7c440(void);
+void NavigationConversationLoadSpecialGraphics(void);
 
 #endif /* NAVIGATION_H */

@@ -33,9 +33,9 @@ enum {
 
 // Index in sIntrTable for each IRQ (order of the checks in asm/intr_main.s).
 enum {
-    INTR_SLOT_VBLANK = 3,
-    INTR_SLOT_HBLANK = 4,
-    INTR_SLOT_VCOUNT = 5,
+    INTR_SLOT_VBLANK = 1,
+    INTR_SLOT_HBLANK = 2,
+    INTR_SLOT_VCOUNT = 3,
 };
 
 static uint64_t sFrameCount;

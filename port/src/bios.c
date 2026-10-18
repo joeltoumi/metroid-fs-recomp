@@ -41,7 +41,7 @@ void CpuFastSet(const void* src, void* dst, uint32_t control)
 
 // ---- math -------------------------------------------------------------------
 
-int32_t DivarmDiv(int32_t number, int32_t denom)
+int32_t DivArmDiv(int32_t number, int32_t denom)
 {
     // SWI 7 (DivArm) takes (denom, number): the game's wrapper names follow
     // the register order, see asm/syscalls.s.
@@ -50,7 +50,7 @@ int32_t DivarmDiv(int32_t number, int32_t denom)
     return denom / number;
 }
 
-int32_t DivarmMod(int32_t number, int32_t denom)
+int32_t DivArmMod(int32_t number, int32_t denom)
 {
     if (number == 0)
         return 0;
@@ -137,7 +137,7 @@ void SoundBias0(void)
 {
 }
 
-void SoundBias200(void)
+void SoundBias1(void)
 {
 }
 
@@ -159,7 +159,7 @@ void Port_Syscall(unsigned int number)
     switch (number) {
     case 2: // Halt: the main loop halts until the VBlank IRQ fires
         Port_RunFrame();
-        Port_HostFrameBoundary(); // only agbmain's loop halts with SWI 2
+        Port_HostFrameBoundary(); // only AgbMain's loop halts with SWI 2
         break;
     case 3: // Stop (sleep mode): treat as waiting for the next frame
         Port_RunFrame();

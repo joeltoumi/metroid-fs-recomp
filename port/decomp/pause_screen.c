@@ -249,7 +249,6 @@ void PauseScreenInitVBlank(void)
 u8 PauseScreenInit(void)
 {
     u32 suitPal;
-    u32 hatches;
     u32 zero;
     s32 i;
 

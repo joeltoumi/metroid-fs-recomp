@@ -187,4 +187,16 @@
 #include "x_parasite_util.h"
 #include "port/decomp_protos.h"
 
+// Defined in src/ but declared in no header.
+void CheckUpdateMusicDuringRoomLoad(void);
+boolu32 CreditsHandler(void);
+u32 GadoraHatchUpdate(u16 xPosition, u16 yPosition, u8 action);
+void InGameTimerUpdate(void);
+void IncreaseMusicVolume(void);
+void InitializeGame(void);
+void LowerMusicVolume(void);
+void PlayRoomMusicTrack(u8 area, u8 room);
+u32 ProcessPauseButtonPress(void);
+void UpdateInput(void);
+
 #endif /* PORT_PROTOTYPES_H */

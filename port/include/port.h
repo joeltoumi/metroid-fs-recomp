@@ -122,7 +122,7 @@ typedef enum PortStateResult {
 } PortStateResult;
 
 // Called by the main loop once per frame, at the only point where the game's
-// C stack is always the same: the Halt at the end of agbmain's loop. Save
+// C stack is always the same: the Halt at the end of AgbMain's loop. Save
 // states can only be taken or restored from here.
 void Port_HostFrameBoundary(void);
 // Size of a save state image (constant for a given build).

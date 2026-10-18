@@ -445,27 +445,23 @@ void GameOverDrawOam(struct GameOverOam* pOam)
  * @param type Type
  * @param pX X position destination (300 if not found)
  * @param pY Y position destination (200 if not found)
- * @return u16 Y position written (the original leaves it in r0)
  */
-u16 GameOverGetPositionAndSlotOfOamByType(u8 type, u16* pX, u16* pY)
+void GameOverGetPositionAndSlotOfOamByType(u8 type, u16* pX, u16* pY)
 {
     u8 i;
-    u16 y;
 
     for (i = 0; i < ARRAY_SIZE(GAME_OVER_DATA.oam); i++)
     {
         if (GAME_OVER_DATA.oam[i].type == type)
         {
             *pX = GAME_OVER_DATA.oam[i].xPosition;
-            y = GAME_OVER_DATA.oam[i].yPosition;
-            *pY = y;
-            return y;
+            *pY = GAME_OVER_DATA.oam[i].yPosition;
+            return;
         }
     }
 
     *pX = 300;
     *pY = 200;
-    return 200;
 }
 
 /**
