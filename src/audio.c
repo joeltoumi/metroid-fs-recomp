@@ -1299,6 +1299,10 @@ static void unk_1da0(struct PsgSoundData* pSound, struct TrackVariables* pVariab
         var_0 = 0;
 
     pSound->maybe_noteDelay = GetNoteDelay(pVariables, var_0, pVariables->unk_18);
+#ifdef PLATFORM_PC
+    // The GBA writes through a NULL pVariables (into the BIOS, ignored)
+    if (pSound->pVariables != NULL)
+#endif
     pSound->pVariables->pSoundPsg = NULL;
     pSound->pVariables = pVariables;
     pSound->unk_F |= 2;
@@ -1319,14 +1323,18 @@ void unk_1e14(struct SoundChannel* pChannel)
         if (pChannel->pChannel2 != NULL)
         {
             // Needed to produce matching ASM
+#ifndef PLATFORM_PC // dereferences a NULL pointer, harmless on the GBA only
             pChannel->pChannel1->pChannel2 += 0;
+#endif
             pChannel->pChannel2->pChannel1 = pChannel->pChannel1;
         }
 
         if (pChannel->pChannel1 != NULL)
         {
             // Needed to produce matching ASM
+#ifndef PLATFORM_PC // dereferences a NULL pointer, harmless on the GBA only
             pChannel->pChannel2->pChannel1 += 0;
+#endif
             pChannel->pChannel1->pChannel2 = pChannel->pChannel2;
         }
         else

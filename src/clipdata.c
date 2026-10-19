@@ -130,7 +130,11 @@ void ClipdataSetupCode(void)
     DMA3_COPY_16(ClipdataConvertToCollision, &IN_GAME_DATA.clipdataCode, sizeof(IN_GAME_DATA.clipdataCode) / sizeof(u16));
 
     // Set pointer
+#ifdef PLATFORM_PC
+    gClipdataCodePointer = ClipdataConvertToCollision; // native code can't run from RAM
+#else
     gClipdataCodePointer = (CollisionFunc_T)&IN_GAME_DATA.clipdataCode[1];
+#endif
 }
 
 /**

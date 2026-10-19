@@ -16,7 +16,6 @@
 #ifdef PLATFORM_PC
 #define gSpritesetSpriteGfxSlots (*gSpritesetSpriteGfxSlots_PortPtr)
 #define gCurrentScrolls (*gCurrentScrolls_PortPtr)
-#define gSpriteDebris (*gSpriteDebris_PortPtr)
 #define gParticleEffects (*gParticleEffects_PortPtr)
 #define gAmmoDigitsGfx (*gAmmoDigitsGfx_PortPtr)
 #define gFileSelectFileInfo (*gFileSelectFileInfo_PortPtr)
@@ -26,12 +25,10 @@
 #define gPrevious64Positions (*gPrevious64Positions_PortPtr)
 #define gDemoInputs (*gDemoInputs_PortPtr)
 #define gDemoInputDurations (*gDemoInputDurations_PortPtr)
-#define gSaXElevatorSprites (*gSaXElevatorSprites_PortPtr)
 #define gSamusPalette (*gSamusPalette_PortPtr)
 #define gHatchData (*gHatchData_PortPtr)
 #define gBombChains (*gBombChains_PortPtr)
 #define gVerticalTilemap (*gVerticalTilemap_PortPtr)
-#define gAnimatedGraphicsData (*gAnimatedGraphicsData_PortPtr)
 #endif
 
 #endif /* PORT_RAM_UNALIGNED_H */

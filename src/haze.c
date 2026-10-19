@@ -188,7 +188,11 @@ void HazeSetupCode(u8 hazeValue)
 
         case HAZE_VALUE_BG3:
             DmaTransfer(3, Haze_Bg3, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_Bg3; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
             
@@ -199,7 +203,11 @@ void HazeSetupCode(u8 hazeValue)
 
         case HAZE_VALUE_BG3_STRONG_WEAK:
             DmaTransfer(3, Haze_Bg3StrongWeak, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_Bg3StrongWeak; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
             
@@ -210,7 +218,11 @@ void HazeSetupCode(u8 hazeValue)
 
         case HAZE_VALUE_BG0:
             DmaTransfer(3, Haze_Bg0, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_Bg0; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
             
@@ -221,7 +233,11 @@ void HazeSetupCode(u8 hazeValue)
  
         case HAZE_VALUE_BG3_NONE_WEAK:
             DmaTransfer(3, Haze_Bg3NoneWeak, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_Bg3NoneWeak; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
             
@@ -232,7 +248,11 @@ void HazeSetupCode(u8 hazeValue)
 
         case HAZE_VALUE_BG3_BG2_STRONG_WEAK_MEDIUM:
             DmaTransfer(3, Haze_Bg3Bg2StrongWeakMedium, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_Bg3Bg2StrongWeakMedium; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
             
@@ -243,7 +263,11 @@ void HazeSetupCode(u8 hazeValue)
 
         case HAZE_VALUE_BG3_BG2_BG1:
             DmaTransfer(3, Haze_Bg3Bg2Bg1, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_Bg3Bg2Bg1; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
             
@@ -276,7 +300,11 @@ void HazeSetupCode(u8 hazeValue)
             gBackdropColor = COLOR_WHITE;
 
             DmaTransfer(3, Haze_PowerBombExpanding, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_PowerBombExpanding; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
             
@@ -290,7 +318,11 @@ void HazeSetupCode(u8 hazeValue)
 
         case HAZE_VALUE_POWER_BOMB_RETRACTING:
             DmaTransfer(3, Haze_PowerBombRetracting, IN_GAME_DATA.hazeCode, sizeof(IN_GAME_DATA.hazeCode), 16);
+#ifdef PLATFORM_PC
+            gHazeProcessCodePointer = (HazeFunc_T)Haze_PowerBombRetracting; // native code can't run from RAM
+#else
             gHazeProcessCodePointer = (HazeFunc_T)(IN_GAME_DATA.hazeCode + 1);
+#endif
 
             gHazeInfo.enabled = TRUE;
 

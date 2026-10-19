@@ -872,6 +872,14 @@ void SamusUpdateEnvironmentEffect(void)
                 }
         }
         
+#ifdef PLATFORM_PC
+        // With no effect the GBA reads the word before the table (unused)
+        if (effect == 0)
+        {
+            gSamusEnvironmentalEffects[i].pOamFrame = NULL;
+            continue;
+        }
+#endif
         pOam = sEnvEffectOamPointers[effect - 1];
         pOam += gSamusEnvironmentalEffects[i].currentAnimationFrame;
         gSamusEnvironmentalEffects[i].pOamFrame = pOam->pFrame;
@@ -6792,7 +6800,11 @@ void SamusUpdateGraphics(u8 direction)
         gPreviousPositionCounter -= 0x80;
 
     if (gPreviousPositionCounter >= ARRAY_SIZE(gPrevious64Positions[0]))
+#ifdef PLATFORM_PC
+        *(u8 *)&gUnk_300144e = TRUE;
+#else
         *(u8 *)0x0300144E = TRUE;
+#endif
 
     pose = gSamusData.pose;
     acd = gSamusData.armCannonDirection;

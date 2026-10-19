@@ -7434,7 +7434,11 @@ void NewFileIntroSamusGettingCuredNervousSystemInit(void)
     NewFileIntroSamusGettingCuredSetupWindow();
 
     DMA3_COPY_32(NewFileIntroSamusGettingCuredNervousSystemHblank, INTRO_DATA.hBlankCode, sizeof(INTRO_DATA.hBlankCode) / sizeof(u32));
+#ifdef PLATFORM_PC
+    INTRO_DATA.hBlankCodePointer = (u8*)NewFileIntroSamusGettingCuredNervousSystemHblank; // native code can't run from RAM
+#else
     INTRO_DATA.hBlankCodePointer = INTRO_DATA.hBlankCode + 1;
+#endif
     CallbackSetHBlank(INTRO_DATA.hBlankCodePointer);
 
     WRITE_16(REG_IE, READ_16(REG_IE) | IF_HBLANK);
