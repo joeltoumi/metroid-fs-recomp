@@ -895,9 +895,9 @@ void SramWrite_WorldData(void)
     s32 offset;
 
     pWorld = SRAM_FILES_WORLD_DATA(gMostRecentSaveFile);
-    DmaTransfer(3, gVisitedMinimapTiles, pWorld, sizeof(gVisitedMinimapTiles), 16);
+    DmaTransfer(3, gVisitedMinimapTiles, pWorld, SRAM_FILES_VISITED_MINIMAP_SIZE, 16);
 
-    offset = sizeof(gVisitedMinimapTiles);
+    offset = SRAM_FILES_VISITED_MINIMAP_SIZE;
     for (i = 0; i < MAX_AMOUNT_OF_AREAS; i++)
     {
         size = gNumberOfNeverReformBlocks[i] * 3;
@@ -940,11 +940,11 @@ void SramRead_WorldData(void)
     s32 offset;
 
     pWorld = SRAM_FILES_WORLD_DATA(gMostRecentSaveFile);
-    DmaTransfer(3, pWorld, gVisitedMinimapTiles, sizeof(gVisitedMinimapTiles), 16);
+    DmaTransfer(3, pWorld, gVisitedMinimapTiles, SRAM_FILES_VISITED_MINIMAP_SIZE, 16);
     // Clears gNeverReformBlocks and gCollectedTanks (9 slots each)
     BitFill(3, USHORT_MAX, gNeverReformBlocks, (MAX_AMOUNT_OF_AREAS + 1) * (NEVER_REFORM_BLOCKS_SIZE + COLLECTED_TANKS_SIZE), 16);
 
-    offset = sizeof(gVisitedMinimapTiles);
+    offset = SRAM_FILES_VISITED_MINIMAP_SIZE;
     for (i = 0; i < MAX_AMOUNT_OF_AREAS; i++)
     {
         size = gNumberOfNeverReformBlocks[i] * 3;
@@ -1140,7 +1140,7 @@ void Sram_InitSaveFile(void)
     s32 i;
     const struct Door* pDoor;
 
-    BitFill(3, 0, gVisitedMinimapTiles, sizeof(gVisitedMinimapTiles), 16);
+    BitFill(3, 0, gVisitedMinimapTiles, SRAM_FILES_VISITED_MINIMAP_SIZE, 16);
     BitFill(3, USHORT_MAX, gNeverReformBlocks, (MAX_AMOUNT_OF_AREAS + 1) * NEVER_REFORM_BLOCKS_SIZE, 16);
     BitFill(3, USHORT_MAX, gCollectedTanks, (MAX_AMOUNT_OF_AREAS + 1) * COLLECTED_TANKS_SIZE, 16);
 
@@ -1187,7 +1187,7 @@ void Sram_ResetForDemo(void)
     gBootDebugOptions = sSramDefaultBootDebugOptions;
     gButtonAssignments = sSramDefaultButtonAssignments;
 
-    BitFill(3, USHORT_MAX, gVisitedMinimapTiles, sizeof(gVisitedMinimapTiles), 16);
+    BitFill(3, USHORT_MAX, gVisitedMinimapTiles, SRAM_FILES_VISITED_MINIMAP_SIZE, 16);
     BitFill(3, USHORT_MAX, gNeverReformBlocks, (MAX_AMOUNT_OF_AREAS + 1) * NEVER_REFORM_BLOCKS_SIZE, 16);
     BitFill(3, USHORT_MAX, gCollectedTanks, (MAX_AMOUNT_OF_AREAS + 1) * COLLECTED_TANKS_SIZE, 16);
 

@@ -33,6 +33,12 @@ void InitializeAudio(void)
     WRITE_8(REG_SOUND3CNT_L, 0x0);
     WRITE_8(REG_SOUNDCNT_L, 0x77); // Sound 1-4 master volume left/right 100%
 
+#ifdef PLATFORM_PC
+    // The ARM mixing code isn't copied to IWRAM: its C versions are called.
+    gSoundCodeAPointer = Port_SoundCodeA;
+    gSoundCodeBPointer = Port_SoundCodeB;
+    gSoundCodeCPointer = Port_SoundCodeC;
+#else // !PLATFORM_PC
     gSoundCodeAPointer = (SoundCodeAFunc_T)(gSoundCodeA + 1);
     DMA3_COPY_16(CallSoundCodeA, gSoundCodeA, sizeof(gSoundCodeA) / 2);
 
@@ -41,6 +47,7 @@ void InitializeAudio(void)
 
     gSoundCodeCPointer = (SoundCodeCFunc_T)(gSoundCodeC + 1);
     DMA3_COPY_16(CallSoundCodeC, gSoundCodeC, sizeof(gSoundCodeC) / 2);
+#endif // PLATFORM_PC
 
     DMA3_FILL_16(0, &gMusicInfo, 28);
 
@@ -53,7 +60,12 @@ void InitializeAudio(void)
 
     for (i = 0; i < (u16)gNumMusicPlayers; i++)
     {
+#ifdef PLATFORM_PC
+        // 44 bytes on the GBA: up to undefined_2C
+        DMA3_FILL_16(0, sMusicTrackDataRom[i].pTrack, __builtin_offsetof(struct TrackData, undefined_2C));
+#else // !PLATFORM_PC
         DMA3_FILL_16(0, sMusicTrackDataRom[i].pTrack, 44);
+#endif // PLATFORM_PC
     }
 
     for (i = 0; i < (u16)gNumMusicPlayers; i++)

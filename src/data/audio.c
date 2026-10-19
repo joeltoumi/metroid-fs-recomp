@@ -7,8 +7,7 @@
 
 #include "constants/audio_engine.h"
 
-void unk_4a3c(void); // asm
-void unk_4a7c(void); // asm
+// unk_4a3c, unk_4a7c (asm): declared in audio/track_internal.h
 
 const u16 sUnk_a5278[128] = {
     0x2c, 0x9d, 0x107, 0x16b, 0x1ca, 0x223, 0x277, 0x2c7, 0x312, 0x358, 0x39b, 0x3da, 0x2c, 0x9d, 0x107, 0x16b,
@@ -146,4 +145,8 @@ const MusicFunc_T sMusicCommandFunctionPointers[30] = {
     [EOT - FINE] = AudioCommand_EndOfTie
 };
 
+#ifndef PLATFORM_PC
+// Voicegroups. Natively they are read from the ROM by address
+// (Port_SoundVoicegroup in port/game/audio_engine.c).
 static const u8 sBlob_a5710_a8cdc[] = INCBIN_U8("data/Blob_a5710_a8cdc.bin");
+#endif

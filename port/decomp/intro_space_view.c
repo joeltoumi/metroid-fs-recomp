@@ -207,8 +207,8 @@ boolu32 IntroSpaceViewPartProcess(void)
                 DMA3_COPY_32(sIntroSpaceViewPal_6591e4, PALRAM_BASE, 0x100 / 4);
                 gWrittenToBldalpha_Eva = 0;
                 gWrittenToBldalpha_Evb = 16;
-                WRITE_16(REG_BG2HOFS, 0);
-                WRITE_16(REG_BG2VOFS, 0);
+                WRITE_16(REG_BG1HOFS, 0);
+                WRITE_16(REG_BG1VOFS, 0);
                 WRITE_16(REG_BG1CNT, 0x1C08);
             }
             else if (timer == 7)

@@ -10,7 +10,7 @@
 #include "structs/menus/pause_screen.h"
 
 /* ---------------------------------------------------------------------------------------------- */
-/* Data blobs (static in src/data / src/*.c, externed here)                                       */
+/* Data blobs (static in src/data, src/menus/pause_screen_map.c and src/text.c; externed here)  */
 /* ---------------------------------------------------------------------------------------------- */
 
 /* static in src/data/menus/pause_debug.c (0x085766d4) */
@@ -19,9 +19,9 @@ extern const u8 sBlob_5766D4_581510[];
 extern u8 sBlob_79bec0_79c128[];
 /* static in src/text.c (0x0879c170) */
 extern u8 sBlob_79c170_79c27c[];
-/* src/data (0x08576217) */
+/* static in src/data/menus/pause_debug.c (0x08576217) */
 extern const u8 sBlob_576217_576234[];
-/* src/data (0x085760e8) */
+/* static in src/data/event_data.c (0x085760e8) */
 extern const u8 sBlob_5760e8_576168[];
 
 /**

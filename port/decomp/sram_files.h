@@ -60,6 +60,8 @@ extern const u8 sBlob_582288_58b3cc[];
 #define SRAM_FILES_CHECK_SIZE(name, type, size) typedef char name[(sizeof(type) == (size)) ? 1 : -1]
 
 #define SRAM_FILES_SIZE 0x1200
+/* Part of gVisitedMinimapTiles saved/cleared (7 areas of 0x80 bytes, not the whole 0x400 bytes array) */
+#define SRAM_FILES_VISITED_MINIMAP_SIZE 0x380
 
 /* struct SamusEnvironmentalEffect as stored in a save file (the GBA struct with a 32 bit OAM pointer) */
 struct SramFilesEnvironmentalEffect {

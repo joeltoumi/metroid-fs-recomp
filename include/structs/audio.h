@@ -270,6 +270,59 @@ extern char gUnk_Audio0x193F600[];
 extern char gUnk_Audio0x50[];
 #endif
 
+#ifdef PLATFORM_PC
+// Natively these structures hold 64-bit pointers, so they don't fit at their
+// GBA addresses (port/game/ram_symbols.c). They live in one block instead,
+// in the GBA's order, so the few out-of-bounds accesses the engine does
+// (soundChannels[11], gUnk_300343c[channel & 7], more tracks than a player
+// has variables for) land in the same neighbours as on the GBA. Defined in
+// port/game/sound_data.c.
+struct PortAudioRam {
+    struct MusicInfo musicInfo;
+    struct SoundChannel musicInfoOverflow;
+    struct PsgSoundData psg[5]; // gUnk_300343c, then gPsgSounds
+    struct SoundChannelBackup soundChannelBackup[6];
+    struct TrackVariables track0Variables[10];
+    struct TrackVariables track1Variables[10];
+    struct TrackVariables track2Variables[2];
+    struct TrackVariables track3Variables[2];
+    struct TrackVariables track4Variables[2];
+    struct TrackVariables track5Variables[2];
+    struct TrackVariables track6Variables[3];
+    struct TrackVariables track7Variables[1];
+    struct TrackVariables trackVariablesOverflow[8];
+    struct TrackData trackData3;
+    struct TrackData trackData1;
+    struct TrackData trackData6;
+    struct TrackData trackData4;
+    struct TrackData trackData0;
+    struct TrackData trackData7;
+    struct TrackData trackData2;
+    struct TrackData trackData5;
+};
+extern struct PortAudioRam gPortAudioRam;
+
+#define gMusicInfo (gPortAudioRam.musicInfo)
+#define gUnk_300343c ((struct PsgSoundData*)gPortAudioRam.psg)
+#define gPsgSounds (*(struct PsgSoundData(*)[4])&gPortAudioRam.psg[1])
+#define gSoundChannelBackup (gPortAudioRam.soundChannelBackup)
+#define gTrack0Variables (gPortAudioRam.track0Variables)
+#define gTrack1Variables (gPortAudioRam.track1Variables)
+#define gTrack2Variables (gPortAudioRam.track2Variables)
+#define gTrack3Variables (gPortAudioRam.track3Variables)
+#define gTrack4Variables (gPortAudioRam.track4Variables)
+#define gTrack5Variables (gPortAudioRam.track5Variables)
+#define gTrack6Variables (gPortAudioRam.track6Variables)
+#define gTrack7Variables (gPortAudioRam.track7Variables)
+#define gTrackData0 (gPortAudioRam.trackData0)
+#define gTrackData1 (gPortAudioRam.trackData1)
+#define gTrackData2 (gPortAudioRam.trackData2)
+#define gTrackData3 (gPortAudioRam.trackData3)
+#define gTrackData4 (gPortAudioRam.trackData4)
+#define gTrackData5 (gPortAudioRam.trackData5)
+#define gTrackData6 (gPortAudioRam.trackData6)
+#define gTrackData7 (gPortAudioRam.trackData7)
+#else // !PLATFORM_PC
 extern struct MusicInfo gMusicInfo;
 
 extern struct PsgSoundData gUnk_300343c[];
@@ -278,6 +331,25 @@ extern struct PsgSoundData gPsgSounds[4];
 extern struct SoundChannelBackup gSoundChannelBackup[6];
 // extern struct SoundChannelBackup gSoundChannelTrack2Backup[6];
 // extern struct SoundQueue gSoundQueue[8];
+
+extern struct TrackVariables gTrack0Variables[10];
+extern struct TrackVariables gTrack1Variables[10];
+extern struct TrackVariables gTrack2Variables[2];
+extern struct TrackVariables gTrack3Variables[2];
+extern struct TrackVariables gTrack4Variables[2];
+extern struct TrackVariables gTrack5Variables[2];
+extern struct TrackVariables gTrack6Variables[3];
+extern struct TrackVariables gTrack7Variables[1];
+
+extern struct TrackData gTrackData3;
+extern struct TrackData gTrackData1;
+extern struct TrackData gTrackData6;
+extern struct TrackData gTrackData4;
+extern struct TrackData gTrackData0;
+extern struct TrackData gTrackData7;
+extern struct TrackData gTrackData2;
+extern struct TrackData gTrackData5;
+#endif // PLATFORM_PC
 
 typedef void (*SoundCodeAFunc_T)(struct SoundChannel*, u32*, u8);
 typedef u8* (*SoundCodeBFunc_T)(u32*, u32*, u32*, u8);
@@ -290,24 +362,13 @@ extern u8 gSoundCodeB[164];
 extern SoundCodeCFunc_T gSoundCodeCPointer;
 extern u8 gSoundCodeC[176];
 
-extern struct TrackVariables gTrack0Variables[10];
-extern struct TrackVariables gTrack1Variables[10];
-extern struct TrackVariables gTrack2Variables[2];
-extern struct TrackVariables gTrack3Variables[2];
-extern struct TrackVariables gTrack4Variables[2];
-extern struct TrackVariables gTrack5Variables[2];
-extern struct TrackVariables gTrack6Variables[3];
-extern struct TrackVariables gTrack7Variables[1];
+#ifdef PLATFORM_PC
+// C versions of SoundCodeA/B/C (port/game/audio_engine.c), called directly.
+void Port_SoundCodeA(struct SoundChannel* pChannel, u32* pBuffer, u8 size);
+u8* Port_SoundCodeB(u32* pDst, u32* pSrc1, u32* pSrc2, u8 size);
+u8* Port_SoundCodeC(u32* pDst, u32* pSrc, u8 size);
+#endif // PLATFORM_PC
 
 extern struct MusicTrack gCurrentMusicTrack;
-
-extern struct TrackData gTrackData3;
-extern struct TrackData gTrackData1;
-extern struct TrackData gTrackData6;
-extern struct TrackData gTrackData4;
-extern struct TrackData gTrackData0;
-extern struct TrackData gTrackData7;
-extern struct TrackData gTrackData2;
-extern struct TrackData gTrackData5;
 
 #endif /* AUDIO_STRUCTS_H */

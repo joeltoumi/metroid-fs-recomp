@@ -45,7 +45,7 @@ u8 SpecialCutsceneGetRandomNumber(void);
 void SpecialCutsceneProcessOam(void);
 void SpecialCutsceneDrawAllOam(void);
 void SpecialCutsceneFadeIn(void);
-void IntroProcessText(void);
+boolu32 IntroProcessText(void);
 void Dma3Transfer_Unused2(const void* src, void* dst, u16 size, u16 rows);
 
 /* Functions of this file */
