@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    namespace 'dev.mzm.android'
+    namespace 'dev.mf.android'
     compileSdk 35
     ndkVersion '27.2.12479018'
 
     defaultConfig {
-        applicationId 'dev.mzm.android'
+        applicationId 'dev.mf.android'
         minSdk 24
         targetSdk 35
         versionCode 1
@@ -16,7 +16,7 @@ android {
 
         externalNativeBuild {
             cmake {
-                arguments "-DMZM_HOST=sdl",
+                arguments "-DMF_HOST=sdl",
                           "-DANDROID_STL=c++_static", "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
             }
         }
@@ -35,29 +35,19 @@ android {
         eu {
             dimension 'region'
             applicationIdSuffix '.eu'
-            resValue 'string', 'app_name', 'Zero Mission (EU)'
+            resValue 'string', 'app_name', 'Metroid Fusion (EU)'
             externalNativeBuild {
                 cmake {
-                    arguments '-DMZM_REGION=eu'
-                }
-            }
-        }
-        jp {
-            dimension 'region'
-            applicationIdSuffix '.jp'
-            resValue 'string', 'app_name', 'Zero Mission (JP)'
-            externalNativeBuild {
-                cmake {
-                    arguments '-DMZM_REGION=jp'
+                    arguments '-DMF_REGION=eu'
                 }
             }
         }
         us {
             dimension 'region'
-            resValue 'string', 'app_name', 'Zero Mission (US)'
+            resValue 'string', 'app_name', 'Metroid Fusion (US)'
             externalNativeBuild {
                 cmake {
-                    arguments '-DMZM_REGION=us'
+                    arguments '-DMF_REGION=us'
                 }
             }
         }

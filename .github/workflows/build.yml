@@ -13,14 +13,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        region: [us, eu, jp]
+        region: [us, eu]
     steps:
       - uses: actions/checkout@v5
       - name: Install tools
         run: sudo apt-get update && sudo apt-get install -y ninja-build
       - name: Configure
         # clang, like the Android NDK: it rejects implicit declarations, GCC does not.
-        run: cmake -B build -G Ninja -DMZM_HOST=headless -DMZM_REGION=${{ matrix.region }} -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER=clang
+        run: cmake -B build -G Ninja -DMF_HOST=headless -DMF_REGION=${{ matrix.region }} -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_C_COMPILER=clang
       - name: Build
         run: cmake --build build
       - name: Smoke test (no game data)
@@ -28,7 +28,7 @@ jobs:
         # few buttons. Catches crashes in the port layer; it can't check visuals.
         run: |
           head -c 8388608 /dev/zero > zero.gba
-          MZM_DEV_SKIP_ROM_CHECK=1 ./build/mzm_headless --rom zero.gba --frames 3000 --dump-every 0 \
+          MF_DEV_SKIP_ROM_CHECK=1 ./build/mf_headless --rom zero.gba --frames 3000 --dump-every 0 \
             --press 400:S:5 --press 700:A:5 --press 900:A:5
 
   android:
@@ -60,6 +60,6 @@ jobs:
           echo "::error title=Android build log::${msg}"
       - uses: actions/upload-artifact@v5
         with:
-          name: mzm-android-apk
+          name: mf-android-apk
           path: android/app/build/outputs/apk/*/release/*.apk
           if-no-files-found: error
