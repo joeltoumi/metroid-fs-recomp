@@ -31,7 +31,7 @@ static const char* sRomPath = "mf_us.gba";
 static const char* sWavPath;
 static FILE* sWav;
 static uint32_t sWavFrames;
-static Press sPresses[64];
+static Press sPresses[1024];
 static int sPressCount;
 
 typedef struct StateOp {
@@ -86,7 +86,7 @@ bool Port_HostInit(const PortHostConfig* cfg)
         } else if (strcmp(a, "--wav") == 0 && v) {
             sWavPath = v;
             i++;
-        } else if (strcmp(a, "--press") == 0 && v && sPressCount < 64) {
+        } else if (strcmp(a, "--press") == 0 && v && sPressCount < (int)(sizeof(sPresses) / sizeof(sPresses[0]))) {
             // FRAME:KEYS:LEN
             Press* p = &sPresses[sPressCount++];
             char* end;
