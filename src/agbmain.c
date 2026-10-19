@@ -13,6 +13,9 @@
 void AgbMain(void)
 {
     InitializeGame();
+#ifdef PLATFORM_PC
+    Port_WarpBoot(); // test warp (MF_WARP), port/game/warp.c
+#endif
 
     while (TRUE)
     {
@@ -27,6 +30,9 @@ void AgbMain(void)
 
         gFrameCounter8Bit++;
         gFrameCounter16Bit++;
+#ifdef PLATFORM_PC
+        Port_WarpFrame();
+#endif
 
         switch (gMainGameMode)
         {

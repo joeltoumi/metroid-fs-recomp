@@ -262,8 +262,17 @@ void RidleyMove(u16 dstY, u16 dstX, u8 ySpeedCap, u8 xSpeedCap, u8 speedDivisor)
     }
 }
 
+#ifdef PLATFORM_PC
+extern const struct MultiSpriteData sPortEmptyMultiSpriteData[2]; // box.c
+#endif
+
 void SpriteUtilUpdateSubSpriteData2Animation(void)
 {
+#ifdef PLATFORM_PC
+    // See SpriteUtilUpdateSubSpriteData1Animation.
+    if (gSubSpriteData2.pMultiOam == NULL)
+        gSubSpriteData2.pMultiOam = sPortEmptyMultiSpriteData;
+#endif
     gSubSpriteData2.animationDurationCounter++;
     if (gSubSpriteData2.pMultiOam[gSubSpriteData2.currentAnimationFrame].timer <
         gSubSpriteData2.animationDurationCounter)

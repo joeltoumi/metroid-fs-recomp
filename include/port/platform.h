@@ -73,23 +73,27 @@ void Port_SoundRebuildVoicegroups(void);
  * the sound engine hasn't set up its buffers yet. */
 int Port_SoundFifoBlock(const signed char** fifoA, const signed char** fifoB);
 
-/* Test warp (MZM_WARP): target `index` of the list, room -1 = every room of
- * the area. Returns 0 past the end. The interval is how many frames each
- * target lasts (0 = stay in the only one). */
-int Port_WarpTarget(int index, int* area, int* room);
-/* "Areas" of the warp list that start a game mode; room = its number. */
-enum {
-    PORT_WARP_CUTSCENE = 100,
-    PORT_WARP_TOURIAN_ESCAPE,
-    PORT_WARP_CHOZODIA_ESCAPE,
-    PORT_WARP_CREDITS,
-};
+/* Test warp (MF_WARP, port/src/warp.c): target `index` of the list. room -1
+ * means every room of the area (or every value of a mode), event -1 the
+ * default event. Returns 0 past the end. The interval is how many frames
+ * each target lasts (0 = stay in the only one). */
+int Port_WarpTarget(int index, int* area, int* room, int* event);
 unsigned int Port_WarpInterval(void);
-/* Game side (port/game/warp.c): called once per frame, and after SamusInit. */
-void Port_WarpUpdate(void);
-void Port_WarpEquip(void);
+/* MF_WARP_DIRECT=1: game modes are entered right at boot. */
+int Port_WarpDirect(void);
+/* Scripted input for the current target (PORT_WARP_SCRIPT_* in port.h). */
+void Port_WarpScript(int script);
+/* Which way Samus faces (the room script starts that way). */
+void Port_WarpFacing(int left);
+/* Game side (port/game/warp.c), called from AgbMain: once after
+ * InitializeGame, then every frame; and from RoomReset when a new game
+ * places Samus. */
+void Port_WarpBoot(void);
+void Port_WarpFrame(void);
+void Port_WarpRoomReset(void);
 
 void Port_Log(const char* fmt, ...);
+void Port_RequestQuit(void);
 
 #endif /* PLATFORM_PC */
 

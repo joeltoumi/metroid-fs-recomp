@@ -52,11 +52,21 @@ u8 sUnk_79be88[32] = {
 };
 
 u8* sUnk_79bea8[5] = {
+#ifdef PLATFORM_PC
+    // Each entry is "the end of the previous array", which on the GBA is the
+    // next array; natively the arrays aren't laid out back to back.
+    (u8*)sPauseDebugBeamFlags,
+    (u8*)sPauseDebugMissileFlags,
+    (u8*)sPauseDebugBombFlags,
+    (u8*)sPauseDebugSuitFlags,
+    (u8*)sPauseDebugMiscFlags,
+#else
     (u8*)sPauseDebugBeamFlags,
     (u8*)((const u8*)sPauseDebugBeamFlags + 0x5),
     (u8*)((const u8*)sPauseDebugMissileFlags + 0x4),
     (u8*)((const u8*)sPauseDebugBombFlags + 0x2),
     (u8*)((const u8*)sPauseDebugSuitFlags + 0x2),
+#endif
 };
 
 static u8 sUnk_79bebc[4] = {

@@ -1348,7 +1348,9 @@ boolu32 EndingInShip(void)
  */
 void EndingProcessMonologueCursor(struct SpecialCutsceneOam* pOam)
 {
-    if (*INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW)
+    // EndingMonologueInit draws once before setting pText: the GBA then
+    // reads the BIOS at address 0 (not the arrow character).
+    if (INTRO_DATA.pText != NULL && *INTRO_DATA.pText == CHAR_NEXT_PAGE_ARROW)
     {
         pOam->xPosition = 118;
         pOam->yPosition = INTRO_DATA.unk_E * 8 + 24;

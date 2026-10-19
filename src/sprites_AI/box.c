@@ -63,8 +63,24 @@ enum BoxPose {
     BOX_POSE_FINAL_JUMP = 0x4e,
 };
 
+#ifdef PLATFORM_PC
+// A boss whose init deleted it (already defeated) still animates and syncs
+// its multi-sprite data. If no boss ran since the game started, that data is
+// NULL: the GBA reads the BIOS at address 0 (for a sprite that is gone
+// anyway), a host can't. These empty frames stand in for it.
+static const s16 sPortEmptyMultiSpriteFrame[256][MULTI_SPRITE_DATA_ELEMENT_END];
+const struct MultiSpriteData sPortEmptyMultiSpriteData[2] = {
+    { sPortEmptyMultiSpriteFrame, 0 },
+    { sPortEmptyMultiSpriteFrame, 0 },
+};
+#endif
+
 void SpriteUtilUpdateSubSpriteData1Animation(void)
 {
+#ifdef PLATFORM_PC
+    if (gSubSpriteData1.pMultiOam == NULL)
+        gSubSpriteData1.pMultiOam = sPortEmptyMultiSpriteData;
+#endif
     gSubSpriteData1.animationDurationCounter++;
     if (gSubSpriteData1.pMultiOam[gSubSpriteData1.currentAnimationFrame].timer <
         gSubSpriteData1.animationDurationCounter)

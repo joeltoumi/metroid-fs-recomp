@@ -31,6 +31,15 @@
 void BlockApplySpeedBoosterScrewAttackDamage(u16, u16, u16);
 #endif
 
+
+#ifdef PLATFORM_PC
+// The 40-byte blob of zeros is read as several structs: natively some of
+// them hold 64-bit pointers and are larger than 40 bytes.
+#define SAMUS_GENERIC_EMPTY(type) ((type){0})
+#else
+#define SAMUS_GENERIC_EMPTY(type) (*(type *)sSamusGenericData_Empty)
+#endif
+
 /**
  * @brief 4D60 | 68 | Copies Samus data to the Samus data copy and resets Samus data
  * 
@@ -7515,9 +7524,9 @@ void SamusInit(void)
         if (!gIsLoadingFile)
         {
             flag = gSamusEnvironmentalEffects[1].externalTimer > 15;
-            gSamusEcho = *(struct SamusEcho *)sSamusGenericData_Empty;
-            gSamusEnvironmentalEffects[0] = *(struct SamusEnvironmentalEffect *)sSamusGenericData_Empty;
-            gSamusEnvironmentalEffects[1] = *(struct SamusEnvironmentalEffect *)sSamusGenericData_Empty;
+            gSamusEcho = SAMUS_GENERIC_EMPTY(struct SamusEcho);
+            gSamusEnvironmentalEffects[0] = SAMUS_GENERIC_EMPTY(struct SamusEnvironmentalEffect);
+            gSamusEnvironmentalEffects[1] = SAMUS_GENERIC_EMPTY(struct SamusEnvironmentalEffect);
 
             if (flag)
                 gSamusEnvironmentalEffects[1].externalTimer = 0x80;
@@ -7529,9 +7538,9 @@ void SamusInit(void)
 
         gPreviousPositionCounter = 0;
         gUnk_300144e = 0;
-        gSaXData = *(struct SaXData *)sSamusGenericData_Empty;
+        gSaXData = SAMUS_GENERIC_EMPTY(struct SaXData);
         gPoseLock = 0;
-        gSamusPhysics = *(struct SamusPhysics *)sSamusGenericData_Empty;
+        gSamusPhysics = SAMUS_GENERIC_EMPTY(struct SamusPhysics);
     }
 
     if (gUnk_3000be3 || gIsLoadingFile)
@@ -7539,11 +7548,11 @@ void SamusInit(void)
 
     gEquipment = sEquipment_Empty;
     gSamusData = sSamusData_Empty;
-    gSamusGraphicsInfo = *(struct SamusGraphicsInfo *)sSamusGenericData_Empty;
-    gSamusAnimationInfo = *(struct SamusAnimationInfo *)sSamusGenericData_Empty;
-    gSamusEnvironmentalEffects[0] = *(struct SamusEnvironmentalEffect *)sSamusGenericData_Empty;
-    gSamusEnvironmentalEffects[1] = *(struct SamusEnvironmentalEffect *)sSamusGenericData_Empty;
-    gSaXData = *(struct SaXData *)sSamusGenericData_Empty;
+    gSamusGraphicsInfo = SAMUS_GENERIC_EMPTY(struct SamusGraphicsInfo);
+    gSamusAnimationInfo = SAMUS_GENERIC_EMPTY(struct SamusAnimationInfo);
+    gSamusEnvironmentalEffects[0] = SAMUS_GENERIC_EMPTY(struct SamusEnvironmentalEffect);
+    gSamusEnvironmentalEffects[1] = SAMUS_GENERIC_EMPTY(struct SamusEnvironmentalEffect);
+    gSaXData = SAMUS_GENERIC_EMPTY(struct SaXData);
 }
 
 /**

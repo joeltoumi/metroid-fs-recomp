@@ -131,7 +131,13 @@ void RoomLoadTileset(void)
 
     tileset = sTilesetEntries[gCurrentRoomEntry.tilesetNumber];
 
+#ifdef PLATFORM_PC
+    // Some rooms use blocks past the end of their tileset's tilemap: on the
+    // GBA those read the ROM data that follows it, so point into the ROM.
+    gTilemapAndClipPointers.pTilemap = (u16*)Port_RomMirror(tileset.pTilemap) + 1;
+#else
     gTilemapAndClipPointers.pTilemap = (u16*)tileset.pTilemap + 1;
+#endif
 
     if (gCurrentArea >= AREA_NORMAL_COUNT)
     {
@@ -377,6 +383,9 @@ void RoomReset(void)
 
             if (gCurrentDemo & 0x80)
                 DemoLoadRam(0);
+#ifdef PLATFORM_PC
+            Port_WarpRoomReset(); // test warp (MF_WARP), port/game/warp.c
+#endif
 
             SetAbilityCount(gAbilityCount);
         }

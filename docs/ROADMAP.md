@@ -38,6 +38,12 @@ plataforma que mzm-android. El juego lee sus datos de la ROM del jugador
 - [ ] Sonido comparado con mGBA
 - [x] APK en GitHub Actions (una por región)
 - [ ] Menú de opciones, guardados rápidos, avance rápido
+- [x] Modo warp de pruebas (`MF_WARP`, ver [PORT.md](PORT.md)): todas las
+      salas de todas las áreas, cinemáticas, conversaciones de navegación,
+      salas de jefes y eventos, pausa (mapa y estado), guardar y cargar, fin
+      de partida, final y créditos
+- [x] Barrido con AddressSanitizer sin errores (EU) y revisión visual de
+      todas las salas y modos
 - [ ] Partida completa jugada a mano
 
 ## No soportado

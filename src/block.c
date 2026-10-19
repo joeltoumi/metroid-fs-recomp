@@ -786,8 +786,15 @@ void BlockUpdateBrokenBlocks(void)
 
         pBlock->timer++;
 
+#ifdef PLATFORM_PC
+        // The last stage (13) is one past the row: on the GBA that reads the
+        // next row, or the ROM byte after the table for the last type.
+        if (pBlock->timer < ((const u8*)Port_RomFind(sBrokenBlockTimers, sizeof(sBrokenBlockTimers)))[pBlock->type * 13 + pBlock->stage])
+            continue;
+#else
         if (pBlock->timer < sBrokenBlockTimers[pBlock->type][pBlock->stage])
             continue;
+#endif
 
         updateStage = FALSE;
         pBlock->timer = 0;

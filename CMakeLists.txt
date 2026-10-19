@@ -73,6 +73,10 @@ string(REPLACE "\n" ";" MF_DATA_WRAPPERS "${MF_DATA_WRAPPERS}")
 
 add_library(mf_game STATIC ${MF_GAME_SOURCES}
     ${MF_PORT_DECOMP_SOURCES} ${MF_PORT_GAME_SOURCES})
+# DMA macro arguments: src/ follows agbcc (see include/gba/dma.h), the code
+# written for the port follows C.
+set_source_files_properties(${MF_PORT_DECOMP_SOURCES} ${MF_PORT_GAME_SOURCES}
+    PROPERTIES COMPILE_DEFINITIONS PORT_DMA_C_ARITHMETIC)
 target_include_directories(mf_game PRIVATE "${CMAKE_SOURCE_DIR}/include" "${CMAKE_SOURCE_DIR}/port/decomp")
 target_compile_definitions(mf_game PRIVATE PLATFORM_PC REGION_${MF_REGION_UPPER})
 if(MF_BUGFIX)
@@ -119,6 +123,7 @@ add_library(mf_port STATIC
     port/src/frame.c
     port/src/main.c
     port/src/savestate.c
+    port/src/warp.c
     port/ppu/src/virtuappu.c
     port/ppu/src/mode1.c)
 target_include_directories(mf_port PUBLIC port/include PRIVATE port/ppu/include)

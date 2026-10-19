@@ -56,6 +56,16 @@ enum {
     PORT_KEY_MASK = 0x3FF,
 };
 
+// Test warp (port/src/warp.c, MF_WARP): scripted input for the current
+// target, ORed with the host's keys.
+enum {
+    PORT_WARP_SCRIPT_NONE,
+    PORT_WARP_SCRIPT_ROOM,
+    PORT_WARP_SCRIPT_MENU,
+    PORT_WARP_SCRIPT_PAUSE,
+};
+uint16_t Port_WarpKeys(void);
+
 // ---- port subsystems ------------------------------------------------------
 void Port_MemReset(void);
 

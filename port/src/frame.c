@@ -159,7 +159,7 @@ const uint32_t* Port_PpuRenderFrame(void)
 
 static void UpdateKeys(void)
 {
-    uint16_t pressed = Port_HostPollKeys() & PORT_KEY_MASK;
+    uint16_t pressed = (Port_HostPollKeys() | Port_WarpKeys()) & PORT_KEY_MASK;
     // KEYINPUT is active-low.
     Port_IoWrite16(IO_KEYINPUT, (uint16_t)(~pressed & PORT_KEY_MASK));
 }

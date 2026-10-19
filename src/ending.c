@@ -577,9 +577,14 @@ boolu32 EndingSamusPosingInit(void)
     
     CallbackSetVBlank(EndingSamusPosingVBlank);
 
+#ifdef PLATFORM_PC
+    // The GBA runs a copy of the code from RAM; natively it's called in place.
+    CallbackSetHBlank(EndingSamusPosingHBlankCode);
+#else
     DMA3_COPY_16(EndingSamusPosingHBlankCode, &ENDING_DATA.unk_270, 32);
 
     CallbackSetHBlank(ENDING_DATA.unk_270 + 1);
+#endif
 
     return FALSE;
 }

@@ -1373,7 +1373,14 @@ static u16 GetNoteDelay(struct TrackVariables* pVariables, u8 param_2, u8 param_
     }
     else
     {
+#ifdef PLATFORM_PC
+        // Notes outside 0x15-0x50 index past the table: on the GBA that reads
+        // the ROM data around it, so read the same bytes from the ROM.
+        delay = ((const u8*)Port_RomFind(sNoiseTable, sizeof(sNoiseTable)))[param_2 - 0x15] |
+            (u8)(port_uptr)pVariables->pSample1;
+#else
         delay = sNoiseTable[param_2 - 0x15] | (u8)(u32)pVariables->pSample1;
+#endif
     }
     
     return delay;

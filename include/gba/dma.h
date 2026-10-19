@@ -35,10 +35,22 @@
 #define REG_DMA3_CNT_H (REG_DMA3 + 10)
 
 #ifdef PLATFORM_PC
+#ifdef PORT_DMA_C_ARITHMETIC
+/* port/decomp and port/game: native code, `p + n` is plain C. */
 #define DMA_SET(channel, src, dst, cnt)                                        \
     {                                                                          \
         Port_DmaSet(channel, (const void *)(src), (void *)(dst), (u32)(cnt)); \
     }
+#else
+/* Like the GBA macro below, whose `(vu32)src` casts only the first operand:
+ * `pointer + n` in a DMA argument adds n bytes whatever the pointer type
+ * (agbcc compiled the game that way). */
+#define DMA_SET(channel, src, dst, cnt)                                        \
+    {                                                                          \
+        Port_DmaSet(channel, (const void *)(port_uptr)src,                     \
+            (void *)(port_uptr)dst, (u32)(cnt));                               \
+    }
+#endif
 #else
 #define DMA_SET(channel, src, dst, cnt)                                        \
     {                                                                          \

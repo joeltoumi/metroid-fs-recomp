@@ -133,17 +133,21 @@ const void* Port_RomFind(const void* data, unsigned int size)
             return sCache[i].found;
     }
 
-    // The array must appear exactly once in the ROM (4-byte aligned).
-    size_t off;
-    for (off = 0; off + size <= sRomSize; off += 4) {
-        if (memcmp(sRom + off, data, size) != 0)
-            continue;
-        if (hit != NULL) {
-            Port_Log("Port_RomFind: %u bytes found more than once in the ROM", size);
-            hit = NULL;
-            break;
+    // The array must appear exactly once in the ROM: 4-byte aligned, or
+    // anywhere for byte arrays (u8 tables are packed unaligned).
+    size_t off = 0;
+    for (size_t step = 4; step != 0 && hit == NULL; step = step == 4 ? 1 : 0) {
+        for (off = 0; off + size <= sRomSize; off += step) {
+            if (memcmp(sRom + off, data, size) != 0)
+                continue;
+            if (hit != NULL) {
+                Port_Log("Port_RomFind: %u bytes found more than once in the ROM", size);
+                hit = NULL;
+                step = 1; // stop
+                break;
+            }
+            hit = sRom + off;
         }
-        hit = sRom + off;
     }
     if (hit == NULL) {
         // Fall back to the compiled-in array: reads past its end then see
