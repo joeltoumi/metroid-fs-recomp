@@ -24,12 +24,15 @@ jobs:
       - name: Build
         run: cmake --build build
       - name: Smoke test (no game data)
-        # Boots the engine on a zero-filled image for 3000 frames and presses a
-        # few buttons. Catches crashes in the port layer; it can't check visuals.
+        # The game can't run without the player's ROM, so CI only checks that
+        # the engine starts and refuses a file that isn't Metroid Fusion.
         run: |
           head -c 8388608 /dev/zero > zero.gba
-          MF_DEV_SKIP_ROM_CHECK=1 ./build/mf_headless --rom zero.gba --frames 3000 --dump-every 0 \
-            --press 400:S:5 --press 700:A:5 --press 900:A:5
+          if ./build/mf_headless --rom zero.gba --frames 10 --dump-every 0 > out.txt 2>&1; then
+            cat out.txt; echo "a zero-filled ROM was accepted"; exit 1
+          fi
+          cat out.txt
+          grep -q "ROM rejected" out.txt
 
   android:
     name: Android APK

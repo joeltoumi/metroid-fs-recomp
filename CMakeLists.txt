@@ -36,6 +36,10 @@ string(TOUPPER "${MF_REGION}" MF_REGION_UPPER)
 file(GLOB_RECURSE MF_ALL_SOURCES CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/src/*.c")
 set(MF_GAME_SOURCES)
 set(MF_DATA_SOURCES)
+# src/status_screen.c is a partial C version that the GBA build doesn't link
+# (it uses asm/disasm_0x0807e678.s); port/decomp/status_easy_sleep.c has the
+# complete one.
+list(FILTER MF_ALL_SOURCES EXCLUDE REGEX "/src/status_screen\\.c$")
 foreach(src IN LISTS MF_ALL_SOURCES)
     file(STRINGS "${src}" has_incbin REGEX "INCBIN_" LIMIT_COUNT 1)
     if(src MATCHES "/src/data/" OR has_incbin)
