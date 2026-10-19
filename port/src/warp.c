@@ -17,6 +17,7 @@
 //                                  with the event before it)
 //   MF_WARP_FRAMES=N    frames per target when there are several (default 300)
 //   MF_WARP_DIRECT=1    cutscenes start right at boot instead of from a room
+//   MF_WARP_ABILITIES=N abilities 0-18 in the game's order (default 18, all)
 //   MF_WARP_MOVE=0      no scripted input (default: walk, jump, shoot, morph
 //                       in rooms; press A in menus)
 //
@@ -131,6 +132,12 @@ int Port_WarpTarget(int index, int* area, int* room, int* event)
     *room = sTargets[index].room;
     *event = sTargets[index].event;
     return 1;
+}
+
+int Port_WarpAbilities(void)
+{
+    const char* n = getenv("MF_WARP_ABILITIES");
+    return n ? atoi(n) : -1;
 }
 
 int Port_WarpDirect(void)

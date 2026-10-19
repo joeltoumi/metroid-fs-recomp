@@ -51,6 +51,8 @@ Otras variables:
 - `MF_WARP_FRAMES=N`: frames por destino cuando hay varios o se usa `*`
   (300 por defecto). Con un solo destino se queda ahí. Al acabar la lista el
   programa termina.
+- `MF_WARP_ABILITIES=N`: número de habilidades (0-18, en el orden del juego;
+  8 = hasta el traje Varia, 14 = hasta el Gravity). Por defecto todas.
 - `MF_WARP_MOVE=0`: sin entrada simulada. Por defecto, en las salas Samus
   corre disparando hacia donde mira, salta, vuelve, se hace bola, pone bombas
   y apunta arriba; en menús y textos se pulsa A; en la pausa se mueve el mapa

@@ -173,6 +173,8 @@ static void WarpNewFile(void)
     gLanguage = LANGUAGE_ENGLISH;
 
     gAbilityCount = ABILITY_COUNT_END - 1;
+    if (Port_WarpAbilities() >= 0 && Port_WarpAbilities() < ABILITY_COUNT_END)
+        gAbilityCount = Port_WarpAbilities();
     gSecurityHatchLevelBackup = SECURITY_LEVEL_4;
     gEventCounter = sEvent;
     sEquipPending = TRUE;

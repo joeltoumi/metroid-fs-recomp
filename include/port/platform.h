@@ -81,6 +81,8 @@ int Port_WarpTarget(int index, int* area, int* room, int* event);
 unsigned int Port_WarpInterval(void);
 /* MF_WARP_DIRECT=1: game modes are entered right at boot. */
 int Port_WarpDirect(void);
+/* MF_WARP_ABILITIES=N: ability count (-1 = all). */
+int Port_WarpAbilities(void);
 /* Scripted input for the current target (PORT_WARP_SCRIPT_* in port.h). */
 void Port_WarpScript(int script);
 /* Which way Samus faces (the room script starts that way). */

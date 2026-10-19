@@ -7317,6 +7317,9 @@ void SamusUpdateGraphics(u8 direction)
                 else if (gEquipment.suitMiscStatus & SMF_VARIA_SUIT)
 #ifdef BUGFIX
                     pPalette = sSamusPal_Default_Row0_Varia;
+#elif defined(PLATFORM_PC)
+                    // Reads the palette after this one in the ROM (Varia's)
+                    pPalette = (const u16*)Port_RomMirror(sSamusPal_Default_Row0_Fusion) + PAL_ROW;
 #else // !BUGFIX
                     pPalette = sSamusPal_Default_Row0_Fusion + PAL_ROW;
 #endif // BUGFIX
