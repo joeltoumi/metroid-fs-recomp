@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "data/sprite_pointers.h"
 #include "sprites_AI/sprites.h"
 #include "gba/memory.h"
@@ -244,7 +245,6 @@ extern const u32 sAtmosphericStabilizerGfx[3 * 512];
 extern const u16 sAtmosphericStabilizerPal[3 * 16];
 extern const u8 sBlob_2e5cae_2e6160[1202];
 extern const u8 sBlob_2e6382_2e6ba4[];
-extern const u8 sBlob_39aa34_39f4b0[];
 extern const u32 sBlueXGfx[1024];
 extern const u16 sBlueXPal[2 * 16];
 extern const u32 sBlueZoroGfx[1 * 512];
@@ -837,8 +837,8 @@ const u32* const sSpritesGraphicsPointers[PSPRITE_END - 0x10] = {
 	[PSPRITE_SA_X_MONSTER - 0x10] = (const u32*)sSaXMonsterGfx,
 	[PSPRITE_ICE_BEAM_CORE_X - 0x10] = (const u32*)sIceBeamCoreXGfx,
 	[PSPRITE_OMEGA_METROID - 0x10] = (const u32*)sOmegaMetroidGfx,
-	[PSPRITE_GUNSHIP_END - 0x10] = (const u32*)((const u8*)sBlob_39aa34_39f4b0 + 0x324),
-	[PSPRITE_ELECTRIC_WATER_DAMAGE_BOX_2 - 0x10] = (const u32*)((const u8*)sBlob_39aa34_39f4b0 + 0x425c),
+	[PSPRITE_GUNSHIP_END - 0x10] = (const u32*)(((const u8*)((const u8*)sBlob_39aa34_39eb38 + 0x324))),
+	[PSPRITE_ELECTRIC_WATER_DAMAGE_BOX_2 - 0x10] = (const u32*)(((const u8*)sBlob_39ec90_39f4b0)),
 	[PSPRITE_FROZEN_RIDLEY - 0x10] = (const u32*)sFrozenRidleyGfx,
 	[PSPRITE_GOLD_SCISER_DOOR_LOCK - 0x10] = (const u32*)((const u8*)sBlob_2e6382_2e6ba4 + 0x2),
 	[PSPRITE_GOLD_ZEBESIAN_DOOR_LOCK - 0x10] = (const u32*)((const u8*)sBlob_2e6382_2e6ba4 + 0x2),
@@ -1031,8 +1031,8 @@ const u16* const sSpritesPalettePointers[PSPRITE_END - 0x10] = {
 	[PSPRITE_SA_X_MONSTER - 0x10] = (const u16*)sSaXMonsterPal,
 	[PSPRITE_ICE_BEAM_CORE_X - 0x10] = (const u16*)sIceBeamCoreXPal,
 	[PSPRITE_OMEGA_METROID - 0x10] = (const u16*)sOmegaMetroidPal,
-	[PSPRITE_GUNSHIP_END - 0x10] = (const u16*)((const u8*)sBlob_39aa34_39f4b0 + 0x3b24),
-	[PSPRITE_ELECTRIC_WATER_DAMAGE_BOX_2 - 0x10] = (const u16*)((const u8*)sBlob_39aa34_39f4b0 + 0x4a5c),
+	[PSPRITE_GUNSHIP_END - 0x10] = (const u16*)(((const u8*)((const u8*)sBlob_39aa34_39eb38 + 0x3b24))),
+	[PSPRITE_ELECTRIC_WATER_DAMAGE_BOX_2 - 0x10] = (const u16*)(((const u8*)((const u8*)sBlob_39ec90_39f4b0 + 0x800))),
 	[PSPRITE_FROZEN_RIDLEY - 0x10] = (const u16*)sFrozenRidleyPal,
 	[PSPRITE_GOLD_SCISER_DOOR_LOCK - 0x10] = (const u16*)((const u8*)sBlob_2e6382_2e6ba4 + 0x802),
 	[PSPRITE_GOLD_ZEBESIAN_DOOR_LOCK - 0x10] = (const u16*)((const u8*)sBlob_2e6382_2e6ba4 + 0x802),

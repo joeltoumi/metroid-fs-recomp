@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef SRAM_FILES_H
 #define SRAM_FILES_H
 
@@ -30,7 +31,6 @@
 /* PORT: static in src/data/menus/pause_debug.c (0x0858217b), must be made visible for the native build */
 extern const u8 sBlob_58217b_58225c[];
 /* PORT: static in src/data/sram_pointers.c (0x08582288), must be made visible for the native build */
-extern const u8 sBlob_582288_58b3cc[];
 
 /* 0x085821e8: 16 bytes written to SRAM 0x7fe0 to test the SRAM ("Met4AGB_BackUp01") */
 #define sSramTestString (sBlob_58217b_58225c + 0x6D)
@@ -42,15 +42,15 @@ extern const u8 sBlob_582288_58b3cc[];
 #define sSramHeaderVersionString (sBlob_58217b_58225c + 0xCD)
 
 /* 0x08582288: "SELECTSAVENUMBER" + "ENDDATA_SEL_SAVE" */
-#define sSramMostRecentFileStrings (sBlob_582288_58b3cc + 0x0)
+#define sSramMostRecentFileStrings (sBlob_582288_582a3c)
 /* 0x085822a8: "STARTKEYLANGUAGE" + "ENDKEY_LANGUAGE_" */
-#define sSramLanguageStrings (sBlob_582288_58b3cc + 0x20)
+#define sSramLanguageStrings (((const u8*)sBlob_582288_582a3c + 0x20))
 /* 0x085822c8: default button assignments */
-#define sSramDefaultButtonAssignments (*(const struct ButtonAssignments*)(sBlob_582288_58b3cc + 0x40))
+#define sSramDefaultButtonAssignments (*(const struct ButtonAssignments*)(((const u8*)sBlob_582288_582a3c + 0x40)))
 /* 0x085822d4: in game timer of a new file */
-#define sSramDefaultInGameTimer (*(const struct InGameTime*)(sBlob_582288_58b3cc + 0x4C))
+#define sSramDefaultInGameTimer (*(const struct InGameTime*)(((const u8*)sBlob_582288_582a3c + 0x4c)))
 /* 0x085822e4: default boot debug options */
-#define sSramDefaultBootDebugOptions (*(const struct BootDebugOptions*)(sBlob_582288_58b3cc + 0x5C))
+#define sSramDefaultBootDebugOptions (*(const struct BootDebugOptions*)(((const u8*)sBlob_582288_582a3c + 0x5c)))
 
 /* ---------------------------------------------------------------------------------------------- */
 /* Structures                                                                                      */

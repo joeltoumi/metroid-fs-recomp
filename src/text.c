@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "text.h"
 
 #include "globals.h"
@@ -36,7 +37,37 @@ static u32 sArray_79c14c[9] = {
     [8] = UINT_MAX
 };
 
-static u8 sBlob_79c170_79c27c[] = INCBIN_U8("data/Blob_79c170_79c27c.bin");
+const void* sPointers_79c170[3] = {
+    (const void*)unk_7bde0,
+    (const void*)NavigationConversationUpdateXParasitePopUp,
+    (const void*)NavigationConversationClearPopUpGraphics,
+};
+
+u8 sBlob_79c17c_79c228[172] = INCBIN_U8("data/Blob_79c17c_79c228.bin");
+
+const void* sPointers_79c228[21] = {
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x6534),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x7924),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x6534),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x7924),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x58bc),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x6c48),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x5e8c),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x7288),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x5ba0),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x6f44),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x61c0),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x7600),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x6908),
+    (const void*)((const u8*)sBlob_582bbc_58b3cc + 0x7cf8),
+    (const void*)&sFrameData_582a3c[0],
+    (const void*)&sFrameData_582a3c[0],
+    (const void*)&sFrameData_582b24[0],
+    (const void*)&sFrameData_582b7c[0],
+    (const void*)&sFrameData_582b8c[0],
+    (const void*)&sFrameData_582b9c[0],
+    (const void*)&sFrameData_582bac[0],
+};
 
  /**
  * @brief 79118 | 24 | Gets the width of a text character

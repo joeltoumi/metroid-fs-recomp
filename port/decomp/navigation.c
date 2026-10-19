@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "navigation.h"
 
 #include "globals.h"
@@ -1762,7 +1763,7 @@ void NavigationConversationLoadPopUpGraphics(void)
     DMA3_FILL_32(0, (u8*)PALRAM_BASE + 0x3E0, PAL_ROW_SIZE);
 }
 
-/* Original reads these from sBlob_79c170_79c27c (0x0879c170) */
+/* Original reads these from &sPointers_79c170[0] (0x0879c170) */
 static void (*const sNavigationPopUpFunctions[3])(void) = {
     unk_7bde0,
     NavigationConversationUpdateXParasitePopUp,
@@ -1780,7 +1781,7 @@ void NavigationConversationUpdatePopUp(void)
 
     PAUSE_SCREEN_DATA.unk_21B++;
     // PORT: currentPopUp is only ever 0-3; out of range values index past the table (the original reads
-    // whatever follows in sBlob_79c170_79c27c)
+    // whatever follows in &sPointers_79c170[0])
     sNavigationPopUpFunctions[PAUSE_SCREEN_DATA.currentPopUp - 1]();
 
     if (PAUSE_SCREEN_DATA.unk_21D != 0)

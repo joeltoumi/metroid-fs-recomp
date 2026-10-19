@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef PORT_DECOMP_CUTSCENES_2_H
 #define PORT_DECOMP_CUTSCENES_2_H
 
@@ -119,8 +120,6 @@ struct CutsceneMonologueData {
 extern u8 gUnk_3001238;
 
 // Static blobs of src/data/new_file_intro_data.c (need to be made non-static for the native build)
-extern const u8 sBlob_6131c8_63a19c[];
-extern const u8 sBlob_6638a0_682fac[];
 
 // Prototypes of functions from cutscenes_1.c
 u8 CutsceneRestrictedLabDetachingSetupOam(u8 type, u16 xPosition, u16 yPosition);

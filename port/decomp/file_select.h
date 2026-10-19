@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef PORT_DECOMP_FILE_SELECT_H
 #define PORT_DECOMP_FILE_SELECT_H
 
@@ -111,9 +112,8 @@ enum FileSelectOamType {
     FILE_SELECT_OAM_TYPE_NEW_GAME_YES_NO_CURSOR,
 };
 
-// Static data blob of src/data/sa_x_close_up.c (sBlob_73421e_7478a0, ROM 0x0873421e)
-extern const u8 sBlob_73421e_7478a0[];
-#define BLOB_73421E(off) (&sBlob_73421e_7478a0[(off)])
+// Static data blob of src/data/sa_x_close_up.c (sBlob_73421e_73c274, ROM 0x0873421e)
+#define BLOB_73421E(off) (&sBlob_73421e_73c274[(off)])
 // src/data/text_data.c
 extern const u8 sCharactersGfx[192 * 1024];
 

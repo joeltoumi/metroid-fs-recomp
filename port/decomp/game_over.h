@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef PORT_DECOMP_GAME_OVER_H
 #define PORT_DECOMP_GAME_OVER_H
 
@@ -44,9 +45,8 @@ struct GameOverData {
 #define GAME_OVER_OAM_TYPE_CURSOR 1
 #define GAME_OVER_OAM_TYPE_FOLLOW_CURSOR 2
 
-// Static data blob of src/data/sa_x_close_up.c (sBlob_73421e_7478a0, ROM 0x0873421e)
-extern const u8 sBlob_73421e_7478a0[];
-#define BLOB_73421E(off) (&sBlob_73421e_7478a0[(off)])
+// Static data blob of src/data/sa_x_close_up.c (sBlob_73421e_73c274, ROM 0x0873421e)
+#define BLOB_73421E(off) (&sBlob_73421e_73c274[(off)])
 
 // PORT: the frame data below lives inside a raw binary blob and holds GBA ROM pointers,
 // it must be decoded into real struct FrameData arrays for a native build.

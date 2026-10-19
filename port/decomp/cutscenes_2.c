@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "cutscenes_2.h"
 #include "gba.h"
 #include "macros.h"
@@ -23,23 +24,23 @@ asm(".set gUnk_3001238, 0x03001238");
 
 // PORT: these blob regions contain struct FrameData arrays (with 32-bit ROM pointers) and small
 // tables; for the native build they must be provided as real typed data at these blob offsets.
-#define sCutsceneBslExplodingExplosionOam ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d62c)) // 0x08680ecc
-#define sCutsceneBslExplodingBslNearOam ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d75c))   // 0x08680ffc
-#define sCutsceneBslExplodingBslFarOam ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d76c))    // 0x0868100c
-#define sCutsceneBslExplodingFlashPal ((const u16*)(sBlob_6638a0_682fac + 0x1d77c))                  // 0x0868101c
-#define sCutsceneBslExplodingObjPal ((const u16*)(sBlob_6638a0_682fac + 0x1d97c))                    // 0x0868121c
-#define sCutsceneBslExplodingBgPal ((const u16*)(sBlob_6638a0_682fac + 0x1ecfc))                     // 0x0868259c
-#define sCutsceneBslExplodingObjGfx (sBlob_6638a0_682fac + 0x19f2c)                                  // 0x0867d7cc
-#define sCutsceneBslExplodingBgGfx (sBlob_6638a0_682fac + 0x15b80)                                   // 0x08679420
-#define sCutsceneBslExplodingTileTable0 (sBlob_6638a0_682fac + 0x1e17c)                              // 0x08681a1c
-#define sCutsceneBslExplodingTileTable1 (sBlob_6638a0_682fac + 0x1e804)                              // 0x086820a4
-#define sCutsceneBslExplodingTileTable2 (sBlob_6638a0_682fac + 0x1ef08)                              // 0x086827a8
-#define sCutsceneBslExplodingTileTable3 (sBlob_6638a0_682fac + 0x1f35c)                              // 0x08682bfc
-#define sCutsceneMonologueCursorOam_Moving ((const struct FrameData*)(sBlob_6638a0_682fac + 0x5bc)) // 0x08663e5c
-#define sCutsceneMonologueCursorOam_Idle ((const struct FrameData*)(sBlob_6638a0_682fac + 0x5d4))   // 0x08663e74
-#define sCutsceneMonologueOamXFlipOffsets ((const u8*)(sBlob_6638a0_682fac + 0x1eefc))              // 0x0868279c [3][4]
-#define sCutsceneOamXFlipOffsets ((const u8*)(sBlob_6131c8_63a19c + 0x26fbc))                       // 0x0863a184 [3][4]
-#define sCutsceneOamYFlipOffsets ((const u8*)(sBlob_6131c8_63a19c + 0x26fc8))                       // 0x0863a190 [3][4]
+#define sCutsceneBslExplodingExplosionOam ((const struct FrameData*)(&sFrameData_680ecc[0])) // 0x08680ecc
+#define sCutsceneBslExplodingBslNearOam ((const struct FrameData*)(&sFrameData_680ffc[0]))   // 0x08680ffc
+#define sCutsceneBslExplodingBslFarOam ((const struct FrameData*)(&sFrameData_68100c[0]))    // 0x0868100c
+#define sCutsceneBslExplodingFlashPal ((const u16*)(sBlob_68101c_682fac))                  // 0x0868101c
+#define sCutsceneBslExplodingObjPal ((const u16*)(((const u8*)sBlob_68101c_682fac + 0x200)))                    // 0x0868121c
+#define sCutsceneBslExplodingBgPal ((const u16*)(((const u8*)sBlob_68101c_682fac + 0x1580)))                     // 0x0868259c
+#define sCutsceneBslExplodingObjGfx (((const u8*)sBlob_679420_680d54 + 0x43ac))                                  // 0x0867d7cc
+#define sCutsceneBslExplodingBgGfx (sBlob_679420_680d54)                                   // 0x08679420
+#define sCutsceneBslExplodingTileTable0 (((const u8*)sBlob_68101c_682fac + 0xa00))                              // 0x08681a1c
+#define sCutsceneBslExplodingTileTable1 (((const u8*)sBlob_68101c_682fac + 0x1088))                              // 0x086820a4
+#define sCutsceneBslExplodingTileTable2 (((const u8*)sBlob_68101c_682fac + 0x178c))                              // 0x086827a8
+#define sCutsceneBslExplodingTileTable3 (((const u8*)sBlob_68101c_682fac + 0x1be0))                              // 0x08682bfc
+#define sCutsceneMonologueCursorOam_Moving ((const struct FrameData*)(&sFrameData_663e5c[0])) // 0x08663e5c
+#define sCutsceneMonologueCursorOam_Idle ((const struct FrameData*)(&sFrameData_663e74[0]))   // 0x08663e74
+#define sCutsceneMonologueOamXFlipOffsets ((const u8*)(((const u8*)sBlob_68101c_682fac + 0x1780)))              // 0x0868279c [3][4]
+#define sCutsceneOamXFlipOffsets ((const u8*)(((const u8*)sBlob_636438_63a19c + 0x3d4c)))                       // 0x0863a184 [3][4]
+#define sCutsceneOamYFlipOffsets ((const u8*)(((const u8*)sBlob_636438_63a19c + 0x3d58)))                       // 0x0863a190 [3][4]
 
 #ifdef CUTSCENES_2_EQUIV
 // Equivalence testing only: store the original ROM addresses of the callbacks so that

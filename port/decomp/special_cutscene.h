@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef SPECIAL_CUTSCENE_H
 #define SPECIAL_CUTSCENE_H
 
@@ -11,13 +12,12 @@
 // Data
 // ---------------------------------------------------------------------------
 
-// Data used here lives inside the (static) blob sBlob_6131c8_63a19c of
+// Data used here lives inside the (static) blob sBlob_6131c8_6331ec of
 // src/data/new_file_intro_data.c (0x086131c8 .. 0x0863a19c)
 // PORT: that blob is declared static in the decomp; the native build must
 // make it visible (or provide these tables) for this extern to resolve.
-extern const u8 sBlob_6131c8_63a19c[];
 
-#define SPECIAL_CUTSCENE_BLOB(offset) (&sBlob_6131c8_63a19c[(offset)])
+#define SPECIAL_CUTSCENE_BLOB(offset) (&sBlob_6131c8_6331ec[(offset)])
 
 // Died on SR388 collision
 #define sDiedOnSr388CollisionObjGfx ((const u8*)SPECIAL_CUTSCENE_BLOB(0x1072C))                // 0x086238f4 (LZ77)

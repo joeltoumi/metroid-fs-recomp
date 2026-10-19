@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "language_select_eu.h"
 
 #ifdef REGION_EU
@@ -40,13 +41,13 @@ asm(".set LanguageSelectProcessSelected_Orig, 0x080a1a81");
 #define LANGUAGE_SELECT_CURSOR_Y 36
 #define LANGUAGE_SELECT_ROW_HEIGHT 16
 
-// Graphics and palette, inside sBlob_73421e_7478a0 (also present, unused, in the US ROM)
+// Graphics and palette, inside sBlob_73421e_73c274 (also present, unused, in the US ROM)
 #define sLanguageSelectObjectsGfx ((const u32*)BLOB_73421E(0x9a02)) // EU 0x0873e430, US 0x0873dc20
 #define sLanguageSelectObjectsPal ((const u16*)BLOB_73421E(0xcaea)) // EU 0x08741518, US 0x08740d08
 
 /*
- * EU only: 2 tables inserted at offset 0x1a0 of sBlob_79e868_79eca0 (EU 0x0879f23c and 0x0879f250),
- * indexed by the language cursor. The frame data is in sBlob_73421e_7478a0 (also in the US ROM).
+ * EU only: 2 tables inserted at offset 0x1a0 of &sPointers_79e868[0] (EU 0x0879f23c and 0x0879f250),
+ * indexed by the language cursor. The frame data is in sBlob_73421e_73c274 (also in the US ROM).
  * PORT: like the file select frame data, the pointed struct FrameData still hold GBA ROM pointers.
  */
 static const struct FrameData* const sLanguageSelectCursorOamPointers[LANGUAGE_SELECT_NBR_LANGUAGES] = {

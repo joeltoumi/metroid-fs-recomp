@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef PORT_DECOMP_CUTSCENES_1_H
 #define PORT_DECOMP_CUTSCENES_1_H
 
@@ -10,9 +11,8 @@
 #include "cutscenes_2.h"
 
 // Static data of src/data/new_file_intro_data.c (must be made non-static for the native build)
-extern const u8 sBlob_64e470_662804[];
 extern const u8 sBlob_662cfc_663820[];
-// (sBlob_6638a0_682fac is declared in cutscenes_2.h)
+// (sBlob_6638a0_663dd0 is declared in cutscenes_2.h)
 
 // Static data of src/new_file_intro.c (must be made non-static for the native build)
 extern u16** sMonologueTextPointers[];

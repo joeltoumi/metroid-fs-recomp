@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef PAUSE_SCREEN_PORT_H
 #define PAUSE_SCREEN_PORT_H
 
@@ -23,7 +24,6 @@ extern struct PauseScreenMaintainedInput gUnk_3005400;
 // ---------------------------------------------------------------------------
 
 // src/data/menus (static) : pause screen graphics/palettes/tilemaps
-extern const u8 sBlob_5657a8_575a60[];
 // src/data/event_data.c (static)
 extern const u8 sBlob_5760e8_576168[];
 // static blob containing navigation panel oam ids/positions
@@ -36,15 +36,14 @@ extern const u8 sMaintainedInputDelays[7];
 
 // Pointers to the frame data of every pause screen oam id (0x0879bec0)
 #ifdef PLATFORM_PC
-// PORT: in the ROM this is a blob of raw 32 bit ROM pointers (sBlob_79bec0_79c128),
+// PORT: in the ROM this is a blob of raw 32 bit ROM pointers (&sPointers_79bec0[0]),
 // the native build must provide it as a real pointer table.
 extern const struct FrameData* const sPauseScreenOamFramePointers[];
 #else
-extern u8 sBlob_79bec0_79c128[];
-#define sPauseScreenOamFramePointers ((const struct FrameData* const*)sBlob_79bec0_79c128)
+#define sPauseScreenOamFramePointers ((const struct FrameData* const*)&sPointers_79bec0[0])
 #endif
 
-#define PAUSE_SCREEN_BLOB(offset) (&sBlob_5657a8_575a60[(offset)])
+#define PAUSE_SCREEN_BLOB(offset) (&sBlob_5657a8_566848[(offset)])
 
 #define sPauseScreenBgPal_Base PAUSE_SCREEN_BLOB(0x0)                 // 0x085657a8
 #define sPauseScreenBgPal_Status PAUSE_SCREEN_BLOB(0x60)              // 0x08565808

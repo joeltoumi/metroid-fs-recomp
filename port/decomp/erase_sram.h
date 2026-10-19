@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef ERASE_SRAM_H
 #define ERASE_SRAM_H
 
@@ -15,41 +16,39 @@
 /* ---------------------------------------------------------------------------------------------- */
 
 /* PORT: static in src/data/sram_pointers.c (0x08582288), must be made visible for the native build */
-extern const u8 sBlob_582288_58b3cc[];
 /* PORT: static in src/text.c (0x0879c170), must be made visible for the native build */
-extern u8 sBlob_79c170_79c27c[];
 
 /* 0x085822f0: object palette (0x70 colors) */
-#define sEraseSramObjPal ((const u16*)(sBlob_582288_58b3cc + 0x68))
+#define sEraseSramObjPal ((const u16*)(((const u8*)sBlob_582288_582a3c + 0x68)))
 /* 0x085823d0: background palette (0x100 colors) */
-#define sEraseSramBgPal ((const u16*)(sBlob_582288_58b3cc + 0x148))
+#define sEraseSramBgPal ((const u16*)(((const u8*)sBlob_582288_582a3c + 0x148)))
 /* 0x08582bbc: LZ77 object graphics (VRAM 0x6012000) */
-#define sEraseSramObjGfx (sBlob_582288_58b3cc + 0x934)
+#define sEraseSramObjGfx (sBlob_582bbc_58b3cc)
 /* 0x0858340c: LZ77 background graphics (VRAM 0x6001000) */
-#define sEraseSramBgGfx (sBlob_582288_58b3cc + 0x1184)
+#define sEraseSramBgGfx (((const u8*)sBlob_582bbc_58b3cc + 0x850))
 /* 0x0858abe4: LZ77 BG1 tilemap */
-#define sEraseSramBg1Tilemap (sBlob_582288_58b3cc + 0x895C)
+#define sEraseSramBg1Tilemap (((const u8*)sBlob_582bbc_58b3cc + 0x8028))
 /* 0x0858adf0: LZ77 BG3 tilemap */
-#define sEraseSramBg3Tilemap (sBlob_582288_58b3cc + 0x8B68)
+#define sEraseSramBg3Tilemap (((const u8*)sBlob_582bbc_58b3cc + 0x8234))
 /* 0x0858b3b0: oam ids of the 4 options (yes/no of the 2 questions) */
-#define sEraseSramOptionsOamIds (sBlob_582288_58b3cc + 0x9128)
+#define sEraseSramOptionsOamIds (((const u8*)sBlob_582bbc_58b3cc + 0x87f4))
 /* 0x0858b3b4: sounds, indexed by the sound played by EraseSramCheckForInput (0 = none) */
-#define sEraseSramSounds ((const u16*)(sBlob_582288_58b3cc + 0x912C))
+#define sEraseSramSounds ((const u16*)(((const u8*)sBlob_582bbc_58b3cc + 0x87f8)))
 /* 0x0858b3be: (x, y) position of the 2 questions */
-#define sEraseSramQuestionsPositions ((const u8 (*)[2])(sBlob_582288_58b3cc + 0x9136))
+#define sEraseSramQuestionsPositions ((const u8 (*)[2])(((const u8*)sBlob_582bbc_58b3cc + 0x8802)))
 /* 0x0858b3c2: (x, y) offset of the cursor for each option */
-#define sEraseSramCursorOffsets ((const s8 (*)[2])(sBlob_582288_58b3cc + 0x913A))
+#define sEraseSramCursorOffsets ((const s8 (*)[2])(((const u8*)sBlob_582bbc_58b3cc + 0x8806)))
 
 /*
  * PORT: 0x0879c228, per language (LZ77 graphics of the text, LZ77 graphics of the text objects) pointers.
  * This blob holds raw 32-bit GBA pointers; the native port has to provide a real pointer table here.
  */
-#define sEraseSramTextGfxPointers ((const u8* const (*)[2])(sBlob_79c170_79c27c + 0xB8))
+#define sEraseSramTextGfxPointers ((const u8* const (*)[2])(&sPointers_79c228[0]))
 /*
  * PORT: 0x0879c260, oam animations of the menu objects (indexed by oam id, 0 unused).
  * This blob holds raw 32-bit GBA pointers; the native port has to provide a real pointer table here.
  */
-#define sEraseSramOam ((const struct FrameData* const*)(sBlob_79c170_79c27c + 0xF0))
+#define sEraseSramOam ((const struct FrameData* const*)(&sPointers_79c228[14]))
 
 /* ---------------------------------------------------------------------------------------------- */
 /* Structures                                                                                      */

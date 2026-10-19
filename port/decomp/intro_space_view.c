@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "globals.h"
 #include "gba.h"
 #include "macros.h"
@@ -16,7 +17,7 @@
 #include "intro_space_view.h"
 
 /*
- * Same content as the ROM table at 0x0879c394 (sBlob_79c394_79c3c8, first 6 entries).
+ * Same content as the ROM table at 0x0879c394 (&sPointers_79c394[0], first 6 entries).
  * PORT: the original indexes that ROM table with pOam->unk_4, which only ever
  * holds 0-5 here; out-of-range indexes would read the following ROM pointers.
  */

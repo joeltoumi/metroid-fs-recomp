@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "gba.h"
 #include "macros.h"
 #include "globals.h"
@@ -17,69 +18,69 @@
 void UpdateAudio(void);
 
 // PORT: the following tables are typed copies of the pointer tables stored in
-// sBlob_79c448_79c5a4 (0x879c4a8..0x879c5a4), so they can be used on 64-bit.
+// &sPointers_79c448[0] (0x879c4a8..0x879c5a4), so they can be used on 64-bit.
 // They are indexed by gCurrentCutscene - 1 (9 entries, cutscenes 1..9).
 
 // 0x879c4a8
 static const u16* const sMonologueBgPalPointers[9] = {
-    (const u16*)(sBlob_6638a0_682fac + 0x20),
-    (const u16*)(sBlob_6638a0_682fac + 0x71c8),
-    (const u16*)(sBlob_6638a0_682fac + 0x20),
-    (const u16*)(sBlob_6638a0_682fac + 0x20),
-    (const u16*)(sBlob_6638a0_682fac + 0x71c8),
-    (const u16*)(sBlob_6638a0_682fac + 0xe164),
-    (const u16*)(sBlob_6638a0_682fac + 0x20),
-    (const u16*)(sBlob_6638a0_682fac + 0x20),
-    (const u16*)(sBlob_6638a0_682fac + 0x20)
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x20)),
+    (const u16*)(sBlob_66aa68_6719cc),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x20)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x20)),
+    (const u16*)(sBlob_66aa68_6719cc),
+    (const u16*)(sBlob_671a04_679280),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x20)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x20)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x20))
 };
 
 // 0x879c4cc
 static const u16* const sMonologueObjPalPointers[9] = {
-    (const u16*)(sBlob_6638a0_682fac + 0x180),
-    (const u16*)(sBlob_6638a0_682fac + 0x180),
-    (const u16*)(sBlob_6638a0_682fac + 0x180),
-    (const u16*)(sBlob_6638a0_682fac + 0x180),
-    (const u16*)(sBlob_6638a0_682fac + 0x7328),
-    (const u16*)(sBlob_6638a0_682fac + 0xe2c4),
-    (const u16*)(sBlob_6638a0_682fac + 0x180),
-    (const u16*)(sBlob_6638a0_682fac + 0x180),
-    (const u16*)(sBlob_6638a0_682fac + 0x180)
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x180)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x180)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x180)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x180)),
+    (const u16*)(((const u8*)sBlob_66aa68_6719cc + 0x160)),
+    (const u16*)(((const u8*)sBlob_671a04_679280 + 0x160)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x180)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x180)),
+    (const u16*)(((const u8*)sBlob_6638a0_663dd0 + 0x180))
 };
 
 // 0x879c4f0
 static const u8* const sMonologueBgGfxPointers[9] = {
-    sBlob_64e470_662804 + 0xdff8,
-    sBlob_6638a0_682fac + 0x60c,
-    sBlob_64e470_662804 + 0xdff8,
-    sBlob_64e470_662804 + 0xdff8,
-    sBlob_6638a0_682fac + 0x60c,
-    sBlob_6638a0_682fac + 0x7c84,
-    sBlob_64e470_662804 + 0xdff8,
-    sBlob_64e470_662804 + 0xdff8,
-    sBlob_64e470_662804 + 0xdff8
+    ((const u8*)sBlob_65c268_662804 + 0x200),
+    sBlob_663eac_66aa30,
+    ((const u8*)sBlob_65c268_662804 + 0x200),
+    ((const u8*)sBlob_65c268_662804 + 0x200),
+    sBlob_663eac_66aa30,
+    ((const u8*)sBlob_66aa68_6719cc + 0xabc),
+    ((const u8*)sBlob_65c268_662804 + 0x200),
+    ((const u8*)sBlob_65c268_662804 + 0x200),
+    ((const u8*)sBlob_65c268_662804 + 0x200)
 };
 
 // 0x879c514
 static const u8* const sMonologueObjGfxPointers[9] = {
-    sBlob_64e470_662804 + 0x117b4,
-    sBlob_64e470_662804 + 0x117b4,
-    sBlob_64e470_662804 + 0x117b4,
-    sBlob_64e470_662804 + 0x117b4,
-    sBlob_6638a0_682fac + 0x4378,
-    sBlob_6638a0_682fac + 0xb378,
-    sBlob_64e470_662804 + 0x117b4,
-    sBlob_64e470_662804 + 0x117b4,
-    sBlob_64e470_662804 + 0x117b4
+    ((const u8*)sBlob_65c268_662804 + 0x39bc),
+    ((const u8*)sBlob_65c268_662804 + 0x39bc),
+    ((const u8*)sBlob_65c268_662804 + 0x39bc),
+    ((const u8*)sBlob_65c268_662804 + 0x39bc),
+    ((const u8*)sBlob_663eac_66aa30 + 0x3d6c),
+    ((const u8*)sBlob_66aa68_6719cc + 0x41b0),
+    ((const u8*)sBlob_65c268_662804 + 0x39bc),
+    ((const u8*)sBlob_65c268_662804 + 0x39bc),
+    ((const u8*)sBlob_65c268_662804 + 0x39bc)
 };
 
 // 0x879c538
 static const u8* const sMonologueTilemapPointers[9] = {
     sBlob_662cfc_663820 + 0x0,
-    sBlob_6638a0_682fac + 0x73e8,
+    ((const u8*)sBlob_66aa68_6719cc + 0x220),
     sBlob_662cfc_663820 + 0x0,
     sBlob_662cfc_663820 + 0x0,
-    sBlob_6638a0_682fac + 0x73e8,
-    sBlob_6638a0_682fac + 0xe384,
+    ((const u8*)sBlob_66aa68_6719cc + 0x220),
+    ((const u8*)sBlob_671a04_679280 + 0x220),
     sBlob_662cfc_663820 + 0x0,
     sBlob_662cfc_663820 + 0x0,
     sBlob_662cfc_663820 + 0x0
@@ -88,66 +89,66 @@ static const u8* const sMonologueTilemapPointers[9] = {
 // 0x879c55c
 // PORT: these point to frame data inside a byte blob (4-byte pointers on GBA)
 static const struct FrameData* const sMonologueOamPointers[9][2] = {
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x530), (const struct FrameData*)(sBlob_6638a0_682fac + 0x558) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x530), (const struct FrameData*)(sBlob_6638a0_682fac + 0x558) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x530), (const struct FrameData*)(sBlob_6638a0_682fac + 0x558) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x530), (const struct FrameData*)(sBlob_6638a0_682fac + 0x558) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x7190), (const struct FrameData*)(sBlob_6638a0_682fac + 0x71b8) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0xe12c), (const struct FrameData*)(sBlob_6638a0_682fac + 0xe154) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x530), (const struct FrameData*)(sBlob_6638a0_682fac + 0x558) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x530), (const struct FrameData*)(sBlob_6638a0_682fac + 0x558) },
-    { (const struct FrameData*)(sBlob_6638a0_682fac + 0x530), (const struct FrameData*)(sBlob_6638a0_682fac + 0x558) }
+    { (const struct FrameData*)(&sFrameData_663dd0[0]), (const struct FrameData*)(&sFrameData_663df8[0]) },
+    { (const struct FrameData*)(&sFrameData_663dd0[0]), (const struct FrameData*)(&sFrameData_663df8[0]) },
+    { (const struct FrameData*)(&sFrameData_663dd0[0]), (const struct FrameData*)(&sFrameData_663df8[0]) },
+    { (const struct FrameData*)(&sFrameData_663dd0[0]), (const struct FrameData*)(&sFrameData_663df8[0]) },
+    { (const struct FrameData*)(&sFrameData_66aa30[0]), (const struct FrameData*)(&sFrameData_66aa58[0]) },
+    { (const struct FrameData*)(&sFrameData_6719cc[0]), (const struct FrameData*)(&sFrameData_6719f4[0]) },
+    { (const struct FrameData*)(&sFrameData_663dd0[0]), (const struct FrameData*)(&sFrameData_663df8[0]) },
+    { (const struct FrameData*)(&sFrameData_663dd0[0]), (const struct FrameData*)(&sFrameData_663df8[0]) },
+    { (const struct FrameData*)(&sFrameData_663dd0[0]), (const struct FrameData*)(&sFrameData_663df8[0]) }
 };
 
 // Data inside the blobs, named by their ROM address
-#define sMonologueTextGfx_65fb5c (sBlob_64e470_662804 + 0x116ec)
+#define sMonologueTextGfx_65fb5c (((const u8*)sBlob_65c268_662804 + 0x38f4))
 #define sMonologueTextTilemap_663598 (sBlob_662cfc_663820 + 0x89c)
 #define sMonologueTextPal_6636a0 ((const u16*)(sBlob_662cfc_663820 + 0x9a4))
-#define sMonologueCursorPal_6638a0 ((const u16*)(sBlob_6638a0_682fac + 0x0))
-#define sMonologueCursorOam_663e5c ((const struct FrameData*)(sBlob_6638a0_682fac + 0x5bc))
-#define sFederationBgGfx_6724c0 (sBlob_6638a0_682fac + 0xec20)
-#define sFederationBgPal_674958 ((const u16*)(sBlob_6638a0_682fac + 0x110b8))
-#define sFederationTilemap_674ad8 (sBlob_6638a0_682fac + 0x11238)
-#define sSecretConversationBgGfx_675098 (sBlob_6638a0_682fac + 0x117f8)
-#define sSecretConversationBgPal_677874 ((const u16*)(sBlob_6638a0_682fac + 0x13fd4))
-#define sSecretConversationTilemap_677914 (sBlob_6638a0_682fac + 0x14074)
-#define sSecretConversationObjPal_677c10 ((const u16*)(sBlob_6638a0_682fac + 0x14370))
-#define sSecretConversationObjPal_677c30 ((const u16*)(sBlob_6638a0_682fac + 0x14390))
-#define sSecretConversationObjPal_677c50 ((const u16*)(sBlob_6638a0_682fac + 0x143b0))
-#define sSecretConversationObjPal_677c70 ((const u16*)(sBlob_6638a0_682fac + 0x143d0))
-#define sSecretConversationTilemap_677c90 (sBlob_6638a0_682fac + 0x143f0)
-#define sSecretConversationObjGfx_67815c (sBlob_6638a0_682fac + 0x148bc)
-#define sSecretConversationObjPal_6788a8 ((const u16*)(sBlob_6638a0_682fac + 0x15008))
-#define sSecretConversationOam_679280 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x159e0))
-#define sSecretConversationOam_6792a8 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x15a08))
-#define sSecretConversationOam_6792d0 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x15a30))
-#define sSecretConversationOam_679350 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x15ab0))
-#define sSecretConversationOam_6793a0 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x15b00))
-#define sSecretConversationOam_6793b0 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x15b10))
-#define sRestrictedLabBgGfx_679420 (sBlob_6638a0_682fac + 0x15b80)
-#define sRestrictedLabObjGfx_67d7cc (sBlob_6638a0_682fac + 0x19f2c)
-#define sRestrictedLabOam_680d54 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d4b4))
-#define sRestrictedLabOam_680d64 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d4c4))
-#define sRestrictedLabOam_680d74 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d4d4))
-#define sRestrictedLabOam_680d84 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d4e4))
-#define sRestrictedLabOam_680d94 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d4f4))
-#define sRestrictedLabOam_680da4 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d504))
-#define sRestrictedLabOam_680dcc ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d52c))
-#define sRestrictedLabOam_680e2c ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d58c))
-#define sRestrictedLabOam_680e3c ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d59c))
-#define sRestrictedLabOam_680f2c ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d68c))
-#define sRestrictedLabOam_680f74 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d6d4))
-#define sRestrictedLabOam_680f9c ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d6fc))
-#define sRestrictedLabOam_680fc4 ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d724))
-#define sRestrictedLabOam_680fec ((const struct FrameData*)(sBlob_6638a0_682fac + 0x1d74c))
-#define sRestrictedLabFadingPal_68101c ((const u16*)(sBlob_6638a0_682fac + 0x1d77c)) // 16 rows
-#define sRestrictedLabObjPal_68121c ((const u16*)(sBlob_6638a0_682fac + 0x1d97c))
-#define sRestrictedLabCyclingPal_68141c ((const u16*)(sBlob_6638a0_682fac + 0x1db7c)) // 4 rows
-#define sRestrictedLabCyclingPal_68161c ((const u16*)(sBlob_6638a0_682fac + 0x1dd7c)) // 4 rows
-#define sRestrictedLabCyclingPal_68181c ((const u16*)(sBlob_6638a0_682fac + 0x1df7c)) // 4 rows
-#define sRestrictedLabTilemap_681a1c (sBlob_6638a0_682fac + 0x1e17c)
-#define sRestrictedLabTilemap_6820a4 (sBlob_6638a0_682fac + 0x1e804)
-#define sRestrictedLabBgPal_68259c ((const u16*)(sBlob_6638a0_682fac + 0x1ecfc))
+#define sMonologueCursorPal_6638a0 ((const u16*)(sBlob_6638a0_663dd0))
+#define sMonologueCursorOam_663e5c ((const struct FrameData*)(&sFrameData_663e5c[0]))
+#define sFederationBgGfx_6724c0 (((const u8*)sBlob_671a04_679280 + 0xabc))
+#define sFederationBgPal_674958 ((const u16*)(((const u8*)sBlob_671a04_679280 + 0x2f54)))
+#define sFederationTilemap_674ad8 (((const u8*)sBlob_671a04_679280 + 0x30d4))
+#define sSecretConversationBgGfx_675098 (((const u8*)sBlob_671a04_679280 + 0x3694))
+#define sSecretConversationBgPal_677874 ((const u16*)(((const u8*)sBlob_671a04_679280 + 0x5e70)))
+#define sSecretConversationTilemap_677914 (((const u8*)sBlob_671a04_679280 + 0x5f10))
+#define sSecretConversationObjPal_677c10 ((const u16*)(((const u8*)sBlob_671a04_679280 + 0x620c)))
+#define sSecretConversationObjPal_677c30 ((const u16*)(((const u8*)sBlob_671a04_679280 + 0x622c)))
+#define sSecretConversationObjPal_677c50 ((const u16*)(((const u8*)sBlob_671a04_679280 + 0x624c)))
+#define sSecretConversationObjPal_677c70 ((const u16*)(((const u8*)sBlob_671a04_679280 + 0x626c)))
+#define sSecretConversationTilemap_677c90 (((const u8*)sBlob_671a04_679280 + 0x628c))
+#define sSecretConversationObjGfx_67815c (((const u8*)sBlob_671a04_679280 + 0x6758))
+#define sSecretConversationObjPal_6788a8 ((const u16*)(((const u8*)sBlob_671a04_679280 + 0x6ea4)))
+#define sSecretConversationOam_679280 ((const struct FrameData*)(&sFrameData_679280[0]))
+#define sSecretConversationOam_6792a8 ((const struct FrameData*)(&sFrameData_6792a8[0]))
+#define sSecretConversationOam_6792d0 ((const struct FrameData*)(&sFrameData_6792d0[0]))
+#define sSecretConversationOam_679350 ((const struct FrameData*)(&sFrameData_679350[0]))
+#define sSecretConversationOam_6793a0 ((const struct FrameData*)(&sFrameData_6793a0[0]))
+#define sSecretConversationOam_6793b0 ((const struct FrameData*)(&sFrameData_6793b0[0]))
+#define sRestrictedLabBgGfx_679420 (sBlob_679420_680d54)
+#define sRestrictedLabObjGfx_67d7cc (((const u8*)sBlob_679420_680d54 + 0x43ac))
+#define sRestrictedLabOam_680d54 ((const struct FrameData*)(&sFrameData_680d54[0]))
+#define sRestrictedLabOam_680d64 ((const struct FrameData*)(&sFrameData_680d64[0]))
+#define sRestrictedLabOam_680d74 ((const struct FrameData*)(&sFrameData_680d74[0]))
+#define sRestrictedLabOam_680d84 ((const struct FrameData*)(&sFrameData_680d84[0]))
+#define sRestrictedLabOam_680d94 ((const struct FrameData*)(&sFrameData_680d94[0]))
+#define sRestrictedLabOam_680da4 ((const struct FrameData*)(&sFrameData_680da4[0]))
+#define sRestrictedLabOam_680dcc ((const struct FrameData*)(&sFrameData_680dcc[0]))
+#define sRestrictedLabOam_680e2c ((const struct FrameData*)(&sFrameData_680e2c[0]))
+#define sRestrictedLabOam_680e3c ((const struct FrameData*)(&sFrameData_680e3c[0]))
+#define sRestrictedLabOam_680f2c ((const struct FrameData*)(&sFrameData_680f2c[0]))
+#define sRestrictedLabOam_680f74 ((const struct FrameData*)(&sFrameData_680f74[0]))
+#define sRestrictedLabOam_680f9c ((const struct FrameData*)(&sFrameData_680f9c[0]))
+#define sRestrictedLabOam_680fc4 ((const struct FrameData*)(&sFrameData_680fc4[0]))
+#define sRestrictedLabOam_680fec ((const struct FrameData*)(&sFrameData_680fec[0]))
+#define sRestrictedLabFadingPal_68101c ((const u16*)(sBlob_68101c_682fac)) // 16 rows
+#define sRestrictedLabObjPal_68121c ((const u16*)(((const u8*)sBlob_68101c_682fac + 0x200)))
+#define sRestrictedLabCyclingPal_68141c ((const u16*)(((const u8*)sBlob_68101c_682fac + 0x400))) // 4 rows
+#define sRestrictedLabCyclingPal_68161c ((const u16*)(((const u8*)sBlob_68101c_682fac + 0x600))) // 4 rows
+#define sRestrictedLabCyclingPal_68181c ((const u16*)(((const u8*)sBlob_68101c_682fac + 0x800))) // 4 rows
+#define sRestrictedLabTilemap_681a1c (((const u8*)sBlob_68101c_682fac + 0xa00))
+#define sRestrictedLabTilemap_6820a4 (((const u8*)sBlob_68101c_682fac + 0x1088))
+#define sRestrictedLabBgPal_68259c ((const u16*)(((const u8*)sBlob_68101c_682fac + 0x1580)))
 
 #ifdef CUTSCENES_1_EQUIV
 // Equivalence testing only: store the original ROM addresses of the callbacks so that

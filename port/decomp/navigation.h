@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef NAVIGATION_H
 #define NAVIGATION_H
 
@@ -16,9 +17,7 @@
 /* static in src/data/menus/pause_debug.c (0x085766d4) */
 extern const u8 sBlob_5766D4_581510[];
 /* static in src/menus/pause_screen_map.c (0x0879bec0) */
-extern u8 sBlob_79bec0_79c128[];
 /* static in src/text.c (0x0879c170) */
-extern u8 sBlob_79c170_79c27c[];
 /* static in src/data/menus/pause_debug.c (0x08576217) */
 extern const u8 sBlob_576217_576234[];
 /* static in src/data/event_data.c (0x085760e8) */
@@ -86,12 +85,12 @@ struct NavigationPopUpConversation {
 /* 0x08581300: u16 [6][16], animated minimap palette colors */
 #define sNavigation_581300 ((const u16*)(sBlob_5766D4_581510 + 0xAC2C))
 /* 0x0879c17c: u8 [4], durations of the special conversation 0x35 */
-#define sNavigation_79c17c (sBlob_79c170_79c27c + 0xC)
+#define sNavigation_79c17c (sBlob_79c17c_79c228)
 /* 0x0879c180: u8 [36], oam ids of the navigation map compass */
-#define sNavigation_79c180 (sBlob_79c170_79c27c + 0x10)
+#define sNavigation_79c180 (((const u8*)sBlob_79c17c_79c228 + 0x4))
 /* 0x0879c1a4, 0x0879c210: s8 (x offset, y offset, oam id) triples */
-#define sNavigation_79c1a4 ((const s8*)(sBlob_79c170_79c27c + 0x34))
-#define sNavigation_79c210 ((const s8*)(sBlob_79c170_79c27c + 0xA0))
+#define sNavigation_79c1a4 ((const s8*)(((const u8*)sBlob_79c17c_79c228 + 0x28)))
+#define sNavigation_79c210 ((const s8*)(((const u8*)sBlob_79c17c_79c228 + 0x94)))
 
 /* 0x085766e0: u8 pairs, Y position of the text cursor object per text line (indexed by line * 2) */
 #define sNavigationTextCursorYPositions (sBlob_5766D4_581510 + 0xC)
@@ -110,9 +109,9 @@ struct NavigationPopUpConversation {
  * PORT: 0x0879c0f0, per language table of pointers to the navigation conversation texts.
  * This blob holds raw 32-bit GBA pointers; the native port has to provide a real pointer table here.
  */
-#define sNavigationConversationTextPointers ((const u16* const* const*)(sBlob_79bec0_79c128 + 0x230))
+#define sNavigationConversationTextPointers ((const u16* const* const*)(&sPointers_79bec0[140]))
 /* PORT: 0x0879c10c, per language table of pointers to the pause screen texts (indexed by event), raw GBA pointers */
-#define sPauseScreenTextPointers ((const u16* const* const*)(sBlob_79bec0_79c128 + 0x24C))
+#define sPauseScreenTextPointers ((const u16* const* const*)(&sPointers_79bec0[147]))
 
 /* ---------------------------------------------------------------------------------------------- */
 /* RAM without a linker.ld name                                                                    */

@@ -1323,7 +1323,7 @@ const struct CreditsEntry sCredits[310] = {
 	},
 };
 
-static const u8 sBlob_74dc48_74e620[] = INCBIN_U8("data/Blob_74dc48_74e620.bin");
+const u8 sBlob_74dc48_74e620[] = INCBIN_U8("data/Blob_74dc48_74e620.bin");
 
 const u32* const sPreResultsSamusBgGfxPointers1[4] = {
     sPreResultsSamusSuitedGfx3,
@@ -1346,7 +1346,7 @@ const u8* const sPreResultsSamusBgTilemapPointers[4] = {
     sTilemap_75e6fc
 };
 
-static const u8 sBlob_74e650_74eb50[] = INCBIN_U8("data/Blob_74e650_74eb50.bin");
+const u8 sBlob_74e650_74eb50[] = INCBIN_U8("data/Blob_74e650_74eb50.bin");
 
 const u32 sPreResultsSpaceBgGfx[4772] = INCBIN_U32("data/ending/space_bg.gfx.lz");
 

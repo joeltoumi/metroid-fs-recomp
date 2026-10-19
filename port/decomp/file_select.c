@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "file_select.h"
 #include "gba.h"
 #include "macros.h"
@@ -65,8 +66,8 @@ asm(".set unk_a1478_Orig, 0x080a1479");
 #endif
 
 /*
- * Typed copies of the pointer tables stored in sBlob_79e868_79eca0 (src/new_file_intro.c),
- * the pointed data is in sBlob_73421e_7478a0.
+ * Typed copies of the pointer tables stored in &sPointers_79e868[0] (src/new_file_intro.c),
+ * the pointed data is in sBlob_73421e_73c274.
  * PORT: the struct FrameData tables pointed to still hold GBA ROM pointers (see file_select.h).
  */
 static const u16* const sFileSelectTexts_879ea08[25] = { // 0x0879ea08

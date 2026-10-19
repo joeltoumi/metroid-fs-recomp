@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "macros.h"
 #include "oam.h"
 
@@ -21112,7 +21113,161 @@ const u32 sIntroArrivingAtBslSpaceMapTilemap[368] = INCBIN_U32("data/new_file_in
 const u32 sIntroSamusMonologueBgTilemap[368] = INCBIN_U32("data/new_file_intro/samus_monologue_bg.tm.lz");
 const u32 sIntroTilemap_5f65d8[238] = INCBIN_U32("data/new_file_intro/5f65d8.tm.lz");
 
-const u8 sBlob_5f6990_60093c[] = INCBIN_U8("data/Blob_5f6990_60093c.bin");
+const u8 sBlob_5f6990_5fe370[31200] = INCBIN_U8("data/Blob_5f6990_5fe370.bin");
+
+const struct FrameData sFrameData_5fe370[10] = {
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7548), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7592), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x75fa), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7662), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x76ca), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7732), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x77b8), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x783e), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x78c4), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5fe3c0[10] = {
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x78c4), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x783e), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x77b8), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7732), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x76ca), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7662), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x75fa), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7592), 8 },
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7548), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5fe410[2] = {
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x794a), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5fe420[2] = {
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x798e), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5fe430[2] = {
+    { (const u16*)((const u8*)sBlob_5f6990_5fe370 + 0x7548), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_5fe440_5ff4d8[4248] = INCBIN_U8("data/Blob_5fe440_5ff4d8.bin");
+
+const struct FrameData sFrameData_5ff4d8[11] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x5ca), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x538), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x49a), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x3fc), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x352), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x2a8), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x1fe), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x154), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xaa), 8 },
+    { (const u16*)sBlob_5fe440_5ff4d8, 100 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff530[2] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x5ca), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff540[8] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x5ca), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x65c), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x6ee), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x780), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x6ee), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x65c), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x5ca), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff580[5] = {
+    { (const u16*)sBlob_5fe440_5ff4d8, 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x812), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x8bc), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x812), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff5a8[2] = {
+    { (const u16*)sBlob_5fe440_5ff4d8, 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff5b8[6] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x966), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x9d4), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xa4e), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xaec), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xb8a), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff5e8[6] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xc72), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xce0), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xd72), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xe04), 4 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xe66), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff618[2] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xe98), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff628[2] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xea6), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff638[2] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xee4), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff648[15] = {
+    { (const u16*)sBlob_5fe440_5ff4d8, 50 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xaa), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x154), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x1fe), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x2a8), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x352), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x3fc), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x49a), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x538), 8 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x5ca), 50 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x5ca), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x65c), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x6ee), 12 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x780), 100 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff6c0[7] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xf16), 6 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xf54), 6 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xf92), 6 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0xfd0), 6 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x100e), 6 },
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x104c), 6 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_5ff6f8[2] = {
+    { (const u16*)((const u8*)sBlob_5fe440_5ff4d8 + 0x108a), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_5ff708_60093c[4660] = INCBIN_U8("data/Blob_5ff708_60093c.bin");
 
 const u32 sIntroSamusSittingGfx[4818] = INCBIN_U32("data/new_file_intro/samus_sitting.gfx.lz");
 const u16 sIntroSamusSittingPal[16 * PAL_ROW] = INCBIN_U16("data/new_file_intro/samus_sitting.pal");
@@ -21129,7 +21284,244 @@ const u16 sTitleScreenSpaceBackgroundPal[8 * PAL_ROW] = INCBIN_U16("data/menus/t
 
 const u32 sTitleScreenSpaceBackgroundTilemap[172] = INCBIN_U32("data/menus/title_screen/space_background.tm.lz");
 
-static const u8 sBlob_6094d0_60b148[] = INCBIN_U8("data/Blob_6094d0_60b148.bin");
+const u8 sBlob_6094d0_60ac08[5944] = INCBIN_U8("data/Blob_6094d0_60ac08.bin");
+
+const struct FrameData sFrameData_60ac08[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x3d8), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac18[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x3e0), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac28[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x3e8), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac38[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x3f0), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac48[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x3f8), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac58[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x400), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac68[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x408), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac78[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x410), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac88[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x418), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ac98[7] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x16d2), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x42e), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x16e6), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x16d2), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x42e), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x16fa), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60acd0[5] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1708), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x171c), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1724), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x171c), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60acf8[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x474), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ad08[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x482), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ad18[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x4a8), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ad28[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x4c2), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ad38[2] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x4d0), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ad48[12] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x8da), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x8e2), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x902), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x93a), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x984), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x9d4), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xa2a), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xa74), 7 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xaac), 8 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xac6), 9 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xada), 10 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ada8[5] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xae2), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xaf0), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xaf8), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xaf0), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60add0[5] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb06), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb14), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb1c), 1 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb14), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60adf8[4] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb2a), 140 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x8d8), 140 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb44), 180 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60ae18[31] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb5e), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb66), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb74), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb88), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xba2), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xbc2), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xbe8), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xc14), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xc46), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xc7e), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xcbc), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xd00), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xd4a), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xd9a), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xdf0), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xe4c), 100 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x8d8), 100 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xeae), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xeb6), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xec4), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xed8), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xef2), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xf12), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xf38), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xf64), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xf96), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xfce), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x100c), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1050), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x109a), 120 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60af10[26] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb5e), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb66), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb74), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xb88), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xba2), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xbc2), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xbe8), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xc14), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xc46), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xc7e), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xcbc), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xd00), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xd4a), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xd9a), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xdf0), 4 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0xe4c), 100 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x8d8), 100 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x10ea), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x10f2), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1100), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1114), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x112e), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x114e), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1174), 6 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11a0), 120 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_60afe0[45] = {
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11d2), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11da), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11e8), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11fc), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x124c), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x129c), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x12ec), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1342), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1380), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x13be), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x13fc), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1440), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1484), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x14c8), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1506), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1544), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x159a), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x15ea), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1634), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1666), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x168c), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x8d8), 200 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11d2), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11da), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11e8), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x11fc), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x124c), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x129c), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x12ec), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1342), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1380), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x13be), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x13fc), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1440), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1484), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x14c8), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1506), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1544), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x159a), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x15ea), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1634), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x1666), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x168c), 3 },
+    { (const u16*)((const u8*)sBlob_6094d0_60ac08 + 0x8d8), 126 },
+    FRAME_DATA_TERMINATOR
+};
 
 const u8 sIntroSpaceTilemap[1320] = INCBIN_U8("data/new_file_intro/space_bg.tm.lz");
 const u8 sIntroBslTilemap[1586] = INCBIN_U8("data/new_file_intro/bsl_bg.tm.lz");
@@ -21138,7 +21530,7 @@ static const u8 padding[2] = {0, 0};
 
 const u32 sIntroBslSpaceBgGfx[4421] = INCBIN_U32("data/new_file_intro/bsl_space_bg.gfx.lz");
 
-static const u8 sBlob_6101b8_612e48[] = INCBIN_U8("data/Blob_6101b8_612e48.bin");
+const u8 sBlob_6101b8_612e48[] = INCBIN_U8("data/Blob_6101b8_612e48.bin");
 
 const u16 sIntroBslSpaceBgPal[8 * PAL_ROW] = INCBIN_U16("data/new_file_intro/bsl_space_bg.pal");
 const u16 sPal_612f48[16 * PAL_ROW] = INCBIN_U16("data/new_file_intro/612f48.pal");
@@ -21182,7 +21574,733 @@ const struct FrameData sIntroNextPageArrowOam[5] = {
 
 const u16 sNextPageArrowPal[1 * PAL_ROW] = INCBIN_U16("data/new_file_intro/next_page_arrow.pal");
 
-static const u8 sBlob_6131c8_63a19c[] = INCBIN_U8("data/Blob_6131c8_63a19c.bin");
+const u8 sBlob_6131c8_6331ec[131108] = INCBIN_U8("data/Blob_6131c8_6331ec.bin");
+
+const struct FrameData sFrameData_6331ec[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 30 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cd58), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cd72), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cd8c), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cdb8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cdde), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ce04), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ce48), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ce8c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ced0), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633244[10] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ced0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ce8c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ce48), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ce04), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cdde), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cdb8), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cd8c), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cd72), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cd58), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633294[13] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cf26), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cf5e), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cfa8), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cff2), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d048), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d098), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d100), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d168), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d1dc), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d24a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d2c4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d33e), 50 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6332fc[13] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d33e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d2c4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d24a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d1dc), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d168), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d100), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d098), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d048), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cff2), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cfa8), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cf5e), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1cf26), 50 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633364[13] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d3c4), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d3ea), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d428), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d46c), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d4a4), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d506), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d568), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d5d0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d644), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d6be), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d744), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d7d0), 50 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6333cc[13] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d7d0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d744), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d6be), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d644), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d5d0), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d568), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d506), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d4a4), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d46c), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d428), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d3ea), 1 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d3c4), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633434[5] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d808), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d81c), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d830), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d844), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_63345c[5] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d844), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d830), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d81c), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d808), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633484[2] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d858), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633494[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d86e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d876), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d87e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d886), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d89a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d8ba), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d8e6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d954), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d9c2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1da3c), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6334ec[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1da3c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d9c2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d954), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d8e6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d8ba), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d89a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d886), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d87e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d876), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d86e), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633544[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dd10), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dd3c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dd68), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ddbe), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_63359c[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ddbe), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dd68), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dd3c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dd10), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6335f4[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1de14), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1de40), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1de6c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dec2), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_63364c[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dec2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1de6c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1de40), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1de14), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d866), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6336a4[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dab6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dabe), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dac6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dad4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dae8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1db08), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1db34), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dba2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dc10), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dc8a), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6336fc[11] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dc8a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dc10), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dba2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1db34), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1db08), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dae8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dad4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dac6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dabe), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dab6), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633754[2] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1df18), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633764[3] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1df18), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1df5c), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_63377c[2] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dfa6), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_63378c[3] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dfa6), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1dfea), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6337a4[8] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e034), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e03c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e044), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e04c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e05a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e086), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e0c4), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6337e4[8] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e0c4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e086), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e05a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e04c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e044), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e03c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e034), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633824[8] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e108), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e110), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e118), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e120), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e12e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e15a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e198), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633864[8] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e198), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e15a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e12e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e120), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e118), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e110), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e108), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6338a4[6] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1d844), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e1dc), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e1f0), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e204), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e1dc), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6338d4[32] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fa84), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fa8c), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fa94), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fa9c), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1faa4), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1faac), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fab4), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fabc), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fac4), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1facc), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fad4), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fadc), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fae4), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1faec), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1faf4), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fb14), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fb34), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fb5a), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fb7a), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fba0), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fbc6), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fbf2), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fc18), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fc44), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fc82), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fcc6), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fd04), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fd48), 21 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fd8c), 64 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fd8c), 255 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fd8c), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6339d4[79] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e218), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e27a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e2dc), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e33e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e3a0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e402), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e464), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e4c6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e528), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e27a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e2dc), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e33e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e3a0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e402), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e464), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e4c6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e528), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e596), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e5f8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e65a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e6bc), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e71e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e780), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e7e2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e844), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e8a6), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e914), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e976), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e9d8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ea3a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ea9c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1eafe), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1eb60), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ebc2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ec24), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ec92), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ecf4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ed56), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1edb8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ee1a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ee7c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1eede), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ef40), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1efa2), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f010), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f072), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f0d4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f136), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f198), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f1fa), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f25c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f2be), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f320), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f38e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f3f0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f452), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f4b4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f516), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f578), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f5da), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f63c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f69e), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f70c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f76e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f7d0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f832), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f894), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f8f6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f958), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f9ba), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f70c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f76e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f7d0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f832), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f894), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f8f6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f958), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f9ba), 60 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633c4c[14] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fde2), 81 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fdf0), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe68), 40 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe04), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe70), 40 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe18), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe78), 40 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe2c), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe80), 40 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe40), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe88), 40 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe54), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe88), 35 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633cbc[53] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e218), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e27a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e2dc), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e33e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e3a0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e402), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e464), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e4c6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e528), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e596), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e5f8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e65a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e6bc), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e71e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e780), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e7e2), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e844), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1e8a6), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ec92), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ecf4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ed56), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1edb8), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ee1a), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ee7c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1eede), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ef40), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1efa2), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f38e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f3f0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f452), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f4b4), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f516), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f578), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f5da), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f63c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f69e), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f70c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f76e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f7d0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f832), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f894), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f8f6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f958), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f9ba), 60 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f70c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f76e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f7d0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f832), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f894), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f8f6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f958), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f9ba), 60 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633e64[5] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe98), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fea0), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fea8), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fea0), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633e8c[2] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe90), 30 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633e9c[5] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1feb0), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1feb8), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fec0), 8 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1feb8), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633ec4[9] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f70c), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f76e), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f7d0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f832), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f894), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f8f6), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f958), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1f9ba), 60 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633f0c[3] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe88), 40 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fe54), 60 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633f24[3] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1fec8), 3 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x2001c), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_633f3c[3] = {
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ced0), 2 },
+    { (const u16*)((const u8*)sBlob_6131c8_6331ec + 0x1ffc6), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_633f54_636020[8396] = INCBIN_U8("data/Blob_633f54_636020.bin");
+
+const struct FrameData sFrameData_636020[3] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1acc), 100 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1ad4), 100 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636038[3] = {
+    { (const u16*)sBlob_633f54_636020, 100 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1ae2), 100 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636050[71] = {
+    { (const u16*)sBlob_633f54_636020, 131 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1ab8), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1aa4), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1a90), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1a7c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1a62), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1a42), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1a1c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x19f6), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x19ca), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1998), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1960), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x191c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x18d2), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1882), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1832), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x17d6), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x176e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x170c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x16a4), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1642), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x15d4), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1566), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x14f8), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x147e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1410), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x139c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x131c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x12a8), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x122e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x11ba), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1140), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x10cc), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x104c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xfc6), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xf46), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xeb4), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xe22), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xd96), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xd0a), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xc7e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xbf2), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xb5a), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xac2), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xa2a), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x9a4), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x91e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x89e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x82a), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x7bc), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x74e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x6e0), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x678), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x60a), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x596), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x522), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x4c6), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x458), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x3f0), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x388), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x326), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x2ca), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x26e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x20c), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1b0), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x15a), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x10a), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0xb4), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x5e), 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x8), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636288[3] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1aea), 2 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1af8), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6362a0[3] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1b06), 2 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1be0), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6362b8[12] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1ca8), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1cb0), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1cd0), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1d08), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1d52), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1da2), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1df8), 6 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1e42), 7 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1e7a), 8 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1e94), 9 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1ea8), 10 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636318[7] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f46), 5 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f4e), 5 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f56), 5 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f5e), 5 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f66), 5 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f6e), 5 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636350[5] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f76), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f7e), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f86), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f8e), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636378[5] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f96), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1f9e), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1fa6), 4 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1fae), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6363a0[3] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x1fb6), 3 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x2012), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6363b8[4] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x206e), 1 },
+    { (const u16*)sBlob_633f54_636020, 1 },
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x2076), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6363d8[2] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x2084), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6363e8[2] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x208c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6363f8[2] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x2094), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636408[2] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x209c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636418[2] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x20a4), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_636428[2] = {
+    { (const u16*)((const u8*)sBlob_633f54_636020 + 0x20b8), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_636438_63a19c[15716] = INCBIN_U8("data/Blob_636438_63a19c.bin");
 
 const u16 sCutsceneTextNone[2] = {
     CHAR_TERMINATOR, CHAR_TERMINATOR
@@ -21225,12 +22343,599 @@ const u32 sIntroSamusHelmetCloseupBgGfx3[812] = INCBIN_U32("data/new_file_intro/
 const u32 sIntroSamusHelmetCloseupBgGfx4[844] = INCBIN_U32("data/new_file_intro/samus_helmet_closeup_bg_4.gfx.lz");
 const u32 sIntroSamusHelmetCloseupBgGfx5[403] = INCBIN_U32("data/new_file_intro/samus_helmet_closeup_bg_5.gfx.lz");
 
-static const u8 sBlob_64e470_662804[] = INCBIN_U8("data/Blob_64e470_662804.bin");
+const u8 sBlob_64e470_65bb38[54984] = INCBIN_U8("data/Blob_64e470_65bb38.bin");
+
+const struct FrameData sFrameData_65bb38[57] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd6be), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd64), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd78), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd92), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbdac), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbdcc), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbdec), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbe0c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbe2c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbe4c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbe6c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbe8c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbeb8), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbee4), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbf10), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbf3c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbf68), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbf94), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbfc0), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbff2), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc02a), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc062), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc09a), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc0d2), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc10a), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc142), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc180), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc1c4), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc208), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc24c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc290), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc2d4), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc318), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc35c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc3a6), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc3f6), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc446), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc496), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc4e6), 10 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd6be), 10 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc4e6), 10 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd6be), 10 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc4e6), 10 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd6be), 10 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc536), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc58c), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc5e8), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc64a), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc6b2), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc720), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc782), 10 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc7f0), 6 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc876), 240 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc876), 240 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc876), 240 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc876), 240 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65bd00[9] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb780), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb7c4), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb802), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb846), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb88a), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb8c8), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb906), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb938), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65bd48[3] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb734), 30 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb760), 30 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65bd60[20] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd6be), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb970), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb978), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb980), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb988), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb990), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb998), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb9a0), 20 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb9a8), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb9c2), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xb9ee), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xba20), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xba58), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbaae), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbb16), 2 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbb84), 240 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbb84), 240 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbb84), 240 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbb84), 240 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65be00[34] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd6be), 114 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd69e), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd67e), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd658), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd638), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd618), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd5ec), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd5c0), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd594), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd568), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd53c), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd516), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd4f0), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd4c4), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd498), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd46c), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd440), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd414), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd3ee), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd3c2), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd39c), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd37c), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd350), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd324), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd2f8), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd2cc), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd2a0), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd27a), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd254), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd234), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd214), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd1e8), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd1bc), 3 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65bf10[56] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd190), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd164), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd138), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd10c), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd0e6), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd0c0), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd0a0), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd080), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd04e), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xd01c), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcfea), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcfb8), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcf92), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcf66), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcf40), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcf1a), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcefa), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xceda), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xceae), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xce82), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xce56), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xce2a), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcdfe), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcdd8), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcdb2), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcd92), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcd72), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcd4c), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcd26), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcd00), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xccda), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xccb4), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcc94), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcc74), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcc42), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcc10), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcbde), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcbac), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcb86), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcb5a), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcb34), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcb0e), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcaee), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcace), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xcaa2), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xca76), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xca4a), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xca1e), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc9f2), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc9cc), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc9a6), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc986), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc966), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc93a), 3 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xc90e), 3 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65c0d0[11] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbc10), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbc2a), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbc44), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbc5e), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbc78), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbc92), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbcac), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbcc6), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbce0), 1 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbcfa), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65c128[11] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd3c), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd34), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd2c), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd24), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd1c), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd14), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd5c), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd54), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd4c), 8 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd44), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65c180[11] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd5c), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd54), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd4c), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd44), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd3c), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd34), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd2c), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd24), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd1c), 80 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd14), 80 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65c1d8[11] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd44), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd3c), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd34), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd2c), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd24), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd1c), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd14), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd5c), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd54), 60 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd4c), 60 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_65c230[7] = {
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd34), 200 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd34), 200 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd34), 200 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd2c), 200 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd2c), 200 },
+    { (const u16*)((const u8*)sBlob_64e470_65bb38 + 0xbd2c), 200 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_65c268_662804[26012] = INCBIN_U8("data/Blob_65c268_662804.bin");
 
 const u32 sIntroTilemap_662804[318] = INCBIN_U32("data/new_file_intro/662804.tm.lz");
 
-static const u8 sBlob_662cfc_663820[] = INCBIN_U8("data/Blob_662cfc_663820.bin");
+const u8 sBlob_662cfc_663820[] = INCBIN_U8("data/Blob_662cfc_663820.bin");
 
 const u16 sIntroPal_663820[4 * PAL_ROW] = INCBIN_U16("data/new_file_intro/663820.pal");
 
-static const u8 sBlob_6638a0_682fac[] = INCBIN_U8("data/Blob_6638a0_682fac.bin");
+const u8 sBlob_6638a0_663dd0[1328] = INCBIN_U8("data/Blob_6638a0_663dd0.bin");
+
+const struct FrameData sFrameData_663dd0[5] = {
+    { (const u16*)((const u8*)sBlob_6638a0_663dd0 + 0x240), 120 },
+    { (const u16*)((const u8*)sBlob_6638a0_663dd0 + 0x392), 4 },
+    { (const u16*)((const u8*)sBlob_6638a0_663dd0 + 0x240), 4 },
+    { (const u16*)((const u8*)sBlob_6638a0_663dd0 + 0x392), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_663df8[2] = {
+    { (const u16*)((const u8*)sBlob_6638a0_663dd0 + 0x4e4), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_663e08_663e5c[84] = INCBIN_U8("data/Blob_663e08_663e5c.bin");
+
+const struct FrameData sFrameData_663e5c[3] = {
+    { (const u16*)sBlob_663e08_663e5c, 4 },
+    { (const u16*)((const u8*)sBlob_663e08_663e5c + 0xe), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_663e74[7] = {
+    { (const u16*)((const u8*)sBlob_663e08_663e5c + 0x1c), 6 },
+    { (const u16*)((const u8*)sBlob_663e08_663e5c + 0x2a), 6 },
+    { (const u16*)((const u8*)sBlob_663e08_663e5c + 0x38), 6 },
+    { (const u16*)((const u8*)sBlob_663e08_663e5c + 0x46), 6 },
+    { (const u16*)((const u8*)sBlob_663e08_663e5c + 0x38), 6 },
+    { (const u16*)((const u8*)sBlob_663e08_663e5c + 0x2a), 6 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_663eac_66aa30[27524] = INCBIN_U8("data/Blob_663eac_66aa30.bin");
+
+const struct FrameData sFrameData_66aa30[5] = {
+    { (const u16*)((const u8*)sBlob_663eac_66aa30 + 0x68b8), 120 },
+    { (const u16*)((const u8*)sBlob_663eac_66aa30 + 0x69f8), 4 },
+    { (const u16*)((const u8*)sBlob_663eac_66aa30 + 0x68b8), 4 },
+    { (const u16*)((const u8*)sBlob_663eac_66aa30 + 0x69f8), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_66aa58[2] = {
+    { (const u16*)((const u8*)sBlob_663eac_66aa30 + 0x6b38), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_66aa68_6719cc[28516] = INCBIN_U8("data/Blob_66aa68_6719cc.bin");
+
+const struct FrameData sFrameData_6719cc[5] = {
+    { (const u16*)((const u8*)sBlob_66aa68_6719cc + 0x6cf8), 120 },
+    { (const u16*)((const u8*)sBlob_66aa68_6719cc + 0x6e08), 4 },
+    { (const u16*)((const u8*)sBlob_66aa68_6719cc + 0x6cf8), 4 },
+    { (const u16*)((const u8*)sBlob_66aa68_6719cc + 0x6e08), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6719f4[2] = {
+    { (const u16*)((const u8*)sBlob_66aa68_6719cc + 0x6f18), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_671a04_679280[30844] = INCBIN_U8("data/Blob_671a04_679280.bin");
+
+const struct FrameData sFrameData_679280[5] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7184), 16 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x719e), 16 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x71b8), 16 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x719e), 16 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6792a8[5] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7136), 16 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7150), 16 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x716a), 16 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7150), 16 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6792d0[8] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7266), 3 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x72b0), 3 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x730c), 2 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7362), 1 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x73c4), 1 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x743e), 1 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x74e8), 1 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_679310[8] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x74e8), 1 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x743e), 1 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x73c4), 1 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7362), 1 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x730c), 2 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x72b0), 3 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7266), 3 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_679350[7] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x75c2), 8 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7636), 8 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x76aa), 8 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x771e), 8 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7792), 8 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7806), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_679388[3] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x71d2), 8 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x721c), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6793a0[2] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x6ee4), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6793b0[2] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x6f0a), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6793c0[2] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x70ce), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6793d0[5] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x6f7e), 4 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x6ff2), 4 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7066), 4 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x70ce), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_6793f8[5] = {
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x70ce), 6 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x7066), 6 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x6ff2), 6 },
+    { (const u16*)((const u8*)sBlob_671a04_679280 + 0x6f7e), 6 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_679420_680d54[31028] = INCBIN_U8("data/Blob_679420_680d54.bin");
+
+const struct FrameData sFrameData_680d54[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x76ce), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680d64[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x76e8), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680d74[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x76fc), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680d84[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7704), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680d94[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x770c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680da4[5] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7714), 2 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x771c), 2 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7724), 2 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x772c), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680dcc[6] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x77a4), 8 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x77b4), 8 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x77bc), 8 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x77c4), 8 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x77cc), 8 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680dfc[6] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x775c), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7764), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x776c), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7774), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x777c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e2c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7734), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e3c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x773c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e4c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7744), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e5c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x774c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e6c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7754), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e7c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7784), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e8c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x778c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680e9c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7794), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680eac[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x779c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680ebc[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x77ac), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680ecc[12] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7494), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x749c), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x74bc), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x74f4), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x753e), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x758e), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x75e4), 6 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x762e), 7 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7666), 8 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7680), 9 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7694), 10 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680f2c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x748c), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680f3c[7] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7872), 5 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x787a), 5 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7882), 5 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x788a), 5 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7892), 5 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x789a), 5 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680f74[5] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78a2), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78aa), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78b2), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78ba), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680f9c[5] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78c2), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78ca), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78d2), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78da), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680fc4[5] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78e2), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78ea), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78f2), 4 },
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x78fa), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680fec[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7902), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_680ffc[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x7912), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_68100c[2] = {
+    { (const u16*)((const u8*)sBlob_679420_680d54 + 0x790a), 4 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_68101c_682fac[8080] = INCBIN_U8("data/Blob_68101c_682fac.bin");

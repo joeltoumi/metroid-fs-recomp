@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef PORT_DECOMP_ENDING_H
 #define PORT_DECOMP_ENDING_H
 
@@ -18,14 +19,12 @@
 
 /* ---- Data (static symbols in src/new_file_intro.c / src/data/new_file_intro_data.c) ---- */
 
-// static const u8 sBlob_6131c8_63a19c[] in src/data/new_file_intro_data.c
-extern const u8 sBlob_6131c8_63a19c[];
-// static u8 sBlob_79c394_79c3c8[] in src/new_file_intro.c
-extern u8 sBlob_79c394_79c3c8[];
+// static const u8 sBlob_6131c8_6331ec[] in src/data/new_file_intro_data.c
+// static u8 &sPointers_79c394[0][] in src/new_file_intro.c
 // static u16** sMonologueTextPointers[LANGUAGE_COUNT] in src/new_file_intro.c
 extern u16** sMonologueTextPointers[LANGUAGE_COUNT];
 
-#define ENDING_BLOB(offset) (&sBlob_6131c8_63a19c[offset])
+#define ENDING_BLOB(offset) (&sBlob_6131c8_6331ec[offset])
 
 // Graphics / tilemaps (LZ77 compressed), palettes
 #define sEndingAdamBgGfx_6131c8              ((const u32*)ENDING_BLOB(0x0))
@@ -84,7 +83,7 @@ extern u16** sMonologueTextPointers[LANGUAGE_COUNT];
 
 // PORT: per-language table of text pointer tables (u16** [LANGUAGE_COUNT])
 // stored inside a raw ROM blob (0x0879c3ac), contains GBA ROM pointers.
-#define sEndingAdamTextPointers ((u16** const*)&sBlob_79c394_79c3c8[0x18])
+#define sEndingAdamTextPointers ((u16** const*)&&sPointers_79c394[0][0x18])
 
 /* ---- Functions implemented elsewhere (still asm / other files) ---- */
 void unk_99940(void);

@@ -100,7 +100,7 @@ const u8 sMaintainedInputDelays[7] = {
     15, 10, 6, 4, 4, 4, 2,
 };
 
-static const u8 sBlob_576217_576234[] = INCBIN_U8("data/Blob_576217_576234.bin");
+const u8 sBlob_576217_576234[] = INCBIN_U8("data/Blob_576217_576234.bin");
 
 const u8 sCharacterWidths[] = {
     8, 8, 8, 8, 8, 8, 8, 8,
@@ -253,7 +253,7 @@ const u8 sCharacterWidths[] = {
     8, 8, 8, 8, 8, 8, 8, 8
 };
 
-static const u8 sBlob_5766D4_581510[] = INCBIN_U8("data/Blob_5766D4_581510.bin");
+const u8 sBlob_5766D4_581510[] = INCBIN_U8("data/Blob_5766D4_581510.bin");
 
 const u8 sPauseDebugEventNames[EVENT_END][EVENT_NAME_SIZE] = {
     [EVENT_NONE] = SHIFT_JIS("TOHOKANKO   トクベツホカンコヘ ムカエ  "),
@@ -515,4 +515,4 @@ const u8 sDebugSectionInfo[PAUSE_DEBUG_SECTION_END][5] = {
     },
 };
 
-static const u8 sBlob_58217b_58225c[] = INCBIN_U8("data/Blob_58217b_58225c.bin");
+const u8 sBlob_58217b_58225c[] = INCBIN_U8("data/Blob_58217b_58225c.bin");

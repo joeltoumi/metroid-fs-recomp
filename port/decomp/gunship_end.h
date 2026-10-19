@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #ifndef GUNSHIP_END_H
 #define GUNSHIP_END_H
 
@@ -5,12 +6,11 @@
 #include "oam.h"
 
 // Data used by the gunship (end of game version), all located inside the
-// (static) blob sBlob_39aa34_39f4b0 of src/data/sprites/omega_metroid.c
+// (static) blob sBlob_39aa34_39eb38 of src/data/sprites/omega_metroid.c
 // PORT: that blob is declared static in the decomp; the native build must
 // make it visible (or provide these tables) for these externs to resolve.
-extern const u8 sBlob_39aa34_39f4b0[];
 
-#define GUNSHIP_END_BLOB(offset) (&sBlob_39aa34_39f4b0[(offset)])
+#define GUNSHIP_END_BLOB(offset) (&sBlob_39aa34_39eb38[(offset)])
 
 // 0x0839aae0 : s16 y movement table, terminated by 0x7FFF
 #define sGunshipEndIdleYMovement ((const s16*)GUNSHIP_END_BLOB(0xAC))

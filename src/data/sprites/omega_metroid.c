@@ -1,3 +1,4 @@
+#include "data/blob_pieces.h"
 #include "data/sprites/omega_metroid.h"
 #include "macros.h"
 
@@ -3250,4 +3251,76 @@ const struct FrameData sOmegaMetroidPartOam_LeftLeg_Swiping[6] = {
     [5] = FRAME_DATA_TERMINATOR
 };
 
-const u8 sBlob_39aa34_39f4b0[] = INCBIN_U8("data/Blob_39aa34_39f4b0.bin");
+const u8 sBlob_39aa34_39eb38[16644] = INCBIN_U8("data/Blob_39aa34_39eb38.bin");
+
+const struct FrameData sFrameData_39eb38[2] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3c04), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39eb48[7] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3d32), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3ce8), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3c9e), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3c54), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3c9e), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3ce8), 16 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39eb80[7] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3d7c), 12 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3dea), 12 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3e58), 12 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3ec6), 12 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3e58), 12 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3dea), 12 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39ebb8[5] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3f34), 3 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3f3c), 3 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3f4a), 3 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3f3c), 3 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39ebe0[5] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3f58), 2 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3fbc), 1 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3f8a), 2 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3fbc), 3 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39ec08[5] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3fc4), 2 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x40cc), 2 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3ffc), 2 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x40cc), 6 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39ec30[7] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x40a6), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x4080), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x405a), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x4034), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x405a), 16 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x4080), 16 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39ec68[2] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x40cc), 255 },
+    FRAME_DATA_TERMINATOR
+};
+
+const struct FrameData sFrameData_39ec78[3] = {
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3fc4), 2 },
+    { (const u16*)((const u8*)sBlob_39aa34_39eb38 + 0x3ffc), 2 },
+    FRAME_DATA_TERMINATOR
+};
+
+const u8 sBlob_39ec90_39f4b0[2080] = INCBIN_U8("data/Blob_39ec90_39f4b0.bin");
