@@ -16,6 +16,7 @@
  * translations of what the decomp still has in assembly).
  */
 
+#include "port/ram_unaligned.h"
 #include "types.h"
 #include "animated_graphics.h"
 #include "animated_palette.h"

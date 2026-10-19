@@ -13,23 +13,23 @@
 #define GUNSHIP_END_BLOB(offset) (&sBlob_39aa34_39eb38[(offset)])
 
 // 0x0839aae0 : s16 y movement table, terminated by 0x7FFF
-#define sGunshipEndIdleYMovement ((const s16*)GUNSHIP_END_BLOB(0xAC))
+#define sGunshipEndIdleYMovement ((const s16*)(&sBlob_39aa34_39eb38[0xac]))
 // 0x0839abc4 : s16 y movement table, terminated by 0x7FFF
-#define sGunshipEndEngineYMovement ((const s16*)GUNSHIP_END_BLOB(0x190))
+#define sGunshipEndEngineYMovement ((const s16*)(&sBlob_39aa34_39eb38[0x190]))
 // 0x0839ac84 : u8 rotation table
-#define sGunshipEndTakingOffRotation ((const u8*)GUNSHIP_END_BLOB(0x250))
+#define sGunshipEndTakingOffRotation ((const u8*)(&sBlob_39aa34_39eb38[0x250]))
 // 0x0839ac90 : u16 scaling table (entering)
-#define sGunshipEndEnteringScaling ((const u16*)GUNSHIP_END_BLOB(0x25C))
+#define sGunshipEndEnteringScaling ((const u16*)(&sBlob_39aa34_39eb38[0x25c]))
 // 0x0839acd0 : u16 scaling table (taking off)
-#define sGunshipEndTakingOffScaling ((const u16*)GUNSHIP_END_BLOB(0x29C))
+#define sGunshipEndTakingOffScaling ((const u16*)(&sBlob_39aa34_39eb38[0x29c]))
 
 // Oam
-#define sGunshipEndOam_Landed ((const struct FrameData*)GUNSHIP_END_BLOB(0x4114))   // 0x0839eb48
-#define sGunshipEndBeamOam ((const struct FrameData*)GUNSHIP_END_BLOB(0x4184))      // 0x0839ebb8
-#define sGunshipEndOam_Engine2 ((const struct FrameData*)GUNSHIP_END_BLOB(0x41D4))  // 0x0839ec08
-#define sGunshipEndBottomOam ((const struct FrameData*)GUNSHIP_END_BLOB(0x41FC))    // 0x0839ec30
-#define sGunshipEndOam_Flying ((const struct FrameData*)GUNSHIP_END_BLOB(0x4234))   // 0x0839ec68
-#define sGunshipEndOam_Engine3 ((const struct FrameData*)GUNSHIP_END_BLOB(0x4244))  // 0x0839ec78
+#define sGunshipEndOam_Landed ((const struct FrameData*)((const u8*)&sFrameData_39eb48[0]))   // 0x0839eb48
+#define sGunshipEndBeamOam ((const struct FrameData*)((const u8*)&sFrameData_39ebb8[0]))      // 0x0839ebb8
+#define sGunshipEndOam_Engine2 ((const struct FrameData*)((const u8*)&sFrameData_39ec08[0]))  // 0x0839ec08
+#define sGunshipEndBottomOam ((const struct FrameData*)((const u8*)&sFrameData_39ec30[0]))    // 0x0839ec30
+#define sGunshipEndOam_Flying ((const struct FrameData*)((const u8*)&sFrameData_39ec68[0]))   // 0x0839ec68
+#define sGunshipEndOam_Engine3 ((const struct FrameData*)((const u8*)&sFrameData_39ec78[0]))  // 0x0839ec78
 
 void GunshipEndSpawnBeams(void);
 void GunshipEndInit(void);

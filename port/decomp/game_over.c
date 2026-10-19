@@ -30,13 +30,13 @@ asm(".set unk_9e58c_Orig, 0x0809e58d");
 
 // Text graphics of the game over options, by language (only read for language > LANGUAGE_HIRAGANA)
 static const u8* const sGameOverTextGfxPointers[LANGUAGE_COUNT] = {
-    [LANGUAGE_JAPANESE] = BLOB_73421E(0x5b3a), // 0x08739d58
-    [LANGUAGE_HIRAGANA] = BLOB_73421E(0x5b3a),
-    [LANGUAGE_ENGLISH] = BLOB_73421E(0x5b3a),
-    [LANGUAGE_GERMAN] = BLOB_73421E(0x6212),   // 0x0873a430
-    [LANGUAGE_FRENCH] = BLOB_73421E(0x690a),   // 0x0873ab28
-    [LANGUAGE_ITALIAN] = BLOB_73421E(0x70ea),  // 0x0873b308
-    [LANGUAGE_SPANISH] = BLOB_73421E(0x788e),  // 0x0873baac
+    [LANGUAGE_JAPANESE] = (&sBlob_73421e_73c274[0x5b3a]), // 0x08739d58
+    [LANGUAGE_HIRAGANA] = (&sBlob_73421e_73c274[0x5b3a]),
+    [LANGUAGE_ENGLISH] = (&sBlob_73421e_73c274[0x5b3a]),
+    [LANGUAGE_GERMAN] = (&sBlob_73421e_73c274[0x6212]),   // 0x0873a430
+    [LANGUAGE_FRENCH] = (&sBlob_73421e_73c274[0x690a]),   // 0x0873ab28
+    [LANGUAGE_ITALIAN] = (&sBlob_73421e_73c274[0x70ea]),  // 0x0873b308
+    [LANGUAGE_SPANISH] = (&sBlob_73421e_73c274[0x788e]),  // 0x0873baac
 };
 
 // Original table at 0x0879e868 : cursor idle, continue selected, quit selected

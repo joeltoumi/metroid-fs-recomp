@@ -27,11 +27,15 @@ SECTIONS {
         . = 0x00000004; gWrittenToBldalpha = .;
         . = 0x00000006; gWrittenToBldcnt = .;
         . = 0x00000008; gWrittenToDispcnt = .;
+        . = 0x0000000a; gUnk_300000a = .;
         . = 0x0000000c; gWrittenToWinin_H = .;
         . = 0x0000000d; gWrittenToWinout_L = .;
         . = 0x0000000e; gBackdropColor = .;
+        . = 0x00000010; gUnk_3000010 = .;
         . = 0x00000011; gLanguage = .;
         . = 0x00000014; gGameCompletion = .;
+        . = 0x00000016; gUnk_3000016 = .;
+        . = 0x00000017; gUnk_3000017 = .;
         . = 0x00000018; gMonochromeFading = .;
         . = 0x00000019; gWhichBgPositionIsWrittenToBg3Ofs = .;
         . = 0x0000001a; gSamusOnTopOfBackgrounds = .;
@@ -67,6 +71,8 @@ SECTIONS {
         . = 0x00000049; gLastElevatorUsed = .;
         . = 0x0000004a; gCurrentEventBasedEffect = .;
         . = 0x0000004b; gQueuedEventBasedEffect = .;
+        . = 0x0000004c; gNavigationTargetLocation = .;
+        . = 0x0000004d; gUnk_300004d = .;
         . = 0x0000004e; gScreenShakeXOffset = .;
         . = 0x0000004f; gScreenShakeYOffset = .;
         . = 0x00000050; gUnk_3000050 = .;
@@ -90,6 +96,7 @@ SECTIONS {
         . = 0x000000f8; gCurrentScrolls = .;
         . = 0x00000110; gCurrentPowerBomb = .;
         . = 0x00000124; gCamera = .;
+        . = 0x00000132; gUnk_3000132 = .;
         . = 0x00000138; gInGameTimer = .;
         . = 0x0000013c; gMaxInGameTimeFlag = .;
         . = 0x00000140; gSpriteData = .;
@@ -156,7 +163,10 @@ SECTIONS {
         . = 0x00000b8a; gRoomEventTrigger = .;
         . = 0x00000b8b; gIsLoadingFile = .;
         . = 0x00000b8d; gMostRecentSaveFile = .;
+        . = 0x00000b8e; gUnk_3000b8e = .;
         . = 0x00000b8f; gUnk_3000b8f = .;
+        . = 0x00000b90; gUnk_3000b90 = .;
+        . = 0x00000b94; gFileSelectFileInfo = .;
         . = 0x00000bd0; gBootDebugOptions = .;
         . = 0x00000bdc; gCurrentCutscene = .;
         . = 0x00000bde; gMainGameMode = .;
@@ -188,6 +198,7 @@ SECTIONS {
         . = 0x00001232; gBg3YPosition = .;
         . = 0x00001234; gUnk_3001234 = .;
         . = 0x00001236; gUnk_3001236 = .;
+        . = 0x00001238; gUnk_3001238 = .;
         . = 0x00001242; gDemoState = .;
         . = 0x00001243; gPoseLock = .;
         . = 0x00001244; gSamusData = .;
@@ -296,6 +307,8 @@ SECTIONS {
         . = 0x000053f9; gUnk_30053f9 = .;
         . = 0x000053fc; gHazeProcessCodePointer = .;
 
+        . = 0x00005400; gUnk_3005400 = .;
+        . = 0x00005404; gUnk_3005404 = .;
         . = 0x00005408; *libgcc.a:dp-bit.o(.bss);
         . = 0x00005420; *libgcc.a:fp-bit.o(.bss);
 

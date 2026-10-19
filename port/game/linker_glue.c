@@ -25,3 +25,14 @@ void (*const sIntrTable[13])(void) = {
     Callback_Empty,
     Callback_Empty,
 };
+
+// asm/intr_main.s: LoadInterruptCode() copies 512 bytes of it to IWRAM. The
+// port dispatches interrupts itself (sIntrTable), so the copy is never run:
+// natively it is 512 zero bytes the copy can read.
+__asm__(
+    "\t.section .rodata.mf_interrupt_code,\"a\"\n"
+    "\t.balign 4\n"
+    "\t.globl InterruptCode\n"
+    "InterruptCode:\n"
+    "\t.zero 512\n"
+    "\t.previous\n");

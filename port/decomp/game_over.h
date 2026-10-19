@@ -50,15 +50,15 @@ struct GameOverData {
 
 // PORT: the frame data below lives inside a raw binary blob and holds GBA ROM pointers,
 // it must be decoded into real struct FrameData arrays for a native build.
-#define sGameOverOam_Cursor           ((const struct FrameData*)BLOB_73421E(0x8056)) // 0x0873c274
-#define sGameOverOam_CursorSelected   ((const struct FrameData*)BLOB_73421E(0x807e)) // 0x0873c29c
-#define sGameOverOamXWidthTable       BLOB_73421E(0x2)    // 0x08734220, u8[3][4] width in tiles by shape/size
-#define sGameOverObjGfx               BLOB_73421E(0x585a) // 0x08739a78 (LZ77)
-#define sGameOverObjPal               BLOB_73421E(0x82c6) // 0x0873c4e4
-#define sGameOverBgGfx                BLOB_73421E(0xe)    // 0x0873422c (LZ77)
-#define sGameOverBg3TileTable         BLOB_73421E(0x84c6) // 0x0873c6e4 (LZ77)
-#define sGameOverBg1TileTable         BLOB_73421E(0x8a8a) // 0x0873cca8 (LZ77)
-#define sGameOverBgPal                BLOB_73421E(0x80c6) // 0x0873c2e4
+#define sGameOverOam_Cursor           ((const struct FrameData*)((const u8*)&sFrameData_73c274[0])) // 0x0873c274
+#define sGameOverOam_CursorSelected   ((const struct FrameData*)((const u8*)&sFrameData_73c29c[0])) // 0x0873c29c
+#define sGameOverOamXWidthTable       (&sBlob_73421e_73c274[0x2])    // 0x08734220, u8[3][4] width in tiles by shape/size
+#define sGameOverObjGfx               (&sBlob_73421e_73c274[0x585a]) // 0x08739a78 (LZ77)
+#define sGameOverObjPal               (&sBlob_73c2e4_7406f8[0x200]) // 0x0873c4e4
+#define sGameOverBgGfx                (&sBlob_73421e_73c274[0xe])    // 0x0873422c (LZ77)
+#define sGameOverBg3TileTable         (&sBlob_73c2e4_7406f8[0x400]) // 0x0873c6e4 (LZ77)
+#define sGameOverBg1TileTable         (&sBlob_73c2e4_7406f8[0x9c4]) // 0x0873cca8 (LZ77)
+#define sGameOverBgPal                (&sBlob_73c2e4_7406f8[0x0]) // 0x0873c2e4
 
 u8 GameOverHandler(void);
 void GameOverInit(void);

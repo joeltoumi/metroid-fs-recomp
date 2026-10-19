@@ -78,6 +78,10 @@ endif()
 # include. Their arrays must be writable to receive the ROM contents (they are
 # mostly zero-initialized, so they land in .bss and cost nothing).
 add_library(mf_data STATIC ${MF_DATA_WRAPPERS})
+# Data and code refer to each other (sprite AI tables, cutscene tables...):
+# CMake repeats the two archives on the link line.
+target_link_libraries(mf_data PUBLIC mf_game)
+target_link_libraries(mf_game PUBLIC mf_data)
 target_compile_definitions(mf_data PRIVATE "const=")
 set(MF_GAME_FLAGS
     -std=gnu11

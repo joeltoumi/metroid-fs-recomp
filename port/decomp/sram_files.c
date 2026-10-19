@@ -40,11 +40,7 @@ asm(".set gFileSelectFileInfo, 0x03000b94");
 
 // Not in a decomp header
 extern const struct Door* sAreaDoorPointers[];
-#ifdef PLATFORM_PC
-#include <string.h>
-#else
 void* memset(void* dst, int value, unsigned long size);
-#endif
 
 #define SRAM_FILES_SAVE_FILE_WORDS (sizeof(struct SramFilesSaveFile) / sizeof(u32))
 #define SRAM_FILES_HEADER_WORDS (sizeof(struct SramFilesHeader) / sizeof(u32))
@@ -158,7 +154,11 @@ void Sram_WriteHeader(void)
     pHeader->unk_8 = '0';
     pHeader->unk_9 = '1';
     pHeader->unk_A = gUnk_3000010;
+#ifdef REGION_EU
+    pHeader->unk_B = 1;
+#else
     pHeader->unk_B = 2;
+#endif
 
     for (i = 0; i < ARRAY_SIZE(pHeader->versionString); i++)
         pHeader->versionString[i] = sSramHeaderVersionString[i];

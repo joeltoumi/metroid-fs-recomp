@@ -62,7 +62,12 @@ struct NavigationPopUpConversation {
 /*
  * PORT: 0x0857bc50, contains raw 32-bit GBA pointers; the native port has to provide a real table.
  */
+#ifdef PLATFORM_PC
+const struct NavigationPopUpInfo* NavigationPopUpsNative(void);
+#define sNavigationPopUps (NavigationPopUpsNative())
+#else
 #define sNavigationPopUps ((const struct NavigationPopUpInfo*)(sBlob_5766D4_581510 + 0x557C))
+#endif
 #define sNavigationPopUpConversations ((const struct NavigationPopUpConversation*)(sBlob_5766D4_581510 + 0x55F4))
 /* 0x0857bcd4, 0x0857bcf4, 0x0857bd34, 0x0857bdb4: u16 tables (palette animations) */
 #define sNavigation_57bcd4 ((const u16*)(sBlob_5766D4_581510 + 0x5600))

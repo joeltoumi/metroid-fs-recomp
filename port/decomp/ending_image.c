@@ -5,6 +5,36 @@
 
 #include "constants/game_state.h"
 #include "structs/ending.h"
+#include "port_rom.h"
+
+#ifdef PLATFORM_PC
+#define ENDING_IMAGE_TEXT_GBA_SIZE 0xC
+#define ENDING_IMAGE_TEXT_COUNT (0x9D8 / ENDING_IMAGE_TEXT_GBA_SIZE)
+
+const struct EndingImageTextOamData* EndingImageTextNative(u32 offset)
+{
+    static struct EndingImageTextOamData sTexts[ENDING_IMAGE_TEXT_COUNT];
+    static u8 sDecoded;
+    u32 i;
+
+    if (!sDecoded)
+    {
+        for (i = 0; i < ENDING_IMAGE_TEXT_COUNT; i++)
+        {
+            const u8* src = &sBlob_74dc48_74e620[i * ENDING_IMAGE_TEXT_GBA_SIZE];
+
+            sTexts[i].unk_0 = src[0];
+            sTexts[i].spawnDelay = src[1];
+            sTexts[i].unk_2 = src[2];
+            sTexts[i].xPosition = PortReadGbaU16(src + 4);
+            sTexts[i].yPosition = PortReadGbaU16(src + 6);
+            sTexts[i].pOam = (const u16*)PORT_GBA_PTR(src + 8);
+        }
+        sDecoded = TRUE;
+    }
+    return &sTexts[offset / ENDING_IMAGE_TEXT_GBA_SIZE];
+}
+#endif /* PLATFORM_PC */
 
 /**
  * @brief a1480 | 1a8 | Draws the in game time and the completion percentage of the ending image

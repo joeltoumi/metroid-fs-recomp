@@ -23,6 +23,7 @@
 #include "globals.h"
 #include "structs/samus.h"
 #include "structs/scroll.h"
+#include "structs/in_game_timer.h"
 
 /* ---------------------------------------------------------------------------------------------- */
 /* Data blobs (static in src/data, externed here)                                                 */
@@ -48,7 +49,7 @@ extern const u8 sBlob_58217b_58225c[];
 /* 0x085822c8: default button assignments */
 #define sSramDefaultButtonAssignments (*(const struct ButtonAssignments*)(((const u8*)sBlob_582288_582a3c + 0x40)))
 /* 0x085822d4: in game timer of a new file */
-#define sSramDefaultInGameTimer (*(const struct InGameTime*)(((const u8*)sBlob_582288_582a3c + 0x4c)))
+#define sSramDefaultInGameTimer (*(const struct InGameTimer*)(((const u8*)sBlob_582288_582a3c + 0x4c)))
 /* 0x085822e4: default boot debug options */
 #define sSramDefaultBootDebugOptions (*(const struct BootDebugOptions*)(((const u8*)sBlob_582288_582a3c + 0x5c)))
 
@@ -154,7 +155,7 @@ struct SramFilesSaveFile {
     /* 0x0E0 */ u16 gadorasDestroyed;
     /* 0x0E2 */ u8 missileHatchDestroyed;
     /* 0x0E3 */ u8 waterLowered;
-    /* 0x0E4 */ struct InGameTime inGameTimer;
+    /* 0x0E4 */ struct InGameTimer inGameTimer;
     /* 0x0E8 */ struct SramFilesMusicInfo musicInfo;
     /* 0x0F0 */ u8 endString[8]; // "SAVE_END"
     /* 0x0F8 */ u8 unk_F8[0x208];

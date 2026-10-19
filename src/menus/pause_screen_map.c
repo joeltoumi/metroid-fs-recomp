@@ -25,7 +25,7 @@
 extern u32 sExploredMinimapBitFlags[32];
 
 // Minimap data?
-static u8* sUnk_79be5c[11] = {
+u8* sUnk_79be5c[11] = {
     (u8*)(((const u8*)((const u8*)sBlob_56a254_575a60 + 0x8af4))),
     (u8*)(((const u8*)((const u8*)sBlob_56a254_575a60 + 0x8d48))),
     (u8*)(((const u8*)((const u8*)sBlob_56a254_575a60 + 0x94f4))),
@@ -40,7 +40,7 @@ static u8* sUnk_79be5c[11] = {
 };
 
 // 4 byte struct?
-static u8 sUnk_79be88[32] = {
+u8 sUnk_79be88[32] = {
     0x00, 0x00, 0x00, 0x00,
     0x13, 0x36, 0x24, 0x8E,
     0x14, 0x37, 0x24, 0x18,

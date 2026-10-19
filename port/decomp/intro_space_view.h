@@ -22,17 +22,17 @@ extern const u32* sIntroSamusSittingBgGfxPointers[]; /* static in src/new_file_i
  * pointers; on PC the blob must be split into real FrameData arrays with these
  * names (address in comment).
  */
-#define sIntroSpaceViewOam_60ac08 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1738]) /* 0x0860ac08 depth particle */
-#define sIntroSpaceViewOam_60ac18 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1748]) /* 0x0860ac18 particle */
-#define sIntroSpaceViewOam_60ac28 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1758]) /* 0x0860ac28 particle */
-#define sIntroSpaceViewOam_60ac38 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1768]) /* 0x0860ac38 particle */
-#define sIntroSpaceViewOam_60ac98 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x17c8]) /* 0x0860ac98 Samus ship entering */
-#define sIntroSpaceViewOam_60acd0 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1800]) /* 0x0860acd0 ship backview */
-#define sIntroSpaceViewOam_60acf8 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1828]) /* 0x0860acf8 BSL backview part (type 15) */
-#define sIntroSpaceViewOam_60ad08 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1838]) /* 0x0860ad08 BSL backview part (type 14) */
-#define sIntroSpaceViewOam_60ad18 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1848]) /* 0x0860ad18 BSL backview part (type 13) */
-#define sIntroSpaceViewOam_60ad28 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1858]) /* 0x0860ad28 BSL backview part (type 12) */
-#define sIntroSpaceViewOam_60af10 ((const struct FrameData*)&sBlob_6094d0_60ac08[0x1a40]) /* 0x0860af10 splash text */
+#define sIntroSpaceViewOam_60ac08 ((const struct FrameData*)((const u8*)&sFrameData_60ac08[0])) /* 0x0860ac08 depth particle */
+#define sIntroSpaceViewOam_60ac18 ((const struct FrameData*)((const u8*)&sFrameData_60ac18[0])) /* 0x0860ac18 particle */
+#define sIntroSpaceViewOam_60ac28 ((const struct FrameData*)((const u8*)&sFrameData_60ac28[0])) /* 0x0860ac28 particle */
+#define sIntroSpaceViewOam_60ac38 ((const struct FrameData*)((const u8*)&sFrameData_60ac38[0])) /* 0x0860ac38 particle */
+#define sIntroSpaceViewOam_60ac98 ((const struct FrameData*)((const u8*)&sFrameData_60ac98[0])) /* 0x0860ac98 Samus ship entering */
+#define sIntroSpaceViewOam_60acd0 ((const struct FrameData*)((const u8*)&sFrameData_60acd0[0])) /* 0x0860acd0 ship backview */
+#define sIntroSpaceViewOam_60acf8 ((const struct FrameData*)((const u8*)&sFrameData_60acf8[0])) /* 0x0860acf8 BSL backview part (type 15) */
+#define sIntroSpaceViewOam_60ad08 ((const struct FrameData*)((const u8*)&sFrameData_60ad08[0])) /* 0x0860ad08 BSL backview part (type 14) */
+#define sIntroSpaceViewOam_60ad18 ((const struct FrameData*)((const u8*)&sFrameData_60ad18[0])) /* 0x0860ad18 BSL backview part (type 13) */
+#define sIntroSpaceViewOam_60ad28 ((const struct FrameData*)((const u8*)&sFrameData_60ad28[0])) /* 0x0860ad28 BSL backview part (type 12) */
+#define sIntroSpaceViewOam_60af10 ((const struct FrameData*)((const u8*)&sFrameData_60af10[0])) /* 0x0860af10 splash text */
 
 /* Pieces of sBlob_64e470_65bb38 (same PORT note) */
 #define sIntroSpaceView_658be0 (&sBlob_64e470_65bb38[0xa770]) /* 0x08658be0 LZ77 tilemap */

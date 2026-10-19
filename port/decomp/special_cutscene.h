@@ -20,21 +20,21 @@
 #define SPECIAL_CUTSCENE_BLOB(offset) (&sBlob_6131c8_6331ec[(offset)])
 
 // Died on SR388 collision
-#define sDiedOnSr388CollisionObjGfx ((const u8*)SPECIAL_CUTSCENE_BLOB(0x1072C))                // 0x086238f4 (LZ77)
-#define sDiedOnSr388CollisionBgGfx ((const u8*)SPECIAL_CUTSCENE_BLOB(0x1842C))                 // 0x0862b5f4 (LZ77)
-#define sDiedOnSr388CollisionBslOam_1 ((const struct FrameData*)SPECIAL_CUTSCENE_BLOB(0x22E58)) // 0x08636020
-#define sDiedOnSr388CollisionBslOam_2 ((const struct FrameData*)SPECIAL_CUTSCENE_BLOB(0x22E70)) // 0x08636038
-#define sDiedOnSr388CollisionOam_3 ((const struct FrameData*)SPECIAL_CUTSCENE_BLOB(0x22E88))    // 0x08636050
-#define sDiedOnSr388CollisionBslOam_Crash ((const struct FrameData*)SPECIAL_CUTSCENE_BLOB(0x230F0)) // 0x086362b8
-#define sDiedOnSr388CollisionFadingPal ((const u16*)SPECIAL_CUTSCENE_BLOB(0x23870))             // 0x08636a38, [16][16]
-#define sDiedOnSr388CollisionObjPal ((const u16*)SPECIAL_CUTSCENE_BLOB(0x23A70))                // 0x08636c38
-#define sDiedOnSr388CollisionBgPal ((const u16*)SPECIAL_CUTSCENE_BLOB(0x23E70))                 // 0x08637038
-#define sDiedOnSr388CollisionTilemap_1 ((const u8*)SPECIAL_CUTSCENE_BLOB(0x25A4C))              // 0x08638c14 (LZ77)
-#define sDiedOnSr388CollisionTilemap_2 ((const u8*)SPECIAL_CUTSCENE_BLOB(0x269FC))              // 0x08639bc4 (LZ77)
+#define sDiedOnSr388CollisionObjGfx ((const u8*)(&sBlob_6131c8_6331ec[0x1072c]))                // 0x086238f4 (LZ77)
+#define sDiedOnSr388CollisionBgGfx ((const u8*)(&sBlob_6131c8_6331ec[0x1842c]))                 // 0x0862b5f4 (LZ77)
+#define sDiedOnSr388CollisionBslOam_1 ((const struct FrameData*)((const u8*)&sFrameData_636020[0])) // 0x08636020
+#define sDiedOnSr388CollisionBslOam_2 ((const struct FrameData*)((const u8*)&sFrameData_636038[0])) // 0x08636038
+#define sDiedOnSr388CollisionOam_3 ((const struct FrameData*)((const u8*)&sFrameData_636050[0]))    // 0x08636050
+#define sDiedOnSr388CollisionBslOam_Crash ((const struct FrameData*)((const u8*)&sFrameData_6362b8[0])) // 0x086362b8
+#define sDiedOnSr388CollisionFadingPal ((const u16*)(&sBlob_636438_63a19c[0x600]))             // 0x08636a38, [16][16]
+#define sDiedOnSr388CollisionObjPal ((const u16*)(&sBlob_636438_63a19c[0x800]))                // 0x08636c38
+#define sDiedOnSr388CollisionBgPal ((const u16*)(&sBlob_636438_63a19c[0xc00]))                 // 0x08637038
+#define sDiedOnSr388CollisionTilemap_1 ((const u8*)(&sBlob_636438_63a19c[0x27dc]))              // 0x08638c14 (LZ77)
+#define sDiedOnSr388CollisionTilemap_2 ((const u8*)(&sBlob_636438_63a19c[0x378c]))              // 0x08639bc4 (LZ77)
 
 // Copies of sOamXFlipOffsets / sOamYFlipOffsets (u8 [3][4])
-#define sSpecialCutsceneOamXFlipOffsets CAST_TO_ARRAY(const u8, [3][4], SPECIAL_CUTSCENE_BLOB(0x26FBC)) // 0x0863a184
-#define sSpecialCutsceneOamYFlipOffsets CAST_TO_ARRAY(const u8, [3][4], SPECIAL_CUTSCENE_BLOB(0x26FC8)) // 0x0863a190
+#define sSpecialCutsceneOamXFlipOffsets CAST_TO_ARRAY(const u8, [3][4], (&sBlob_636438_63a19c[0x3d4c])) // 0x0863a184
+#define sSpecialCutsceneOamYFlipOffsets CAST_TO_ARRAY(const u8, [3][4], (&sBlob_636438_63a19c[0x3d58])) // 0x0863a190
 
 // ---------------------------------------------------------------------------
 // RAM
@@ -56,8 +56,7 @@ extern u16 gUnk_3005404;
 // IntroData, the offsets are relative to unk_14 so they stay valid with a
 // 64-bit layout (only u8 fields between unk_14 and unk_20C).
 #ifdef PLATFORM_PC
-#include <stddef.h>
-#define SPECIAL_CUTSCENE_UNK_14_OFFSET offsetof(struct IntroData, unk_14)
+#define SPECIAL_CUTSCENE_UNK_14_OFFSET __builtin_offsetof(struct IntroData, unk_14)
 #else
 #define SPECIAL_CUTSCENE_UNK_14_OFFSET OFFSET_OF(struct IntroData, unk_14)
 #endif

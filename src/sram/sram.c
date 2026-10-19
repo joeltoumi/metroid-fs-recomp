@@ -22,6 +22,11 @@ void SramWriteUnchecked(u8* src, u8* dest, u32 size)
 
     WRITE_16(REG_WAITCNT, READ_16(REG_WAITCNT) & ~WAIT_SRAM_CYCLES_MASK | WAIT_SRAM_8CYCLES);
 
+#ifdef PLATFORM_PC
+    // The GBA copies the function to the stack to run it; natively just call it.
+    SramWriteUncheckedInternal(src, dest, size);
+    return;
+#endif
     func_ptr = (u16*)SramWriteUncheckedInternal;
     func_ptr = (u16*)((u32)func_ptr ^ 1);
     code_ptr = code;
@@ -63,6 +68,9 @@ u8* SramCheck(u8* src, u8* dest, u32 size)
 
     WRITE_16(REG_WAITCNT, READ_16(REG_WAITCNT) & ~WAIT_SRAM_CYCLES_MASK | WAIT_SRAM_8CYCLES);
 
+#ifdef PLATFORM_PC
+    return SramCheckInternal(src, dest, size);
+#endif
     func_ptr = (u16*)SramCheckInternal;
     func_ptr = (u16*)((u32)func_ptr ^ 1);
     code_ptr = code;

@@ -247,3 +247,42 @@ const char* Port_RomStatusText(PortRomStatus status)
     }
     return "?";
 }
+
+// Pointers the game stores in save files (port/decomp/sram_files.c), as the
+// GBA address they would have on the cartridge, and back.
+uint32_t PortPointerToGbaAddress(const void* ptr)
+{
+    const uint8_t* p = Port_RomMirror(ptr);
+
+    if (ptr == NULL)
+        return 0;
+    if (sRom != NULL && p >= sRom && p < sRom + sRomSize)
+        return 0x08000000u + (uint32_t)(p - sRom);
+    if ((const uint8_t*)ptr >= gPortEwram && (const uint8_t*)ptr < gPortEwram + sizeof(gPortEwram))
+        return 0x02000000u + (uint32_t)((const uint8_t*)ptr - gPortEwram);
+    if ((const uint8_t*)ptr >= gPortIwram && (const uint8_t*)ptr < gPortIwram + sizeof(gPortIwram))
+        return 0x03000000u + (uint32_t)((const uint8_t*)ptr - gPortIwram);
+    Port_Log("PortPointerToGbaAddress: %p is not game data", ptr);
+    return 0;
+}
+
+const void* PortGbaAddressToPointer(uint32_t address)
+{
+    if (address == 0)
+        return NULL;
+    if (address >= 0x02000000u && address < 0x02000000u + sizeof(gPortEwram))
+        return gPortEwram + (address - 0x02000000u);
+    if (address >= 0x03000000u && address < 0x03000000u + sizeof(gPortIwram))
+        return gPortIwram + (address - 0x03000000u);
+    // Prefer the game's own array holding that ROM data, so pointer
+    // comparisons in the game still work; else the ROM copy.
+    for (size_t c = 0; c < sChunkCount; c++) {
+        for (unsigned long i = 0; i < sChunks[c].count; i++) {
+            const PortAsset* a = &sChunks[c].assets[i];
+            const uint32_t off = address - 0x08000000u;
+            if (off >= a->romOffset && off < a->romOffset + a->size)
+                return a->dst + (off - a->romOffset);
+        }
+    }
+    return Port_RomPointer(address);
+}

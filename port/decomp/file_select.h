@@ -120,47 +120,47 @@ extern const u8 sCharactersGfx[192 * 1024];
 // PORT: the frame data below lives inside a raw binary blob and holds GBA ROM pointers,
 // it must be decoded into real struct FrameData arrays for a native build.
 #define FS_FRAME(off) ((const struct FrameData*)BLOB_73421E(off))
-#define sFileSelectOam_AudioStereoIdle      FS_FRAME(0xc5a2) // 0x087407c0
-#define sFileSelectOam_AudioStereoActive    FS_FRAME(0xc5b2) // 0x087407d0
-#define sFileSelectOam_AudioLogos           FS_FRAME(0xc5c2) // 0x087407e0
-#define sFileSelectOam_AudioLogosActive     FS_FRAME(0xc5d2) // 0x087407f0
-#define sFileSelectOam_CorruptedPanel       FS_FRAME(0xc662) // 0x08740880
-#define sFileSelectOam_Type8Selected        FS_FRAME(0xc6b2) // 0x087408d0
-#define sFileSelectOam_Type8                FS_FRAME(0xc6c2) // 0x087408e0
-#define sFileSelectOam_AudioSelect          FS_FRAME(0xc6d2) // 0x087408f0
-#define sFileSelectOam_PanelOpening         FS_FRAME(0xc6fa) // 0x08740918
-#define sFileSelectOam_ActionPanelIdle      FS_FRAME(0xc722) // 0x08740940
-#define sFileSelectOam_ActionPanelClosing   FS_FRAME(0xc732) // 0x08740950
-#define sFileSelectOam_SmallPanelOpening    FS_FRAME(0xc75a) // 0x08740978
-#define sFileSelectOam_SmallPanelIdle       FS_FRAME(0xc782) // 0x087409a0
-#define sFileSelectOam_SmallPanelClosing    FS_FRAME(0xc792) // 0x087409b0
-#define sFileSelectOam_SamusHead            FS_FRAME(0xc82a) // 0x08740a48
-#define sFileSelectOam_SamusHeadSelected    FS_FRAME(0xc852) // 0x08740a70
-#define sFileSelectOam_CopyArrow            FS_FRAME(0xc89a) // 0x08740ab8
-#define sFileSelectOam_Cursor               FS_FRAME(0xc92a) // 0x08740b48
-#define sFileSelectOam_CursorSelected       FS_FRAME(0xc952) // 0x08740b70
-#define sFileSelectOam_CompletedStar        FS_FRAME(0xc97a) // 0x08740b98
+#define sFileSelectOam_AudioStereoIdle      ((const struct FrameData*)((const u8*)&sFrameData_7407c0[0])) // 0x087407c0
+#define sFileSelectOam_AudioStereoActive    ((const struct FrameData*)((const u8*)&sFrameData_7407d0[0])) // 0x087407d0
+#define sFileSelectOam_AudioLogos           ((const struct FrameData*)((const u8*)&sFrameData_7407e0[0])) // 0x087407e0
+#define sFileSelectOam_AudioLogosActive     ((const struct FrameData*)((const u8*)&sFrameData_7407f0[0])) // 0x087407f0
+#define sFileSelectOam_CorruptedPanel       ((const struct FrameData*)((const u8*)&sFrameData_740880[0])) // 0x08740880
+#define sFileSelectOam_Type8Selected        ((const struct FrameData*)((const u8*)&sFrameData_7408d0[0])) // 0x087408d0
+#define sFileSelectOam_Type8                ((const struct FrameData*)((const u8*)&sFrameData_7408e0[0])) // 0x087408e0
+#define sFileSelectOam_AudioSelect          ((const struct FrameData*)((const u8*)&sFrameData_7408f0[0])) // 0x087408f0
+#define sFileSelectOam_PanelOpening         ((const struct FrameData*)((const u8*)&sFrameData_740918[0])) // 0x08740918
+#define sFileSelectOam_ActionPanelIdle      ((const struct FrameData*)((const u8*)&sFrameData_740940[0])) // 0x08740940
+#define sFileSelectOam_ActionPanelClosing   ((const struct FrameData*)((const u8*)&sFrameData_740950[0])) // 0x08740950
+#define sFileSelectOam_SmallPanelOpening    ((const struct FrameData*)((const u8*)&sFrameData_740978[0])) // 0x08740978
+#define sFileSelectOam_SmallPanelIdle       ((const struct FrameData*)((const u8*)&sFrameData_7409a0[0])) // 0x087409a0
+#define sFileSelectOam_SmallPanelClosing    ((const struct FrameData*)((const u8*)&sFrameData_7409b0[0])) // 0x087409b0
+#define sFileSelectOam_SamusHead            ((const struct FrameData*)((const u8*)&sFrameData_740a48[0])) // 0x08740a48
+#define sFileSelectOam_SamusHeadSelected    ((const struct FrameData*)((const u8*)&sFrameData_740a70[0])) // 0x08740a70
+#define sFileSelectOam_CopyArrow            ((const struct FrameData*)((const u8*)&sFrameData_740ab8[0])) // 0x08740ab8
+#define sFileSelectOam_Cursor               ((const struct FrameData*)((const u8*)&sFrameData_740b48[0])) // 0x08740b48
+#define sFileSelectOam_CursorSelected       ((const struct FrameData*)((const u8*)&sFrameData_740b70[0])) // 0x08740b70
+#define sFileSelectOam_CompletedStar        ((const struct FrameData*)((const u8*)&sFrameData_740b98[0])) // 0x08740b98
 
-#define sFileSelectOamXWidthTable           BLOB_73421E(0x9986) // 0x0873dba4, u8[3][4] width in tiles by shape/size
-#define sFileSelectCopyYesNoXPositions      BLOB_73421E(0x9992) // 0x0873dbb0, u8[LANGUAGE_COUNT][2] (no, yes)
-#define sFileSelectEraseYesNoXPositions     BLOB_73421E(0x99a0) // 0x0873dbbe, u8[LANGUAGE_COUNT][2] (no, yes)
+#define sFileSelectOamXWidthTable           (&sBlob_73c2e4_7406f8[0x18c0]) // 0x0873dba4, u8[3][4] width in tiles by shape/size
+#define sFileSelectCopyYesNoXPositions      (&sBlob_73c2e4_7406f8[0x18cc]) // 0x0873dbb0, u8[LANGUAGE_COUNT][2] (no, yes)
+#define sFileSelectEraseYesNoXPositions     (&sBlob_73c2e4_7406f8[0x18da]) // 0x0873dbbe, u8[LANGUAGE_COUNT][2] (no, yes)
 
-#define sFileSelectEnergyTankFullGfx        BLOB_73421E(0x9946) // 0x0873db64
-#define sFileSelectEnergyTankHalfFullGfx    BLOB_73421E(0x98e6) // 0x0873db04, half full, last tank
-#define sFileSelectEnergyTankHalfGfx        BLOB_73421E(0x9926) // 0x0873db44, half full, more tanks after
-#define sFileSelectEnergyTankEmptyGfx       BLOB_73421E(0x9906) // 0x0873db24
-#define sFileSelectEnergyTankHalfEmptyGfx   BLOB_73421E(0x98c6) // 0x0873dae4
+#define sFileSelectEnergyTankFullGfx        (&sBlob_73c2e4_7406f8[0x1880]) // 0x0873db64
+#define sFileSelectEnergyTankHalfFullGfx    (&sBlob_73c2e4_7406f8[0x1820]) // 0x0873db04, half full, last tank
+#define sFileSelectEnergyTankHalfGfx        (&sBlob_73c2e4_7406f8[0x1860]) // 0x0873db44, half full, more tanks after
+#define sFileSelectEnergyTankEmptyGfx       (&sBlob_73c2e4_7406f8[0x1840]) // 0x0873db24
+#define sFileSelectEnergyTankHalfEmptyGfx   (&sBlob_73c2e4_7406f8[0x1800]) // 0x0873dae4
 
-#define sFileSelectBgGfx                    BLOB_73421E(0xed96)  // 0x08742fb4 (LZ77)
-#define sFileSelectBg3TileTable             BLOB_73421E(0x12ec2) // 0x087470e0 (LZ77)
-#define sFileSelectBgPal                    BLOB_73421E(0x13482) // 0x087476a0
-#define sFileSelectBg2TileTable             BLOB_73421E(0x8d8e)  // 0x0873cfac (LZ77)
-#define sFileSelectBg1TileTable             BLOB_73421E(0x9162)  // 0x0873d380 (LZ77)
-#define sFileSelectBg0TileTable             BLOB_73421E(0x93ce)  // 0x0873d5ec (LZ77)
-#define sFileSelectBgPalRow0                BLOB_73421E(0x9966)  // 0x0873db84
-#define sFileSelectBgPalOverride            BLOB_73421E(0x98a6)  // 0x0873dac4
-#define sFileSelectObjGfx                   BLOB_73421E(0x9a02)  // 0x0873dc20 (LZ77)
-#define sFileSelectObjPal                   BLOB_73421E(0xcaea)  // 0x08740d08
+#define sFileSelectBgGfx                    (&sBlob_740d08_7478a0[0x22ac])  // 0x08742fb4 (LZ77)
+#define sFileSelectBg3TileTable             (&sBlob_740d08_7478a0[0x63d8]) // 0x087470e0 (LZ77)
+#define sFileSelectBgPal                    (&sBlob_740d08_7478a0[0x6998]) // 0x087476a0
+#define sFileSelectBg2TileTable             (&sBlob_73c2e4_7406f8[0xcc8])  // 0x0873cfac (LZ77)
+#define sFileSelectBg1TileTable             (&sBlob_73c2e4_7406f8[0x109c])  // 0x0873d380 (LZ77)
+#define sFileSelectBg0TileTable             (&sBlob_73c2e4_7406f8[0x1308])  // 0x0873d5ec (LZ77)
+#define sFileSelectBgPalRow0                (&sBlob_73c2e4_7406f8[0x18a0])  // 0x0873db84
+#define sFileSelectBgPalOverride            (&sBlob_73c2e4_7406f8[0x17e0])  // 0x0873dac4
+#define sFileSelectObjGfx                   (&sBlob_73c2e4_7406f8[0x193c])  // 0x0873dc20 (LZ77)
+#define sFileSelectObjPal                   (&sBlob_740d08_7478a0[0x0])  // 0x08740d08
 
 s8 FileSelectHandler(void);
 void FileSelectInit(void);

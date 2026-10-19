@@ -26,7 +26,13 @@ extern const u8 sBlob_74e650_74eb50[]; // ROM 0x0874e650
 
 // PORT: these tables live inside a raw binary blob and hold GBA ROM pointers (pOam),
 // they must be decoded into real struct EndingImageTextOamData arrays for a native build.
+#ifdef PLATFORM_PC
+// Native: decoded on first use from the blob (12 bytes per entry on the GBA).
+const struct EndingImageTextOamData* EndingImageTextNative(u32 offset);
+#define ENDING_IMAGE_TEXT(off) EndingImageTextNative(off)
+#else
 #define ENDING_IMAGE_TEXT(off) ((const struct EndingImageTextOamData*)&sBlob_74dc48_74e620[(off)])
+#endif
 #define sEndingImageLines_Default    ENDING_IMAGE_TEXT(0x0)   // 0x0874dc48 [6]
 #define sEndingImageText0_Default    ENDING_IMAGE_TEXT(0x48)  // 0x0874dc90 [9]
 #define sEndingImageText1_Default    ENDING_IMAGE_TEXT(0xb4)  // 0x0874dcfc [11]

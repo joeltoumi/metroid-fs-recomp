@@ -34,6 +34,37 @@ asm(".set gUnk_300000a, 0x0300000a");
 
 #define NAV_OAM(i) (PAUSE_SCREEN_DATA.oam[(i)])
 
+#ifdef PLATFORM_PC
+#include "port_rom.h"
+
+// The pop-up table (5 entries of 0x18 bytes on the GBA) holds GBA pointers.
+const struct NavigationPopUpInfo* NavigationPopUpsNative(void)
+{
+    static struct NavigationPopUpInfo sPopUps[5];
+    static u8 sDecoded;
+    u32 i;
+
+    if (!sDecoded)
+    {
+        for (i = 0; i < 5; i++)
+        {
+            const u8* src = sBlob_5766D4_581510 + 0x557C + i * 0x18;
+
+            sPopUps[i].pFrames = (const u8*)PORT_GBA_PTR(src + 0x0);
+            sPopUps[i].frameCount = src[4];
+            sPopUps[i].pPalette = (const u16*)PORT_GBA_PTR(src + 0x8);
+            sPopUps[i].pFlashingColors = (const u16*)PORT_GBA_PTR(src + 0xC);
+            sPopUps[i].flashingColorDelay = src[0x10];
+            sPopUps[i].tiles = src[0x11];
+            sPopUps[i].type = src[0x12];
+            sPopUps[i].pGraphics = (const u32*)PORT_GBA_PTR(src + 0x14);
+        }
+        sDecoded = TRUE;
+    }
+    return sPopUps;
+}
+#endif /* PLATFORM_PC */
+
 /**
  * @brief 79afc | 600 | Processes the text of a navigation conversation
  *

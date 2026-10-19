@@ -42,8 +42,8 @@ asm(".set LanguageSelectProcessSelected_Orig, 0x080a1a81");
 #define LANGUAGE_SELECT_ROW_HEIGHT 16
 
 // Graphics and palette, inside sBlob_73421e_73c274 (also present, unused, in the US ROM)
-#define sLanguageSelectObjectsGfx ((const u32*)BLOB_73421E(0x9a02)) // EU 0x0873e430, US 0x0873dc20
-#define sLanguageSelectObjectsPal ((const u16*)BLOB_73421E(0xcaea)) // EU 0x08741518, US 0x08740d08
+#define sLanguageSelectObjectsGfx ((const u32*)(&sBlob_73c2e4_7406f8[0x193c])) // EU 0x0873e430, US 0x0873dc20
+#define sLanguageSelectObjectsPal ((const u16*)(&sBlob_740d08_7478a0[0x0])) // EU 0x08741518, US 0x08740d08
 
 /*
  * EU only: 2 tables inserted at offset 0x1a0 of &sPointers_79e868[0] (EU 0x0879f23c and 0x0879f250),
@@ -51,19 +51,19 @@ asm(".set LanguageSelectProcessSelected_Orig, 0x080a1a81");
  * PORT: like the file select frame data, the pointed struct FrameData still hold GBA ROM pointers.
  */
 static const struct FrameData* const sLanguageSelectCursorOamPointers[LANGUAGE_SELECT_NBR_LANGUAGES] = {
-    FS_FRAME(0xc4da), // English
-    FS_FRAME(0xc4ea), // German
-    FS_FRAME(0xc4fa), // French
-    FS_FRAME(0xc50a), // Italian
-    FS_FRAME(0xc51a), // Spanish
+    ((const struct FrameData*)((const u8*)&sFrameData_7406f8[0])), // English
+    ((const struct FrameData*)((const u8*)&sFrameData_740708[0])), // German
+    ((const struct FrameData*)((const u8*)&sFrameData_740718[0])), // French
+    ((const struct FrameData*)((const u8*)&sFrameData_740728[0])), // Italian
+    ((const struct FrameData*)((const u8*)&sFrameData_740738[0])), // Spanish
 };
 
 static const struct FrameData* const sLanguageSelectSelectedOamPointers[LANGUAGE_SELECT_NBR_LANGUAGES] = {
-    FS_FRAME(0xc52a), // English
-    FS_FRAME(0xc542), // German
-    FS_FRAME(0xc55a), // French
-    FS_FRAME(0xc572), // Italian
-    FS_FRAME(0xc58a), // Spanish
+    ((const struct FrameData*)((const u8*)&sFrameData_740748[0])), // English
+    ((const struct FrameData*)((const u8*)&sFrameData_740760[0])), // German
+    ((const struct FrameData*)((const u8*)&sFrameData_740778[0])), // French
+    ((const struct FrameData*)((const u8*)&sFrameData_740790[0])), // Italian
+    ((const struct FrameData*)((const u8*)&sFrameData_7407a8[0])), // Spanish
 };
 
 /**

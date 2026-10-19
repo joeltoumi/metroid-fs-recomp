@@ -17,6 +17,29 @@ SYM = re.compile(r'\.\s*=\s*(0x[0-9a-fA-F]+)\s*;\s*([A-Za-z_]\w*)\s*=\s*\.\s*;')
 SECTION = re.compile(r'^\s*(ewram|iwram)\s*\(NOLOAD\)')
 SIZES = {"ewram": 256 * 0x400, "iwram": 32 * 0x400}
 BUFFERS = {"ewram": "gPortEwram", "iwram": "gPortIwram"}
+# Arrays of 16 bytes or more that linker.ld places at an offset that isn't a
+# multiple of 16. x86-64 compilers (clang) assume such an array is 16-byte
+# aligned and use aligned SSE moves on it, which fault here; the game reaches
+# them through a pointer instead (include/port/ram_unaligned.h lists the
+# same names).
+UNALIGNED = [
+    "gSpritesetSpriteGfxSlots", "gCurrentScrolls", "gParticleEffects",
+    "gAmmoDigitsGfx", "gFileSelectFileInfo", "gInterruptCode", "gOamData",
+    "gSaXElevatorBgCnt", "gPrevious64Positions", "gDemoInputs", "gDemoInputDurations",
+    "gSamusPalette", "gHatchData", "gBombChains", "gVerticalTilemap",
+]
+# Variables that are bigger natively than on the GBA (they hold pointers):
+# kept at their GBA offset they would overwrite their neighbours. They are
+# defined as ordinary variables in port/game/ram_native.c instead (same list).
+NATIVE = {
+    "gHazeInfo", "gBackgroundsData", "gCurrentRoomEntry", "gSpriteData", "gCurrentSprite",
+    "gSpriteDebris", "gCurrentSpriteDebris", "gSubSpriteData1", "gSubSpriteData2",
+    "gProjectileData", "gCurrentProjectile", "gSamusGraphicsInfo", "gSamusEnvironmentalEffects",
+    "gSaXData", "gNonGameplayRam", "gVBlankCallback", "gHBlankCallback", "gVCountCallback",
+    "gSoundCodeAPointer", "gSoundCodeBPointer", "gSoundCodeCPointer", "gSaXElevatorSprites",
+    "gTilemapAndClipPointers", "gClipdataCodePointer", "gAnimatedGraphicsData",
+    "gCurrentRoomScrollDataPointer", "gHazeProcessCodePointer", "gInterruptCodePointer",
+}
 
 
 def main():
@@ -55,11 +78,26 @@ def main():
             f'    "\\t.zero 0x{SIZES[region]:x}\\n"',
         ]
         for off, name in syms[region]:
+            if name in NATIVE:
+                continue
             out += [
                 f'    "\\t.globl {name}\\n"',
                 f'    "\\t.type {name}, %object\\n"',
                 f'    "\\t.set {name}, {buf} + 0x{off:x}\\n"',
             ]
+    # Pointers to the variables that can't be accessed by name: see
+    # include/port/ram_unaligned.h.
+    out += [
+        '    "\\t.pushsection .data.rel.ro.mf_gba_ram_ptrs,\\"aw\\"\\n"',
+        '    "\\t.balign 8\\n"',
+    ]
+    for name in UNALIGNED:
+        out += [
+            f'    "\\t.globl {name}_PortPtr\\n"',
+            f'    "{name}_PortPtr:\\n"',
+            f'    "\\t.quad {name}\\n"',
+        ]
+    out += ['    "\\t.popsection\\n"']
     out += ['    "\\t.previous\\n"', ");", ""]
     sys.stdout.write("\n".join(out))
 
