@@ -30961,6 +30961,14 @@
     "size": 2
   },
   {
+    "path": "ending/credits_eu.bin",
+    "count": "0x2BBC",
+    "addr": {
+      "eu": "0x74B8C0"
+    },
+    "size": 1
+  },
+  {
     "path": "ending/credits_character.gfx",
     "count": "0x500",
     "addr": {

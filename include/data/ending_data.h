@@ -32,7 +32,13 @@ extern const u16 sEnding_3_Pal[PAL_ROW * 16];
 extern const u16 sEnding_4_Pal[PAL_ROW * 16];
 extern const u16 sResultsTextPal[PAL_ROW * 4];
 
-extern const struct CreditsEntry sCredits[310];
+#ifdef REGION_EU
+#define CREDITS_COUNT 311
+#else
+#define CREDITS_COUNT 310
+#endif // REGION_EU
+
+extern const struct CreditsEntry sCredits[CREDITS_COUNT];
 
 extern const u32* const sPreResultsSamusBgGfxPointers1[4];
 extern const u32* const sPreResultsSamusBgGfxPointers2[4];

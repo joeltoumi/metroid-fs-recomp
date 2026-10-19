@@ -100,6 +100,7 @@ int Port_Main(int argc, char** argv)
             Port_Log("ROM rejected: %s", error);
         }
     }
+    Port_GameRomLoaded();
 
     Port_MemReset();
     Port_DmaReset();

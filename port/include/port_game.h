@@ -14,6 +14,9 @@ void AgbMain(void);
 // port/game/linker_glue.c — IRQ handler table indexed like asm/intr_main.s.
 extern const PortGameFunc sIntrTable[13];
 
+// port/game/region_tables.c — region fix-ups of game tables, once the ROM is loaded.
+void Port_GameRomLoaded(void);
+
 // Unwind from deep inside the game back to main() (quit request).
 _Noreturn void Port_ExitToMain(void);
 

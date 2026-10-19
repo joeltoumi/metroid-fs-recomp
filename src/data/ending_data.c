@@ -80,7 +80,11 @@ const u16 sResultsTextPal[PAL_ROW * 4] = INCBIN_U16("data/ending/results_text.pa
 
 static const u8 sBlob_74a7d8_74b0b0[] = INCBIN_U8("data/Blob_74a7d8_74b0b0.bin");
 
-const struct CreditsEntry sCredits[310] = {
+#ifdef REGION_EU
+// EU credits (NOE localization staff added), from the ROM
+const struct CreditsEntry sCredits[CREDITS_COUNT] = INCBIN_U8("data/ending/credits_eu.bin");
+#else
+const struct CreditsEntry sCredits[CREDITS_COUNT] = {
 	[0] = {
 		.type = CREDIT_LINE_TYPE_WHITE_BIG,
 		.text = ""
@@ -1322,6 +1326,7 @@ const struct CreditsEntry sCredits[310] = {
 		.text = ""
 	},
 };
+#endif // REGION_EU
 
 const u8 sBlob_74dc48_74e620[] = INCBIN_U8("data/Blob_74dc48_74e620.bin");
 
