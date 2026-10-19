@@ -11,6 +11,15 @@
 #include "constants/audio.h"
 #include "constants/menus/title_screen.h"
 
+#ifdef REGION_EU
+#include "constants/game_state.h"
+
+// The EU version moved "Press start" up to make room for the language option under it
+#define TITLE_SCREEN_PRESS_START_Y SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8)
+#else
+#define TITLE_SCREEN_PRESS_START_Y SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8 + HALF_BLOCK_SIZE)
+#endif // REGION_EU
+
 /**
  * @brief 86854 | b8 | To document
  * 
@@ -69,10 +78,19 @@ s32 unk_86854(void)
             }
             else
             {
+#ifdef REGION_EU
+                if (TITLE_SCREEN_DATA.unk_4 == 0)
+                    ended = TRUE; // Start, go to file select
+                else if (TITLE_SCREEN_DATA.unk_4 == 1)
+                    ended = 0x64; // Idle, start demo
+                else if (TITLE_SCREEN_DATA.unk_4 == 2)
+                    ended = 2; // Language selected, go to language select
+#else
                 if (TITLE_SCREEN_DATA.unk_4 == 0x1)
                     ended = 0x64;
                 else
                     ended = TRUE;
+#endif // REGION_EU
 
                 gSubGameMode1 = 0;
             }
@@ -158,7 +176,7 @@ void unk_8690c(void)
     CallbackSetVBlank(TitleScreenVblank);
 
     TitleScreenSetupObject(TITLE_SCREEN_SECTION_COPYRIGHT, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8), SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 9 + HALF_BLOCK_SIZE + EIGHTH_BLOCK_SIZE));
-    TitleScreenSetupObject(TITLE_SCREEN_SECTION_PRESS_START, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 7 + HALF_BLOCK_SIZE), SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8 + HALF_BLOCK_SIZE));
+    TitleScreenSetupObject(TITLE_SCREEN_SECTION_PRESS_START, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 7 + HALF_BLOCK_SIZE), TITLE_SCREEN_PRESS_START_Y);
 
     TitleScreenDrawAllObjects();
 
@@ -210,10 +228,20 @@ s32 unk_86b58(void)
                 TITLE_SCREEN_DATA.unk_0 = 0;
             }
 
+#ifdef REGION_EU
+            // Moving the cursor resets the demo timer
+            if (gChangedInput & (KEY_UP | KEY_DOWN))
+                TITLE_SCREEN_DATA.unk_2 = 0;
+#endif // REGION_EU
+
             if (gChangedInput & (KEY_A | KEY_START))
             {
                 TITLE_SCREEN_DATA.unk_0 = 0;
                 TITLE_SCREEN_DATA.unk_2 = 0;
+#ifdef REGION_EU
+                if (TITLE_SCREEN_DATA.cursor == 1)
+                    TITLE_SCREEN_DATA.unk_4 = 2;
+#endif // REGION_EU
                 TITLE_SCREEN_DATA.unk_5 = 1;
 
                 SoundPlay(SOUND_1FF);
@@ -282,7 +310,11 @@ u8 TitleScreenSetupObject(u8 section, u16 xPosition, u16 yPosition)
     }
     else if (section == TITLE_SCREEN_SECTION_PRESS_START)
     {
+#ifdef REGION_EU
+        TITLE_SCREEN_DATA.objects[i].pOam = sTitleScreenLanguageOamPointers[gLanguage - LANGUAGE_ENGLISH][TITLE_SCREEN_LANGUAGE_OAM_START_IDLE];
+#else
         TITLE_SCREEN_DATA.objects[i].pOam = sTitleScreenOam_PressStart;
+#endif // REGION_EU
         TITLE_SCREEN_DATA.objects[i].pHandler = TitleScreenProcessPressStart;
     }
     else if (section == TITLE_SCREEN_SECTION_LANGUAGE)
@@ -299,6 +331,7 @@ u8 TitleScreenSetupObject(u8 section, u16 xPosition, u16 yPosition)
     return i;
 }
 
+#ifndef REGION_EU
 /**
  * @brief 86cf0 | e8 | To document
  * 
@@ -376,6 +409,94 @@ void unk_86cf0(struct TitleScreenObject* pObject)
     pObject->unk_9++;
 }
 
+#endif // !REGION_EU
+
+#ifdef REGION_EU
+/**
+ * @brief 86d30 (EU) | 1b0 | Process the press start object (press start/language menu)
+ * 
+ * @param pObject Title screen object pointer
+ */
+void TitleScreenProcessPressStart(struct TitleScreenObject* pObject)
+{
+    const struct FrameData* pOam;
+    const struct FrameData* const* pAnims;
+
+    pOam = &pObject->pOam[pObject->currentAnimationFrame];
+
+    if (pObject->action != 0)
+        return;
+
+    pObject->unk_9++;
+
+    if (pObject->unk_9 == 12)
+    {
+        pObject->unk_9 = 0;
+        pObject->unk_5++;
+
+        if (pObject->unk_5 == PALETTE_NBR_ROWS(sTitleScreenPressStartPal))
+            pObject->unk_5 = 0;
+
+        DMA3_COPY_32(&sTitleScreenPressStartPal[pObject->unk_5 * 16], PALRAM_OBJ, 16 * sizeof(u16) / sizeof(s32));
+    }
+
+    pAnims = sTitleScreenLanguageOamPointers[gLanguage - LANGUAGE_ENGLISH];
+
+    if (TITLE_SCREEN_DATA.cursor == 0)
+    {
+        // Cursor on "Press start"
+        if (gChangedInput & KEY_DOWN)
+        {
+            TITLE_SCREEN_DATA.cursor = 1;
+            pObject->currentAnimationFrame = 0;
+            pObject->animationDurationCounter = 0;
+            pObject->pOam = pAnims[TITLE_SCREEN_LANGUAGE_OAM_MOVING_TO_LANGUAGE];
+            SoundPlay(SOUND_1F9);
+        }
+        else if (gChangedInput & (KEY_A | KEY_START))
+        {
+            pObject->currentAnimationFrame = 0;
+            pObject->animationDurationCounter = 0;
+            pObject->pOam = pAnims[TITLE_SCREEN_LANGUAGE_OAM_START_SELECTED];
+            pObject->action = 1;
+        }
+
+        // Animation ended (on its last frame), switch to the idle animation
+        if (pOam[0].timer == pObject->animationDurationCounter && pOam[1].timer == 0)
+        {
+            pObject->currentAnimationFrame = 0;
+            pObject->animationDurationCounter = 0;
+            pObject->pOam = sTitleScreenLanguageOamPointers[gLanguage - LANGUAGE_ENGLISH][TITLE_SCREEN_LANGUAGE_OAM_START_IDLE];
+        }
+    }
+    else if (TITLE_SCREEN_DATA.cursor == 1)
+    {
+        // Cursor on "Language"
+        if (gChangedInput & KEY_UP)
+        {
+            TITLE_SCREEN_DATA.cursor = 0;
+            pObject->currentAnimationFrame = 0;
+            pObject->animationDurationCounter = 0;
+            pObject->pOam = pAnims[TITLE_SCREEN_LANGUAGE_OAM_MOVING_TO_START];
+            SoundPlay(SOUND_1F9);
+        }
+        else if (gChangedInput & (KEY_A | KEY_START))
+        {
+            pObject->currentAnimationFrame = 0;
+            pObject->animationDurationCounter = 0;
+            pObject->pOam = pAnims[TITLE_SCREEN_LANGUAGE_OAM_LANGUAGE_SELECTED];
+            pObject->action = 1;
+        }
+
+        if (pOam[0].timer == pObject->animationDurationCounter && pOam[1].timer == 0)
+        {
+            pObject->currentAnimationFrame = 0;
+            pObject->animationDurationCounter = 0;
+            pObject->pOam = sTitleScreenLanguageOamPointers[gLanguage - LANGUAGE_ENGLISH][TITLE_SCREEN_LANGUAGE_OAM_LANGUAGE_IDLE];
+        }
+    }
+}
+#else
 /**
  * @brief 86dd8 | 78 | Process the press start object
  * 
@@ -407,6 +528,7 @@ void TitleScreenProcessPressStart(struct TitleScreenObject* pObject)
         pObject->action = 1;
     }
 }
+#endif // REGION_EU
 
 /**
  * @brief 86e50 | 44 | Process the language object
@@ -721,7 +843,7 @@ s32 TitleScreenSpawningIn(void)
                 objSlot = TitleScreenSetupObject(TITLE_SCREEN_SECTION_COPYRIGHT, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8), SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 9 + HALF_BLOCK_SIZE + EIGHTH_BLOCK_SIZE));
                 TITLE_SCREEN_DATA.objects[objSlot].objMode = OAM_OBJ_MODE_SEMI_TRANSPARENT;
 
-                objSlot = TitleScreenSetupObject(TITLE_SCREEN_SECTION_PRESS_START, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 7 + HALF_BLOCK_SIZE), SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8 + HALF_BLOCK_SIZE));
+                objSlot = TitleScreenSetupObject(TITLE_SCREEN_SECTION_PRESS_START, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 7 + HALF_BLOCK_SIZE), TITLE_SCREEN_PRESS_START_Y);
                 TITLE_SCREEN_DATA.objects[objSlot].objMode = OAM_OBJ_MODE_SEMI_TRANSPARENT;
                 
                 TITLE_SCREEN_DATA.unk_0 = 0;
@@ -762,10 +884,20 @@ s32 TitleScreenSpawningIn(void)
                 TITLE_SCREEN_DATA.unk_0 = 0;
             }
 
+#ifdef REGION_EU
+            // Moving the cursor resets the demo timer
+            if (gChangedInput & (KEY_UP | KEY_DOWN))
+                TITLE_SCREEN_DATA.unk_2 = 0;
+#endif // REGION_EU
+
             if (gChangedInput & (KEY_A | KEY_START))
             {
                 TITLE_SCREEN_DATA.unk_0 = 0;
                 TITLE_SCREEN_DATA.unk_2 = 0;
+#ifdef REGION_EU
+                if (TITLE_SCREEN_DATA.cursor == 1)
+                    TITLE_SCREEN_DATA.unk_4 = 2;
+#endif // REGION_EU
                 TITLE_SCREEN_DATA.unk_5 = 6;
 
                 SoundPlay(SOUND_1FF);
@@ -813,7 +945,7 @@ s32 TitleScreenSpawningIn(void)
                 objSlot = TitleScreenSetupObject(TITLE_SCREEN_SECTION_COPYRIGHT, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8), SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 9 + HALF_BLOCK_SIZE + EIGHTH_BLOCK_SIZE));
                 TITLE_SCREEN_DATA.objects[objSlot].objMode = OAM_OBJ_MODE_SEMI_TRANSPARENT;
 
-                objSlot = TitleScreenSetupObject(TITLE_SCREEN_SECTION_PRESS_START, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 7 + HALF_BLOCK_SIZE), SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 8 + HALF_BLOCK_SIZE));
+                objSlot = TitleScreenSetupObject(TITLE_SCREEN_SECTION_PRESS_START, SUB_PIXEL_TO_PIXEL(BLOCK_SIZE * 7 + HALF_BLOCK_SIZE), TITLE_SCREEN_PRESS_START_Y);
                 TITLE_SCREEN_DATA.objects[objSlot].objMode = OAM_OBJ_MODE_SEMI_TRANSPARENT;
 
                 TITLE_SCREEN_DATA.unk_0 = 0;
@@ -880,10 +1012,19 @@ s32 TitleScreenHandler(void)
             }
             else
             {
+#ifdef REGION_EU
+                if (TITLE_SCREEN_DATA.unk_4 == 0)
+                    ended = TRUE; // Start, go to file select
+                else if (TITLE_SCREEN_DATA.unk_4 == 1)
+                    ended = 0x64; // Idle, start demo
+                else if (TITLE_SCREEN_DATA.unk_4 == 2)
+                    ended = 2; // Language selected, go to language select
+#else
                 if (TITLE_SCREEN_DATA.unk_4 == 0x1)
                     ended = 0x64;
                 else
                     ended = TRUE;
+#endif // REGION_EU
 
                 gSubGameMode1 = 0;
             }

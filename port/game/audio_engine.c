@@ -21,8 +21,7 @@
 // Each translation keeps the assembly's exact arithmetic (including its
 // quirks), so the music plays as it does on the console. Same engine as
 // Metroid Zero Mission (mzm-android's port/game/audio_engine.c), with
-// Fusion's differences: InitTrack's default track volume, the stop
-// functions, UpdateAudio, the reverb source and the 8-bit conversion table.
+// Fusion's differences: the stop functions, UpdateAudio, the reverb source and the 8-bit conversion table.
 #include "types.h"
 #include "macros.h"
 #include "gba.h"
@@ -60,6 +59,10 @@ static u32 Read32(const u8* p)
 {
     return p[0] | p[1] << 8 | p[2] << 16 | (u32)p[3] << 24;
 }
+
+// The ROM copy (Port_SoundInit), for reads the GBA makes past a sample.
+static const s8* sRomBase;
+static u32 sRomSize;
 
 static const u8* RomPointer(u32 address)
 {
@@ -276,6 +279,8 @@ void Port_SoundInit(const u8* rom, u32 size)
     s32 offset;
     u32 i;
 
+    sRomBase = (const s8*)rom;
+    sRomSize = size;
     SetupSilentVoicegroup();
     sVoicegroupCount = 0;
 
@@ -395,8 +400,8 @@ u8 InitTrack(struct TrackData* pTrack, const u32* pHeader)
                 pVariables->unk_0 = 1;
                 pVariables->bendRange = 2;
                 pVariables->unk_1B = 0xC;
-                pVariables->volume = 0x40;
-                pVariables->unk_5 = 0;
+                pVariables->volume = 0;
+                pVariables->unk_5 = 0x40;
                 pVariables->unk_6 = 0x40;
                 pVariables->unk_7 = 0;
                 pVariables->pRawData = ScriptPointer(Read32(header + 8 + i * 4));
@@ -538,7 +543,7 @@ void UpdateAudio(void)
 
     if (gMusicInfo.priority != 0x11)
     {
-        for (i = 0; i < (u16)gNumMusicPlayers; i++)
+        for (i = 0; i < (u16)(port_uptr)gNumMusicPlayers; i++)
         {
             pTrack = sMusicTrackDataRom[i].pTrack;
             if (pTrack != NULL && pTrack->flags & 2)
@@ -844,11 +849,10 @@ void unk_4b10(struct PsgSoundData* pSound)
     u8 channel;
     u8 bias;
 
-    if (pSound->pVariables == NULL) // the GBA would read the BIOS
-        return;
-
     frequency = pSound->unk_14;
-    channel = pSound->pVariables->channel;
+    // Without variables the GBA reads the channel from the BIOS (address
+    // 0x34, which reads as an open-bus value): taken as 0, no channel.
+    channel = pSound->pVariables != NULL ? pSound->pVariables->channel : 0;
 
     if (channel > 8)
     {
@@ -948,6 +952,19 @@ void unk_4530(void)
     unk_4534();
 }
 
+#ifndef PORT_EQUIV_TEST
+static s32 FarSample(const s8* pData, u32 index)
+{
+    port_uptr offset = (port_uptr)(pData + index) - (port_uptr)sRomBase;
+
+    if (sRomBase != NULL && offset < sRomSize)
+        return sRomBase[offset];
+    if (index < 0x10) // sSilentSample
+        return pData[index];
+    return 0;
+}
+#endif // !PORT_EQUIV_TEST
+
 // One resampled sample (18.14 fixed point position), linear interpolation.
 // The unsigned arithmetic matches the ARM code: the error it causes on
 // negative slopes is a multiple of 2^18 per unit of volume, which the
@@ -956,6 +973,19 @@ void unk_4530(void)
     do {                                                                        \
         const s8* pAt_ = &pData[(position) >> 14];                              \
         u32 sample_ = pAt_[0] + ((u32)((pAt_[1] - pAt_[0]) * (s32)((position) & 0x3FFF)) >> 14); \
+        pBuffer[0] += sample_ * volumeA;                                        \
+        pBuffer[1] += sample_ * volumeB;                                        \
+        pBuffer += 2;                                                           \
+    } while (0)
+
+// Same, for positions that can be far outside the sample: the GBA reads
+// whatever follows it in the ROM; natively reads stay inside the ROM copy
+// (0 past its end, the GBA's open bus is not emulated).
+#define MIX_RESAMPLED_FAR(position)                                             \
+    do {                                                                        \
+        s32 at0_ = FarSample(pData, (position) >> 14);                          \
+        s32 at1_ = FarSample(pData, ((position) >> 14) + 1);                    \
+        u32 sample_ = at0_ + ((u32)((at1_ - at0_) * (s32)((position) & 0x3FFF)) >> 14); \
         pBuffer[0] += sample_ * volumeA;                                        \
         pBuffer[1] += sample_ * volumeB;                                        \
         pBuffer += 2;                                                           \
@@ -1019,13 +1049,14 @@ void Port_SoundCodeA(struct SoundChannel* pChannel, u32* pBuffer, u8 size)
 
             for (i = 0; ; i++)
             {
-                MIX_RESAMPLED(position);
+                MIX_RESAMPLED_FAR(position);
                 if (i == 3)
                     goto end;
                 position += step;
-                // The ARM code shifts unsigned; signed stops a position that
-                // went below 0 instead of reading far outside the sample.
-                if ((s32)position >> 14 <= 0)
+                // Unsigned shift, as in the ARM code: a position that went
+                // below 0 reads ~256 KiB past the sample for the rest of
+                // these 4 samples (MIX_RESAMPLED_FAR keeps that in the ROM).
+                if ((position >> 14) == 0)
                     goto end;
             }
         }

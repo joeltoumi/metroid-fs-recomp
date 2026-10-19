@@ -19,6 +19,25 @@ extern const u32 sTitleScreenLogoTileTable[597];
 extern const u16 sTitleScreenLogoPal[16 * 8];
 extern const u16 sTitleScreen_596e0c[16 * 8];
 
+#ifdef REGION_EU
+#include "constants/game_state.h"
+
+// Press start/language menu animations, per language (gLanguage - LANGUAGE_ENGLISH)
+enum TitleScreenLanguageOam {
+    TITLE_SCREEN_LANGUAGE_OAM_COPYRIGHT,
+    TITLE_SCREEN_LANGUAGE_OAM_START_IDLE,
+    TITLE_SCREEN_LANGUAGE_OAM_MOVING_TO_LANGUAGE,
+    TITLE_SCREEN_LANGUAGE_OAM_LANGUAGE_IDLE,
+    TITLE_SCREEN_LANGUAGE_OAM_MOVING_TO_START,
+    TITLE_SCREEN_LANGUAGE_OAM_START_SELECTED,
+    TITLE_SCREEN_LANGUAGE_OAM_LANGUAGE_SELECTED,
+
+    TITLE_SCREEN_LANGUAGE_OAM_COUNT
+};
+
+extern const struct FrameData* const sTitleScreenLanguageOamPointers[LANGUAGE_COUNT - LANGUAGE_ENGLISH][TITLE_SCREEN_LANGUAGE_OAM_COUNT];
+#endif // REGION_EU
+
 extern const struct FrameData sTitleScreenOam_Copyright[2];
 extern const struct FrameData sTitleScreenOam_5973e0[2];
 extern const struct FrameData sTitleScreenOam_5973f0[3];

@@ -1779,6 +1779,8 @@ void NavigationConversationUpdatePopUp(void)
         return;
 
     PAUSE_SCREEN_DATA.unk_21B++;
+    // PORT: currentPopUp is only ever 0-3; out of range values index past the table (the original reads
+    // whatever follows in sBlob_79c170_79c27c)
     sNavigationPopUpFunctions[PAUSE_SCREEN_DATA.currentPopUp - 1]();
 
     if (PAUSE_SCREEN_DATA.unk_21D != 0)

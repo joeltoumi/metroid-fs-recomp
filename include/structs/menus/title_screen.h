@@ -28,7 +28,12 @@ struct TitleScreenData {
     u16 unk_2;
     u8 unk_4;
     u8 unk_5;
+#ifdef REGION_EU
+    u8 cursor; // 0 = press start, 1 = language
+    u8 padding_7[5];
+#else
     u8 padding_6[6];
+#endif // REGION_EU
     struct TitleScreenObject objects[4];
 };
 

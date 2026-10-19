@@ -16,6 +16,57 @@ const u32 sTitleScreenLogoTileTable[597] = INCBIN_U32("data/menus/title_screen/l
 const u16 sTitleScreenLogoPal[16 * 8] = INCBIN_U16("data/menus/title_screen/logo.pal");
 const u16 sTitleScreen_596e0c[16 * 8] = INCBIN_U16("data/menus/title_screen/596e0c.pal");
 
+#ifdef REGION_EU
+// 0x08597568 (EU only)
+const struct FrameData* const sTitleScreenLanguageOamPointers[LANGUAGE_COUNT - LANGUAGE_ENGLISH][TITLE_SCREEN_LANGUAGE_OAM_COUNT] = {
+    [LANGUAGE_ENGLISH - LANGUAGE_ENGLISH] = {
+        sTitleScreenOam_Copyright,
+        sTitleScreenOam_5973e0,
+        sTitleScreenOam_5973f0,
+        sTitleScreenOam_Language,
+        sTitleScreenOam_597418,
+        sTitleScreenOam_597430,
+        sTitleScreenOam_597448
+    },
+    [LANGUAGE_GERMAN - LANGUAGE_ENGLISH] = {
+        sTitleScreenOam_Copyright,
+        sTitleScreenOam_597488,
+        sTitleScreenOam_597498,
+        sTitleScreenOam_5974b0,
+        sTitleScreenOam_5974c0,
+        sTitleScreenOam_5974d8,
+        sTitleScreenOam_5974f0
+    },
+    [LANGUAGE_FRENCH - LANGUAGE_ENGLISH] = {
+        sTitleScreenOam_Copyright,
+        sTitleScreenOam_597508,
+        sTitleScreenOam_597518,
+        sTitleScreenOam_597530,
+        sTitleScreenOam_597540,
+        sTitleScreenOam_597558,
+        sTitleScreenOam_597570
+    },
+    [LANGUAGE_ITALIAN - LANGUAGE_ENGLISH] = {
+        sTitleScreenOam_Copyright,
+        sTitleScreenOam_597588,
+        sTitleScreenOam_597598,
+        sTitleScreenOam_5975b0,
+        sTitleScreenOam_5975c0,
+        sTitleScreenOam_5975d8,
+        sTitleScreenOam_5975f0
+    },
+    [LANGUAGE_SPANISH - LANGUAGE_ENGLISH] = {
+        sTitleScreenOam_Copyright,
+        sTitleScreenOam_597608,
+        sTitleScreenOam_597618,
+        sTitleScreenOam_597630,
+        sTitleScreenOam_597640,
+        sTitleScreenOam_597658,
+        sTitleScreenOam_597670
+    },
+};
+#endif // REGION_EU
+
 static const u16 sTitleScreenOam_Copyright_Frame0[OAM_DATA_SIZE(4)] = {
     4,
     OAM_ENTRY(-59, -16, OAM_DIMS_16x16, OAM_NO_FLIP, 0, 0, 0),
