@@ -3557,7 +3557,11 @@ void NewFileIntroSamusLosingConsciousnessInit(void)
 
     CallbackSetVBlank(unk_99940);
     
+#ifdef PLATFORM_PC
+    DMA3_FILL_32(0, INTRO_DATA.oam, sizeof(INTRO_DATA.oam)); // 0x030016a0: INTRO_DATA.oam on the GBA
+#else
     DMA3_FILL_32(0, 0x030016a0, 720); // TODO: Find out what 16a0 is
+#endif
     
     DMA3_COPY_32(sNextPageArrowGfx, VRAM_OBJ + 0x7FE0, 8);
     DMA3_COPY_32(sNextPageArrowPal, PALRAM_OBJ + 0x1E0, PAL_ROW_SIZE / 4);

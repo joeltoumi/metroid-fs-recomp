@@ -22,6 +22,8 @@
 #include "structs/clipdata.h"
 #include "structs/scroll.h"
 
+void* memset(void* dst, int value, unsigned long size);
+
 #define PORT_RAM_NATIVE(name) __attribute__((section("mf_state"), aligned(16))) __typeof__(name) name
 
 PORT_RAM_NATIVE(gHazeInfo);
@@ -52,3 +54,36 @@ PORT_RAM_NATIVE(gAnimatedGraphicsData);
 PORT_RAM_NATIVE(gCurrentRoomScrollDataPointer);
 PORT_RAM_NATIVE(gHazeProcessCodePointer);
 PORT_RAM_NATIVE(gInterruptCodePointer);
+
+// The game clears IWRAM (except its last 0x200 bytes) at boot and on soft
+// reset: clear these too.
+void PortClearNativeRam(void)
+{
+    memset(&gHazeInfo, 0, sizeof(gHazeInfo));
+    memset(&gBackgroundsData, 0, sizeof(gBackgroundsData));
+    memset(&gCurrentRoomEntry, 0, sizeof(gCurrentRoomEntry));
+    memset(&gSpriteData, 0, sizeof(gSpriteData));
+    memset(&gCurrentSprite, 0, sizeof(gCurrentSprite));
+    memset(&gSpriteDebris, 0, sizeof(gSpriteDebris));
+    memset(&gCurrentSpriteDebris, 0, sizeof(gCurrentSpriteDebris));
+    memset(&gSubSpriteData1, 0, sizeof(gSubSpriteData1));
+    memset(&gSubSpriteData2, 0, sizeof(gSubSpriteData2));
+    memset(&gProjectileData, 0, sizeof(gProjectileData));
+    memset(&gCurrentProjectile, 0, sizeof(gCurrentProjectile));
+    memset(&gSamusGraphicsInfo, 0, sizeof(gSamusGraphicsInfo));
+    memset(&gSamusEnvironmentalEffects, 0, sizeof(gSamusEnvironmentalEffects));
+    memset(&gSaXData, 0, sizeof(gSaXData));
+    memset(&gNonGameplayRam, 0, sizeof(gNonGameplayRam));
+    memset(&gVBlankCallback, 0, sizeof(gVBlankCallback));
+    memset(&gHBlankCallback, 0, sizeof(gHBlankCallback));
+    memset(&gVCountCallback, 0, sizeof(gVCountCallback));
+    memset(&gSoundCodeAPointer, 0, sizeof(gSoundCodeAPointer));
+    memset(&gSoundCodeBPointer, 0, sizeof(gSoundCodeBPointer));
+    memset(&gSoundCodeCPointer, 0, sizeof(gSoundCodeCPointer));
+    memset(&gSaXElevatorSprites, 0, sizeof(gSaXElevatorSprites));
+    memset(&gTilemapAndClipPointers, 0, sizeof(gTilemapAndClipPointers));
+    memset(&gClipdataCodePointer, 0, sizeof(gClipdataCodePointer));
+    memset(&gAnimatedGraphicsData, 0, sizeof(gAnimatedGraphicsData));
+    memset(&gCurrentRoomScrollDataPointer, 0, sizeof(gCurrentRoomScrollDataPointer));
+    memset(&gHazeProcessCodePointer, 0, sizeof(gHazeProcessCodePointer));
+}

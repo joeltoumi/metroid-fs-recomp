@@ -1291,7 +1291,12 @@ void SpecialCutsceneFadOut(void)
  */
 void NewFileIntroProcessTextCursor(struct SpecialCutsceneOam* pOam)
 {
+#ifdef PLATFORM_PC
+    // Can run before any text is set (pText NULL: the GBA reads the BIOS)
+    if (INTRO_DATA.pText != NULL && *INTRO_DATA.pText == SC_CHAR_WAIT_INPUT)
+#else
     if (*INTRO_DATA.pText == SC_CHAR_WAIT_INPUT)
+#endif
     {
         pOam->xPosition = 235;
         pOam->yPosition = 152;

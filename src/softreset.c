@@ -58,6 +58,9 @@ void SoftReset(void)
 
     DMA3_FILL_32(0, EWRAM_BASE, EWRAM_SIZE);
     DMA3_FILL_32(0, IWRAM_BASE, IWRAM_SIZE - 0x200);
+#ifdef PLATFORM_PC
+    PortClearNativeRam(); // port/game/ram_native.c
+#endif
 
     ClearGfxRam();
     LoadInterruptCode();

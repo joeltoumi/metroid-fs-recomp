@@ -72,7 +72,10 @@ uint16_t Sqrt(uint32_t number)
 
 static void Lz77Uncomp(const void* src, void* dst)
 {
-    const uint8_t* s = (const uint8_t*)src;
+    // Some compressed streams are longer than the array the decomp declares
+    // for them (the rest is in the next symbol): read ROM data from the ROM
+    // copy, where it is contiguous as on the GBA.
+    const uint8_t* s = (const uint8_t*)Port_RomMirror(src);
     uint8_t* d = (uint8_t*)dst;
     uint32_t header;
     uint32_t size;

@@ -57,4 +57,7 @@ void SramWrite_MostRecentSaveFile(void);
 void Sram_ResetForDemo(void);
 s8 Sram_ChecLoadSaveFileWithBlank(void);
 
+// port/game/ram_native.c
+void PortClearNativeRam(void);
+
 #endif /* PORT_DECOMP_PROTOS_H */
