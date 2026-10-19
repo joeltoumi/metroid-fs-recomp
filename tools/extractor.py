@@ -90,7 +90,9 @@ def total_blob_size() -> None:
         path: str = entry["path"]
         if not path.startswith("Blob"):
             continue
-        count: int = entry["count"]
+        count = entry["count"]
+        if isinstance(count, dict):
+            count = count["us"]
         size: int = int(count, 16) * entry["size"]
         blob_size += size
     assert blob_size <= total_size
