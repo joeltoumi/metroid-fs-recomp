@@ -9,6 +9,10 @@ layer (the same one as
 The repository **contains no game data**. On launch, the app asks for your own
 copy of the ROM and reads the graphics, sound and text from it.
 
+> **AI notice:** this project was developed with the help of AI tools
+> (Anthropic's Claude), which wrote most of the code and documentation under
+> my direction and review.
+
 ## Status
 
 - European (EU) and American (US) versions. Each one needs its own ROM:
