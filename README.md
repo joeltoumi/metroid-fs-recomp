@@ -1,92 +1,92 @@
 # mf-android
 
-Port nativo de **Metroid Fusion** (GBA) a Android y PC, hecho a partir de la
-decompilación [metroidret/mf](https://github.com/metroidret/mf). No es un
-emulador: el código del juego se compila en C para el dispositivo, con una
-capa de plataforma SDL3 (la misma que
+Native port of **Metroid Fusion** (GBA) to Android and PC, built from the
+[metroidret/mf](https://github.com/metroidret/mf) decompilation. It is not an
+emulator: the game code is compiled as C for the device, with an SDL3 platform
+layer (the same one as
 [mzm-android](https://github.com/joeltoumi/mzm-android)).
 
-El repositorio **no contiene datos del juego**. Al arrancar, la app pide tu
-propia copia de la ROM y lee de ella los gráficos, el sonido y los textos.
+The repository **contains no game data**. On launch, the app asks for your own
+copy of the ROM and reads the graphics, sound and text from it.
 
-## Estado
+## Status
 
-- Versiones europea (EU) y estadounidense (US). Cada una necesita su ROM:
+- European (EU) and American (US) versions. Each one needs its own ROM:
 
-  | Región | Archivo | SHA-1 |
+  | Region | File | SHA-1 |
   |---|---|---|
-  | EU | Metroid Fusion (Europa) | `cc46d54b70c1ee38c856ee6e58ec712136763389` |
-  | US | Metroid Fusion (EE. UU.) | `ca33f4348c2c05dd330d37b97e2c5a69531dfe87` |
+  | EU | Metroid Fusion (Europe) | `cc46d54b70c1ee38c856ee6e58ec712136763389` |
+  | US | Metroid Fusion (USA) | `ca33f4348c2c05dd330d37b97e2c5a69531dfe87` |
 
-- Todo el código que la decompilación tenía en ensamblador está traducido a C
-  (`port/decomp/`), y cada función se ha comparado con la original. El motor
-  de sonido está en `port/game/audio_engine.c`.
-- Probado en PC con las dos ROMs:
-  - todas las salas de la estación y de los 6 sectores (381);
-  - las cinemáticas y las conversaciones con el ordenador;
-  - los menús, guardar y cargar, el fin de partida, el final y los créditos.
-- Falta probarlo a fondo en Android y jugar una partida completa a mano.
-  Detalle en [docs/ROADMAP.md](docs/ROADMAP.md).
+- All the code the decompilation still had in assembly has been translated to
+  C (`port/decomp/`), and every function has been compared against the
+  original. The sound engine is in `port/game/audio_engine.c`.
+- Tested on PC with both ROMs:
+  - every room in the station and the 6 sectors (381);
+  - the cutscenes and the conversations with the computer;
+  - the menus, saving and loading, game over, the ending and the credits.
+- It still needs thorough testing on Android and a full playthrough by hand.
+  Details in [docs/ROADMAP.md](docs/ROADMAP.md).
 
-## Descargar la APK
+## Downloading the APK
 
-GitHub Actions compila una APK por región en cada cambio de `main`. Se
-descarga desde la pestaña **Actions**: abre la última ejecución de `build` y
-baja el artefacto `mf-android-apk`. Instala la de tu región y, al abrirla,
-elige tu ROM.
+GitHub Actions builds one APK per region on every change to `main`. Download
+it from the **Actions** tab: open the latest `build` run and grab the
+`mf-android-apk` artifact. Install the one for your region and pick your ROM
+when you open it.
 
-## Compilar
+## Building
 
 ### Android
 
-Hace falta el JDK 17 y el SDK de Android con el NDK 27.2.12479018:
+You need JDK 17 and the Android SDK with NDK 27.2.12479018:
 
 ```
 cd android
-./gradlew assembleEuRelease   # o assembleUsRelease
+./gradlew assembleEuRelease   # or assembleUsRelease
 ```
 
 ### PC (Linux, Windows, macOS)
 
-Hacen falta CMake, Ninja, un compilador C (clang o gcc) y Python 3. SDL3 se
-descarga solo si no está instalado.
+You need CMake, Ninja, a C compiler (clang or gcc) and Python 3. SDL3 is
+downloaded automatically if it is not installed.
 
 ```
-cmake -B build -G Ninja -DMF_REGION=eu    # o us
+cmake -B build -G Ninja -DMF_REGION=eu    # or us
 ninja -C build
-./build/mf [ruta/a/la/rom.gba]
+./build/mf [path/to/rom.gba]
 ```
 
-Sin ruta, el programa busca `mf_eu.gba` / `mf_us.gba` junto al ejecutable o
-abre un selector de archivos. `-DMF_HOST=headless` compila `mf_headless`, una
-versión sin ventana para pruebas que vuelca capturas.
+Without a path, the program looks for `mf_eu.gba` / `mf_us.gba` next to the
+executable or opens a file picker. `-DMF_HOST=headless` builds `mf_headless`,
+a windowless version for testing that dumps screenshots.
 
-### Pruebas
+### Testing
 
-[docs/PORT.md](docs/PORT.md) explica el modo `MF_WARP`. Este modo salta a
-cualquier sala, cinemática o menú con todo el equipo, y así se ha probado el
-juego entero sin jugarlo.
+[docs/PORT.md](docs/PORT.md) explains the `MF_WARP` mode. It jumps to any
+room, cutscene or menu with all equipment, and that is how the whole game has
+been tested without playing it.
 
-## ROM de GBA (decompilación)
+## GBA ROM (decompilation)
 
-El árbol de la decompilación sigue generando la ROM US original, idéntica
-byte a byte, con [agbcc](https://github.com/pret/agbcc) y
+The decompilation tree still builds the original US ROM, byte-for-byte
+identical, with [agbcc](https://github.com/pret/agbcc) and
 `binutils-arm-none-eabi`:
 
 ```
-cp tu_rom_us.gba mf_us_baserom.gba
+cp your_us_rom.gba mf_us_baserom.gba
 python3 tools/extractor.py
 make -j
 sha1sum mf_us.gba   # ca33f4348c2c05dd330d37b97e2c5a69531dfe87
 ```
 
-Los cambios del port van bajo `#ifdef PLATFORM_PC`, así que no tocan esa
-compilación. Las instrucciones completas de instalación de agbcc están en el
-[README de metroidret/mf](https://github.com/metroidret/mf#readme).
+The port's changes are under `#ifdef PLATFORM_PC`, so they do not affect that
+build. Full agbcc installation instructions are in the
+[metroidret/mf README](https://github.com/metroidret/mf#readme).
 
-## Créditos
+## Credits
 
-- Decompilación: [metroidret](https://github.com/metroidret/mf)
+- Decompilation: [metroidret](https://github.com/metroidret/mf)
   ([Discord](https://discord.gg/2MGB9Xbr9y)).
-- Metroid Fusion es una marca de Nintendo. Este proyecto no está afiliado a
-  Nintendo y no distribuye ningún dato del juego.
+- Metroid Fusion is a trademark of Nintendo. This project is not affiliated
+  with Nintendo and does not distribute any game data.

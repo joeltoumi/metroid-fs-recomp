@@ -1,79 +1,79 @@
-# Pruebas del port nativo
+# Native port testing
 
-## Modo warp (`MF_WARP`)
+## Warp mode (`MF_WARP`)
 
-Herramienta de pruebas: salta el título, empieza una partida nueva con todo el
-equipo (energía, misiles y bombas al máximo, todas las habilidades, nivel de
-seguridad 4, todos los mapas) y entra directamente en una sala, o en uno de
-los modos de juego que normalmente quedan a horas de partida. Funciona en
-cualquier frontend (headless, SDL, Android) porque se lee del entorno. El
-código está en `port/src/warp.c` (lista de destinos, entrada simulada) y
-`port/game/warp.c` (lado del juego).
+A testing tool: it skips the title screen, starts a new game with all
+equipment (energy, missiles and bombs maxed out, every ability, security level
+4, every map) and goes straight into a room, or into one of the game modes
+that are normally hours of play away. It works in any frontend (headless, SDL,
+Android) because it is read from the environment. The code is in
+`port/src/warp.c` (destination list, simulated input) and `port/game/warp.c`
+(game side).
 
 ```
-MF_WARP=DESTINO[,DESTINO...]
-  DESTINO = ÁREA:SALA[@EVENTO]
-          | MODO:N[@EVENTO]
+MF_WARP=DESTINATION[,DESTINATION...]
+  DESTINATION = AREA:ROOM[@EVENT]
+              | MODE:N[@EVENT]
 ```
 
-- `ÁREA`: número (0-9) o nombre: `main` (Main Deck), `s1`..`s6` o `srx`,
-  `tro`, `pyr`, `aqa`, `arc`, `noc`; `test1`..`test3` son las áreas de prueba
-  que quedaron en la ROM.
-- `SALA`: número, o `*` para todas las salas del área (las que tienen puerta),
-  una detrás de otra.
-- `EVENTO`: contador de eventos (decimal o `0x..`). Por defecto, el evento en
-  que se llega a ese sector por primera vez (Main Deck: 13, tras el ascensor
-  con el SA-X).
-- `MODO`:
-  - `cutscene:1`..`12` o `cutscene:*`: monólogos, conversación secreta, el
-    laboratorio que se desprende, la explosión del BSL.
-  - `nav:EVENTO` o `nav:*`: la conversación con el ordenador de ese evento,
-    empezando en su sala de navegación.
-  - `pause:0`: pantalla de pausa (mapa, estado con R/L).
-  - `gameover:0`: Samus muere, pantalla de fin de partida.
-  - `ending:0`: final completo, créditos y resultados.
-  - `credits:0`: sólo los créditos.
-  - `sr388:0`: el final en que la nave choca con SR388.
-  - `saxcloseup:0`: primer plano del SA-X.
-  - `save:0`: guarda en la ranura A, reinicia y la carga desde el menú.
-  - `event:N` o `event:*`: la sala donde ocurre el evento N (jefes,
-    habilidades, encuentros con el SA-X, huidas...) con el evento anterior,
-    es decir, justo antes de que ocurra.
+- `AREA`: number (0-9) or name: `main` (Main Deck), `s1`..`s6` or `srx`,
+  `tro`, `pyr`, `aqa`, `arc`, `noc`; `test1`..`test3` are the test areas left
+  in the ROM.
+- `ROOM`: number, or `*` for every room in the area (those with a door), one
+  after another.
+- `EVENT`: event counter (decimal or `0x..`). By default, the event at which
+  that sector is first reached (Main Deck: 13, after the elevator with the
+  SA-X).
+- `MODE`:
+  - `cutscene:1`..`12` or `cutscene:*`: monologues, the secret conversation,
+    the lab detaching, the BSL explosion.
+  - `nav:EVENT` or `nav:*`: the conversation with the computer for that
+    event, starting in its navigation room.
+  - `pause:0`: pause screen (map, status with R/L).
+  - `gameover:0`: Samus dies, game over screen.
+  - `ending:0`: full ending, credits and results.
+  - `credits:0`: just the credits.
+  - `sr388:0`: the ending where the ship crashes into SR388.
+  - `saxcloseup:0`: SA-X close-up.
+  - `save:0`: saves to slot A, resets and loads it from the menu.
+  - `event:N` or `event:*`: the room where event N happens (bosses,
+    abilities, SA-X encounters, escapes...) with the previous event, that is,
+    just before it happens.
 
-Los modos se alcanzan desde una sala, como en el juego: tras 40 frames de
-juego se pone `gPauseScreenFlag` / `gCurrentCutscene` y se hace el mismo
-fundido que usa el juego. Con `MF_WARP_DIRECT=1` las cinemáticas empiezan
-nada más arrancar, sin pasar por una sala (para comparar con un emulador
-escribiendo esas mismas variables).
+Modes are reached from a room, as in the game: after 40 frames of gameplay
+`gPauseScreenFlag` / `gCurrentCutscene` is set and the same fade the game uses
+is performed. With `MF_WARP_DIRECT=1` cutscenes start right at boot, without
+going through a room (to compare against an emulator by writing those same
+variables).
 
-Otras variables:
+Other variables:
 
-- `MF_WARP_FRAMES=N`: frames por destino cuando hay varios o se usa `*`
-  (300 por defecto). Con un solo destino se queda ahí. Al acabar la lista el
-  programa termina.
-- `MF_WARP_ABILITIES=N`: número de habilidades (0-18, en el orden del juego;
-  8 = hasta el traje Varia, 14 = hasta el Gravity). Por defecto todas.
-- `MF_WARP_MOVE=0`: sin entrada simulada. Por defecto, en las salas Samus
-  corre disparando hacia donde mira, salta, vuelve, se hace bola, pone bombas
-  y apunta arriba; en menús y textos se pulsa A; en la pausa se mueve el mapa
-  y se pasa a la pantalla de estado y vuelta.
+- `MF_WARP_FRAMES=N`: frames per destination when there are several or `*` is
+  used (300 by default). With a single destination it stays there. When the
+  list ends the program exits.
+- `MF_WARP_ABILITIES=N`: number of abilities (0-18, in game order; 8 = up to
+  the Varia Suit, 14 = up to the Gravity Suit). All by default.
+- `MF_WARP_MOVE=0`: no simulated input. By default, in rooms Samus runs
+  shooting in the direction she faces, jumps, turns back, morphs into a ball,
+  lays bombs and aims up; in menus and text A is pressed; in the pause screen
+  the map is moved and it switches to the status screen and back.
 
-Ejemplos:
+Examples:
 
 ```sh
-# Todas las salas del Sector 3, 300 frames cada una, un PPM cada 60 frames
+# Every room in Sector 3, 300 frames each, one PPM every 60 frames
 MF_WARP='s3:*' ./build/mf_headless --rom mf_eu.gba --frames 100000 \
     --dump-every 60 --out out/s3
 
-# La sala de Box, justo antes de su combate (evento 40, Box derrotado)
+# Box's room, just before its fight (event 40, Box defeated)
 MF_WARP='event:40' ./build/mf_headless --rom mf_eu.gba --frames 2000
 
-# Todas las cinemáticas, 2400 frames cada una
+# Every cutscene, 2400 frames each
 MF_WARP='cutscene:*' MF_WARP_FRAMES=2400 ./build/mf_headless --rom mf_eu.gba \
     --frames 30000 --dump-every 120
 ```
 
-## Barrido con AddressSanitizer
+## AddressSanitizer sweep
 
 ```sh
 cmake -B build-asan -G Ninja -DMF_HOST=headless -DMF_REGION=eu \
@@ -88,30 +88,28 @@ for a in main s1 s2 s3 s4 s5 s6; do
 done
 ```
 
-Con Clang de Ubuntu hace falta `libclang-rt-18-dev` (el runtime de ASan).
+With Ubuntu's Clang you need `libclang-rt-18-dev` (the ASan runtime).
 
-## Qué se ha encontrado así
+## What was found this way
 
-Atajos de la GBA que en un host de 64 bits fallan o dibujan otra cosa:
+GBA shortcuts that crash or draw something else on a 64-bit host:
 
-- **Macros DMA**: el `DMA_SET` de la GBA hace `(vu32)src`, que convierte sólo
-  el primer operando, así que `paleta_u16 + 2 * PAL_ROW_SIZE` suma *bytes*.
-  La versión nativa sumaba elementos (el doble o el cuádruple): paletas de
-  fila equivocada, gráficos del banner de mensajes y de Samus en los créditos
-  leídos fuera de su sitio. Ahora `src/` sigue la regla de agbcc y el código
-  escrito para el port (`port/decomp`, `port/game`) la de C
-  (`PORT_DMA_C_ARITHMETIC`).
-- **Lecturas más allá de una tabla**, que en la GBA leen la ROM que sigue:
-  tilemaps de tileset (salas que usan bloques fuera de su tileset), la tabla de
-  ruido del motor de sonido, los tiempos de bloques que se rehacen. Se leen de
-  la copia de la ROM (`Port_RomMirror` / `Port_RomFind`, que ahora también
-  busca tablas de bytes no alineadas).
-- **NULL leído como BIOS**: jefes ya derrotados (Box, Nightmare...) que se
-  borran al iniciarse pero siguen animando sus datos multi-sprite; el
-  cursor del monólogo final antes de tener texto.
-- **Estructuras más grandes en nativo**: `SamusInit` copiaba un bloque de
-  40 bytes de ceros a estructuras con punteros.
-- **Tablas de punteros "fin del array anterior"** (`sUnk_79bea8`, pantalla de
-  estado): en la GBA los arrays están seguidos, en nativo no.
-- **Código copiado a RAM**: el HBlank de Samus en los créditos se llama
-  directamente.
+- **DMA macros**: the GBA's `DMA_SET` does `(vu32)src`, which only casts the
+  first operand, so `palette_u16 + 2 * PAL_ROW_SIZE` adds *bytes*. The native
+  version added elements (twice or four times as much): palettes from the
+  wrong row, and message banner and credits Samus graphics read from the wrong
+  place. Now `src/` follows the agbcc rule and the code written for the port
+  (`port/decomp`, `port/game`) follows the C rule (`PORT_DMA_C_ARITHMETIC`).
+- **Reads past the end of a table**, which on the GBA read the ROM that
+  follows: tileset tilemaps (rooms that use blocks outside their tileset), the
+  sound engine's noise table, the timers of blocks that regenerate. They are
+  read from the ROM copy (`Port_RomMirror` / `Port_RomFind`, which now also
+  finds unaligned byte tables).
+- **NULL read as BIOS**: already-defeated bosses (Box, Nightmare...) that are
+  deleted on init but keep animating their multi-sprite data; the final
+  monologue cursor before it has any text.
+- **Larger structs natively**: `SamusInit` copied a 40-byte block of zeros
+  into structs containing pointers.
+- **"End of previous array" pointer tables** (`sUnk_79bea8`, status screen):
+  on the GBA the arrays are contiguous, natively they are not.
+- **Code copied to RAM**: Samus's HBlank in the credits is called directly.
