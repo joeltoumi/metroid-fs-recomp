@@ -1,70 +1,92 @@
-# Metroid Fusion Decomp
+# mf-android
 
-This is a work in progress decompilation of Metroid Fusion.
+Port nativo de **Metroid Fusion** (GBA) a Android y PC, hecho a partir de la
+decompilación [metroidret/mf](https://github.com/metroidret/mf). No es un
+emulador: el código del juego se compila en C para el dispositivo, con una
+capa de plataforma SDL3 (la misma que
+[mzm-android](https://github.com/joeltoumi/mzm-android)).
 
-3212/3607 functions decompiled (89.05%, 395 left)
+El repositorio **no contiene datos del juego**. Al arrancar, la app pide tu
+propia copia de la ROM y lee de ella los gráficos, el sonido y los textos.
 
-0x5c2ff0/0x6f9d24 bytes of data not in blobs (82.59%, 0x136d34 left)
+## Estado
 
-Progress can be seen here: https://docs.google.com/spreadsheets/d/1HvJ-jynb-4P9tfEBVJmkQFpIg6mJRDRUBvDIBiLxQIo/
+- Versiones europea (EU) y estadounidense (US). Cada una necesita su ROM:
 
-**This decomp is not shiftable, don't use it as a base to work on anything**
+  | Región | Archivo | SHA-1 |
+  |---|---|---|
+  | EU | Metroid Fusion (Europa) | `cc46d54b70c1ee38c856ee6e58ec712136763389` |
+  | US | Metroid Fusion (EE. UU.) | `ca33f4348c2c05dd330d37b97e2c5a69531dfe87` |
 
-This repository can be used to build multiple ROMs. The ROMs are named like this: `mf_{region}.gba` (or `mf_{region}_debug.gba`)
+- Todo el código que la decompilación tenía en ensamblador está traducido a C
+  (`port/decomp/`), y cada función se ha comparado con la original. El motor
+  de sonido está en `port/game/audio_engine.c`.
+- Probado en PC con las dos ROMs:
+  - todas las salas de la estación y de los 6 sectores (381);
+  - las cinemáticas y las conversaciones con el ordenador;
+  - los menús, guardar y cargar, el fin de partida, el final y los créditos.
+- Falta probarlo a fondo en Android y jugar una partida completa a mano.
+  Detalle en [docs/ROADMAP.md](docs/ROADMAP.md).
 
-Region indicates which region the ROM targets:
-- us: USA, North America `sha1: ca33f4348c2c05dd330d37b97e2c5a69531dfe87`
-- eu: Europe **(Not yet supported)**
-- jp: Japan **(Not yet supported)**
-- cn: China **(Not yet supported)**
-- eu_beta: Europe beta version **(Not yet supported)**
+## Descargar la APK
 
-Debug simply indicates whether the ROM contains the debug features, it is optional.
+GitHub Actions compila una APK por región en cada cambio de `main`. Se
+descarga desde la pestaña **Actions**: abre la última ejecución de `build` y
+baja el artefacto `mf-android-apk`. Instala la de tu región y, al abrirla,
+elige tu ROM.
 
-**Debug is not supported yet**
+## Compilar
 
-The default built ROM is mf_us.gba
+### Android
 
-**Discords**:
-- https://discord.gg/2MGB9Xbr9y Metroidret
-- https://discord.gg/WtekHKb MAGConst
+Hace falta el JDK 17 y el SDK de Android con el NDK 27.2.12479018:
 
-## Dependencies
+```
+cd android
+./gradlew assembleEuRelease   # o assembleUsRelease
+```
 
-- [agbcc](https://github.com/pret/agbcc)
-- `binutils-arm-none-eabi`
-- A baserom for each ROM desired to be built (i.e.`mf_us_baserom.gba` if you wish to build `mf_us.gba`).
-- `python3`
-- `g++`
+### PC (Linux, Windows, macOS)
 
-## Setup
+Hacen falta CMake, Ninja, un compilador C (clang o gcc) y Python 3. SDL3 se
+descarga solo si no está instalado.
 
-- **WINDOWS ONLY**: Install and setup [WSL](https://docs.microsoft.com/en-us/windows/wsl/install)
-- Run `sudo apt update` just in case
-- Install `binutils-arm-none-eabi` by running this command: `sudo apt-get install binutils-arm-none-eabi`
-- Install `git` by running this command: `sudo apt-get install git`
-- Install `make` by running this command: `sudo apt-get install make`
+```
+cmake -B build -G Ninja -DMF_REGION=eu    # o us
+ninja -C build
+./build/mf [ruta/a/la/rom.gba]
+```
 
-- Clone [agbcc](https://github.com/pret/agbcc) by running this command: `git clone https://github.com/pret/agbcc`
-- Enter the agbcc folder (run `cd agbcc`) and build it (run `./build.sh`)
-- Add agbcc to your path (`export PATH="<agbcc_path>:$PATH"`, where `<agbcc_path>` is the full path to the agbcc directory)
-- Either:
-  - Install agbcc into this project (by using its `./install.sh <path>` script, where `<path>` is the path to the root of this repository), or
-  - Add agbcc to your path (`export PATH="<agbcc_path>:$PATH"`, where `<agbcc_path>` is the full path to the agbcc directory)
+Sin ruta, el programa busca `mf_eu.gba` / `mf_us.gba` junto al ejecutable o
+abre un selector de archivos. `-DMF_HOST=headless` compila `mf_headless`, una
+versión sin ventana para pruebas que vuelca capturas.
 
-## Build
+### Pruebas
 
-- Run `make clean` if necessary
-  - Use `make clean DATA=1` to remove data as well
-- Run the data extractor if necessary: `python3 tools/extractor.py`
-  - Use the `-r` flag to specify a region other than `us` (ex: `-r jp`)
-  - Use the `-d` flag to extract only debug data from the US beta ROM (required for building a ROM with debug features)
-- Run `make` (using the `-j` option is recommended to speed up the process)
-- To build another version of the ROM you can do either of the following:
-  - Specify it directly (ex: `make us_debug` for the US ROM with debug features)
-  - Specify the flags, REGION (takes the region name, defaults to `us`) and DEBUG (takes 0 or 1, defaults to 0)
-- Optionally, you can combine the commands to make it easier: `python3 tools/extractor.py && make -j`
+[docs/PORT.md](docs/PORT.md) explica el modo `MF_WARP`. Este modo salta a
+cualquier sala, cinemática o menú con todo el equipo, y así se ha probado el
+juego entero sin jugarlo.
 
-## Contributing
+## ROM de GBA (decompilación)
 
-See [CONTRIBUTING.md](CONTRIBUTING.md)
+El árbol de la decompilación sigue generando la ROM US original, idéntica
+byte a byte, con [agbcc](https://github.com/pret/agbcc) y
+`binutils-arm-none-eabi`:
+
+```
+cp tu_rom_us.gba mf_us_baserom.gba
+python3 tools/extractor.py
+make -j
+sha1sum mf_us.gba   # ca33f4348c2c05dd330d37b97e2c5a69531dfe87
+```
+
+Los cambios del port van bajo `#ifdef PLATFORM_PC`, así que no tocan esa
+compilación. Las instrucciones completas de instalación de agbcc están en el
+[README de metroidret/mf](https://github.com/metroidret/mf#readme).
+
+## Créditos
+
+- Decompilación: [metroidret](https://github.com/metroidret/mf)
+  ([Discord](https://discord.gg/2MGB9Xbr9y)).
+- Metroid Fusion es una marca de Nintendo. Este proyecto no está afiliado a
+  Nintendo y no distribuye ningún dato del juego.
