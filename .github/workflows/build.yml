@@ -61,7 +61,7 @@ jobs:
           } > summary.txt || true
           msg=$(sed -e 's/%/%25/g' summary.txt | awk '{printf "%s%%0A", $0}')
           echo "::error title=Android build log::${msg}"
-      - uses: actions/upload-artifact@v5
+      - uses: actions/upload-artifact@v6
         with:
           name: mf-android-apk
           path: android/app/build/outputs/apk/*/release/*.apk
