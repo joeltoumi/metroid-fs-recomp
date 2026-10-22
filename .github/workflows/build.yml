@@ -77,6 +77,13 @@ jobs:
         run: |
           set -o pipefail
           ./gradlew --no-daemon assembleRelease 2>&1 | tee gradle.log
+      - name: Show the signing certificate
+        # Release APKs must keep the same certificate so updates install
+        # over older versions.
+        run: |
+          for apk in android/app/build/outputs/apk/*/release/*.apk; do
+            echo "$apk"; keytool -printcert -jarfile "$apk" | grep -E "Owner|SHA256"
+          done
       - name: Report build errors
         if: failure()
         working-directory: android
