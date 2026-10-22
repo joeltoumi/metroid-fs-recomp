@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/images/title.png" alt="Metroid Fusion title screen" width="60%">
+  <img src="docs/images/logo.jpg" alt="Metroid Fusion Recomp logo" width="80%">
 </p>
 
 <h1 align="center">metroid-fs-recomp</h1>
