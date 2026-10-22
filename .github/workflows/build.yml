@@ -81,8 +81,11 @@ jobs:
         # Release APKs must keep the same certificate so updates install
         # over older versions.
         run: |
+          # APK signature scheme v2 only (minSdk 24): keytool can't read it.
+          apksigner=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)/apksigner
           for apk in android/app/build/outputs/apk/*/release/*.apk; do
-            echo "$apk"; keytool -printcert -jarfile "$apk" | grep -E "Owner|SHA256"
+            echo "$apk"
+            "$apksigner" verify --print-certs "$apk" | grep -E "DN:|SHA-256"
           done
       - name: Report build errors
         if: failure()
