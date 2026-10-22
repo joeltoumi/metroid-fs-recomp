@@ -5,6 +5,9 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  # Publishing a release builds everything again and attaches the files to it.
+  release:
+    types: [published]
 
 jobs:
   linux:
@@ -44,8 +47,24 @@ jobs:
           distribution: temurin
           java-version: 17
       - uses: gradle/actions/setup-gradle@v5
+      - name: Set up the release keystore
+        # Optional: without these secrets the APKs are signed with the
+        # runner's throwaway debug key.
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+            echo "ANDROID_KEYSTORE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+          elif [ "${{ github.event_name }}" = release ]; then
+            echo "::warning::No ANDROID_KEYSTORE_BASE64 secret: the release APKs are signed with a debug key"
+          fi
       - name: Build APK
         working-directory: android
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
           set -o pipefail
           ./gradlew --no-daemon assembleRelease 2>&1 | tee gradle.log
@@ -66,3 +85,29 @@ jobs:
           name: mf-android-apk
           path: android/app/build/outputs/apk/*/release/*.apk
           if-no-files-found: error
+
+  release:
+    name: Attach to the release
+    # Only the files built above: APKs, never game data.
+    if: github.event_name == 'release'
+    needs: [linux, android]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v6
+        with:
+          path: artifacts
+      - name: Upload
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          mkdir dist
+          # app-eu-release.apk -> Metroid_Fusion-eu.apk
+          for apk in artifacts/mf-android-apk/*/release/*.apk; do
+            region=$(basename "$(dirname "$(dirname "$apk")")")
+            cp "$apk" "dist/Metroid_Fusion-$region.apk"
+          done
+          ls -l dist
+          gh release upload "$TAG" dist/* --clobber --repo "$GITHUB_REPOSITORY"

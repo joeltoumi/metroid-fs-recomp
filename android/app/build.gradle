@@ -60,14 +60,26 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            if (System.getenv('ANDROID_KEYSTORE')) {
+                storeFile file(System.getenv('ANDROID_KEYSTORE'))
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
         }
         release {
             minifyEnabled false
-            // Signed with the debug key unless CI provides a keystore.
-            signingConfig signingConfigs.debug
+            // Signed with the release keystore when CI provides one (see
+            // .github/workflows/build.yml), otherwise with the debug key.
+            signingConfig System.getenv('ANDROID_KEYSTORE') ? signingConfigs.release : signingConfigs.debug
         }
     }
 
