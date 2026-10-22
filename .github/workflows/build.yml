@@ -3,9 +3,12 @@ name: build
 on:
   push:
     branches: [main]
+    # Pushing a v* tag creates its release (a pre-release if the tag has a
+    # suffix such as v1.0-beta) and attaches the files.
+    tags: ['v*']
   pull_request:
   workflow_dispatch:
-  # Publishing a release builds everything again and attaches the files to it.
+  # Publishing a release from the GitHub page also attaches the files to it.
   release:
     types: [published]
 
@@ -56,7 +59,7 @@ jobs:
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
             echo "ANDROID_KEYSTORE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
-          elif [ "${{ github.event_name }}" = release ]; then
+          elif [ "${{ github.event_name }}" = release ] || [ "${{ github.ref_type }}" = tag ]; then
             echo "::warning::No ANDROID_KEYSTORE_BASE64 secret: the release APKs are signed with a debug key"
           fi
       - name: Build APK
@@ -89,11 +92,13 @@ jobs:
   release:
     name: Attach to the release
     # Only the files built above: APKs, never game data.
-    if: github.event_name == 'release'
+    if: github.event_name == 'release' || startsWith(github.ref, 'refs/tags/v')
     needs: [linux, android]
     runs-on: ubuntu-24.04
     permissions:
       contents: write
+    # A release made on the page with a new tag can also fire the tag push.
+    concurrency: release-${{ github.ref_name }}
     steps:
       - uses: actions/download-artifact@v6
         with:
@@ -101,8 +106,12 @@ jobs:
       - name: Upload
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ github.event.release.tag_name || github.ref_name }}
         run: |
+          if ! gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            pre=; case "$TAG" in *-*) pre=--prerelease ;; esac
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --generate-notes $pre
+          fi
           mkdir dist
           # app-eu-release.apk -> Metroid_Fusion-eu.apk
           for apk in artifacts/mf-android-apk/*/release/*.apk; do
